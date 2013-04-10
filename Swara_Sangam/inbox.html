@@ -1,0 +1,65 @@
+<html>
+<head>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.8.0-bundled-min.js"></script>
+</head>
+<script type="text/javascript">
+StackMob.init({
+    appName: "swara_sangam",
+    clientSubdomain: "ankitguptamixorgcom",
+    publicKey: "a21c4638-f221-4a70-925b-65cc30de4c30",
+    apiVersion: 0
+});
+</script>
+</script><script type="text/javascript">
+/**
+ * This code declares your class and saves an object "blogentry" to the table on StackMob.
+ * StackMob will create the table for you automatically based on your JSON.
+ */
+var media = StackMob.Model.extend({ schemaName: 'media' });
+var mymedia = new media({ });
+var q = new StackMob.Collection.Query();
+q.orderDesc('lastmoddate');
+mymedia.query(q,{
+	success:function(model) {
+						array = model.toJSON();
+						//console.debug(array);
+						var key;
+						var count = 0;
+						for(key in array) {
+							 if(array.hasOwnProperty(key)) {
+							  count ++;
+							 }
+						 }
+						 //alert(count);
+						$(".count").html("count:"+ count +'<br/><tr/>');
+						for(var i=0; i<=count; i++)
+						{
+							//console.debug(array[i].user_name);
+							//$(".data1").append("user_name:"+ array[i].user_name +"<br/>");
+						
+ 
+    $('demo').bind('click', function(){
+    window.location = 'http://somelocation.com';
+    // Or, we can grab the HREF from the first anchor:
+     window.location = $('a:first', this).attr('href');
+});
+ 
+	                        $(".demo").append("<tr><td>"+array[i].mobile_number +"</td><td >"+array[i].time+"</td><td><a href=array[i].audio>"+array[i].audio+"</a></td><td>"+array[i].media_lat+","+array[i].media_lang+"</td></tr>");
+	                   
+
+						}
+						
+
+    }
+});
+
+</script>
+<body>
+
+<table class="demo"  border="5" style="background-color:white;">
+   <tr style="background-color:blue;color:white;"><td width="25%">Mobile-Number</td><td>Time</td><td>Audio</td><td>Location</td><td><button style="width:65;height:25" onClick="window.location.reload()"><b>Refresh</b></button><td></tr>    
+</table>
+<div id="data"></div>
+</body>
+<html>

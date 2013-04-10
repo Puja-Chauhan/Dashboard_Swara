@@ -1,0 +1,62 @@
+<html>
+<head>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.8.0-bundled-min.js"></script>
+</head>
+
+
+<script type="text/javascript">
+StackMob.init({
+    appName: "swara_sangam",
+    clientSubdomain: "ankitguptamixorgcom",
+    publicKey: "a21c4638-f221-4a70-925b-65cc30de4c30",
+    apiVersion: 0
+});
+</script>
+
+</script><script type="text/javascript">
+/**
+ * This code declares your class and saves an object "blogentry" to the table on StackMob.
+ * StackMob will create the table for you automatically based on your JSON.
+ */
+var device = StackMob.Model.extend({ schemaName: 'device' });
+var mydevice = new device({ });
+var q = new StackMob.Collection.Query();
+q.orderDesc('lastmoddate');
+mydevice.query(q,{
+	success:function(model) {
+						array = model.toJSON();
+						//console.debug(array);
+						var key;
+						var count = 0;
+						for(key in array) {
+							 if(array.hasOwnProperty(key)) {
+							  count ++;
+							 }
+						 }
+						 //alert(count);
+						$(".count").html("count:"+ count +'<br/><tr/>');
+						for(var i=0; i<=count; i++)
+						{
+							//console.debug(array[i].user_name);
+							//$(".data1").append("user_name:"+ array[i].user_name +"<br/>");
+	                        $(".demo").append("<tr><td>"+array[i].device_IMEI +"</td><td>"+array[i].device_model+"</td><td>"+array[i].device_petName+"</td><td >"+array[i].device_org+"</td></tr>");
+	                       /* $("#device_modal").append(array[i].device_modal+"<br/></tr>");
+	
+	                        $("#device_petName").append(array[i].device_petName+"<br/></tr>");
+	                        $("#device").append(array[i].device+ "<br/></tr>");
+							*/
+						}
+					
+    }
+});
+
+</script>
+<body>
+
+<table class="demo"  border="5" style="background-color:white;">
+   <tr style="background-color:blue;color:white;"><td width="25%">device_IMEI</td><td>device_model</td><td>device_petName</td><td>device_org</td><td><button style="width:65;height:25" onClick="window.location.reload()"><b>Refresh</b></button><td></tr>    
+</table>
+<div id="data"></div>
+</body>
+<html>

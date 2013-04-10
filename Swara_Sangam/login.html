@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>wara_Sangam Portal</title>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/json2-min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/underscore-1.4.1-min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/backbone-0.9.2-min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/2.5.3-crypto-sha1-hmac.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.6.1-beta-bundled-min.js"></script>
+
+<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+<link type="text/css" rel="stylesheet" href="bootstrap/css/bootstrap.css"></link>
+<link type="text/css" rel="stylesheet" href="assets/css/basestyle.css"></link>
+
+<script type="text/javascript">
+StackMob.init({
+    appName: "swara_sangam",
+    clientSubdomain: "ankitguptamixorgcom",
+    publicKey: "a21c4638-f221-4a70-925b-65cc30de4c30",
+    apiVersion: 0
+});
+</script>
+</head>
+
+<body>
+<center>
+  <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="display:none">�</button>
+      <h3 id="myModalLabel">Swara_Sangam</h3>
+    </div>
+    <div class="modal-body">
+      <p>
+        <form id="login_form">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username"><br/>
+          
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password">
+        </form>
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true" style="display:none">Close</button>
+      <input type="button" id="login_form_submit" class="btn btn-primary" form="login_form" value="Login">
+    </div>
+</center>
+ <script>
+
+
+    
+      $("#login_form_submit").click(function(e){
+    	  e.preventDefault();
+    	  
+    	  var username = $("#username").val();
+    	  var password = $("#password").val();
+    		var user = new StackMob.User({username: username, password: password});
+    		user.login(false,{
+    			success: function(model){
+    		    //show a success message/update your UI
+    		    alert("Login successful");
+    		    window.location="index1.html"    
+    		  }, 
+    		  error: function(model, response) {
+    		    //show a failure message in your app    
+    		    alert("Login Failed "+ JSON.stringify(model));
+    		  }
+    		});
+    		
+     });
+      
+      
+    </script>
+  </div>
+  
+  <div id="output_box" style="font-family: arial; font-size: 11px; color: #000;">
+  </div>
+  
+</body>
+</body>
+</html>
