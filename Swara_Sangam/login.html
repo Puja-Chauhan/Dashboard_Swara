@@ -26,7 +26,8 @@ StackMob.init({
 
 <body>
 <center>
-  <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  
+      <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="display:none">�</button>
       <h3 id="myModalLabel">Swara_Sangam</h3>
@@ -34,8 +35,8 @@ StackMob.init({
     <div class="modal-body">
       <p>
         <form id="login_form">
-          <label for="organization_id">Organization</label>
-          <input type="text" id="organization_id" name="organization_id"><br/>
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username"><br/>
           
           <label for="password">Password</label>
           <input type="password" id="password" name="password">
@@ -52,12 +53,12 @@ StackMob.init({
 
     
       $("#login_form_submit").click(function(e){
-    	  e.preventDefault();
+          e.preventDefault();
     	  
-    	  var organization_id = $("#organization_id").val();
+    	  var username = $("#username").val();
     	  var password = $("#password").val();
-    		var organization_login = new StackMob.User({organization_id: organizatin_id, password: password});
-    		organization_login.login(false,{
+    		var user = new StackMob.User({username: username, password: password});
+    		user.login(false,{
     			success: function(model){
     		    //show a success message/update your UI
     		    alert("Login successful");
@@ -70,7 +71,6 @@ StackMob.init({
     		});
     		
      });
-      
       
     </script>
   </div>
