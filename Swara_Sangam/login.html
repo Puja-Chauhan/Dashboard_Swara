@@ -54,10 +54,10 @@ StackMob.init({
       $("#login_form_submit").click(function(e){
     	  e.preventDefault();
     	  
-    	  var username = $("#username").val();
+    	  var organization_id = $("#organization_id").val();
     	  var password = $("#password").val();
-    		var user = new StackMob.User({username: username, password: password});
-    		user.login(false,{
+    		var organization_login = new StackMob.User({organization_id: organizatin_id, password: password});
+    		organization_login.login(false,{
     			success: function(model){
     		    //show a success message/update your UI
     		    alert("Login successful");
