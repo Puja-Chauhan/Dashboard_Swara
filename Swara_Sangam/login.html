@@ -56,7 +56,7 @@ StackMob.init({
     	  
     	  var organization_id = $("#organization_id").val();
     	  var password = $("#password").val();
-    		var organization_login = new StackMob.User({organization_id: organizatin_id, password: password});
+    		var organization_login = new StackMob.orgaization_login({organization_id: organizatin_id, password: password});
     		organization_login.login(false,{
     			success: function(model){
     		    //show a success message/update your UI
