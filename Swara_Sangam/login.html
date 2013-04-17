@@ -1,83 +1,115 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>wara_Sangam Portal</title>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-<script type="text/javascript" src="http://static.stackmob.com/js/json2-min.js"></script>
-<script type="text/javascript" src="http://static.stackmob.com/js/underscore-1.4.1-min.js"></script>
-<script type="text/javascript" src="http://static.stackmob.com/js/backbone-0.9.2-min.js"></script>
-<script type="text/javascript" src="http://static.stackmob.com/js/2.5.3-crypto-sha1-hmac.js"></script>
-<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.6.1-beta-bundled-min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.7.0-bundled-min.js"></script>
+<script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
+ <script type="text/javascript" src="style/js/bootstrap.js"></script>
 
-<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
-<link type="text/css" rel="stylesheet" href="bootstrap/css/bootstrap.css"></link>
-<link type="text/css" rel="stylesheet" href="assets/css/basestyle.css"></link>
+<link type="text/css" rel="stylesheet" href="style/css/bootstrap.css"></link>
 
 <script type="text/javascript">
-StackMob.init({
+      /* <![CDATA[ */
+      // Initialize StackMob object
+      // Copy your init data from here: https://dashboard.stackmob.com/sdks/js/config
+      // Your other app information is here: https://dashboard.stackmob.com/settings
+    StackMob.init({
     appName: "swara_sangam",
     clientSubdomain: "ankitguptamixorgcom",
     publicKey: "a21c4638-f221-4a70-925b-65cc30de4c30",
-    apiVersion: 0
-});
-</script>
+		userSchema: 'organization_login', //the schema you are using as a User Object
+		loginField: 'organization_id', //the username you are using as the login field
+		passwordField: 'password', //the password field you are using as the password field
+		apiVersion : 0
+        
+      });
+      /* ]]> */
+		</script>
+				
 </head>
-
 <body>
-<center>
-  
-      <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+   <div class="modal hide fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div tabindex="-1"  class="alert alert-block alert-error fade in" id="error_login">Something went wrong. Either you entered a wrong password or your organization id is wrong . Please try again later
+<button type="button" class="close" data-dismiss="alert">x</button>
+</div>
     <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="display:none">�</button>
-      <h3 id="myModalLabel">Swara_Sangam</h3>
+	
+            <h3 id="myModalLabel">Swara Login Panel</h3>
     </div>
     <div class="modal-body">
       <p>
-        <form id="login_form">
-          <label for="username">Username</label>
-          <input type="text" id="username" name="username"><br/>
-          
-          <label for="password">Password</label>
+
+ <form id="login_form">
+          <label for="username">Enter Organization Id: </label>
+	<input type="text" id="name"/>
+	<div class="alert alert-block alert-error fade in" id="error_name">
+	Please enter a valid organization id
+<button type="button" class="close" data-dismiss="alert">x</button>
+</div>
+            
+          <label for="password">Enter Organization Password</label>
           <input type="password" id="password" name="password">
+		  <div class="alert alert-block alert-error fade in" id="error_password">
+		  Please enter your organization passowrd
+<button type="button" class="close" data-dismiss="alert">x</button>
+</div>
         </form>
       </p>
     </div>
     <div class="modal-footer">
-      <button class="btn" data-dismiss="modal" aria-hidden="true" style="display:none">Close</button>
-      <input type="button" id="login_form_submit" class="btn btn-primary" form="login_form" value="Login">
+	
+	<!-- <button class="btn" data-dismiss="modal" aria-hidden="true" style="">Close</button>-->
+      <input type="button" id="submit" value="submit" class="btn btn-primary" form="login_form" value="Login">
     </div>
-</center>
- <script>
 
-
-    
-      $("#login_form_submit").click(function(e){
-          e.preventDefault();
-    	  
-    	  var username = $("#username").val();
-    	  var password = $("#password").val();
-    		var user = new StackMob.User({username: username, password: password});
-    		user.login(false,{
-    			success: function(model){
-    		    //show a success message/update your UI
-    		    alert("Login successful");
-    		    window.location="index1.html"    
-    		  }, 
-    		  error: function(model, response) {
-    		    //show a failure message in your app    
-    		    alert("Login Failed "+ JSON.stringify(model));
-    		  }
-    		});
-    		
-     });
-      
-    </script>
-  </div>
+ 
+<script type="text/javascript">
+$(function(){
+$('#myModal').modal('toggle');
+$(".alert").hide();
+	$("#submit").click(function(){
+		//e.preventDefault();
+		var name = $("#name").val();
+		var password = $("#password").val();
+		/* Validataion**************/
+		
+		if(name=='')
+		{
+		$("#name").focus();
+		$("#error_name").show();
+		}
+ else if(password=='')
+		{
+		$("#password").focus();
+		$("#error_password").show();
+		}
+		else
+		{
+var User = StackMob.Model.extend({ schemaName: 'organization_login' });
+var user = new StackMob.User({ organization_id: name, password: password });
+ 
+//Makes a call to StackMob to request a login
+user.login(true, {
+  success: function(model) {
+    //show a success message/update your UI
+	//alert("success");
+	window.location="index.html"
+  }, 
+  error: function(model, response) {
+    //show a failure message in your app    
+	//alert("error");
+	$("#error_login").show();
+		$("#name").val('');
+		$("#password").val('');
+	
+  }
   
-  <div id="output_box" style="font-family: arial; font-size: 11px; color: #000;">
-  </div>
-  
-</body>
+});
+}
+});
+});
+</script>
+ 
 </body>
 </html>
