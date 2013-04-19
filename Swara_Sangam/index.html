@@ -62,7 +62,7 @@
 		-->
 		<script type="text/javascript">
       /* <![CDATA[ */
-      $(document).ready(function() {
+	   $(document).ready(function() {
 	  		// organisation app icon image
 			var User = StackMob.Model.extend({ schemaName: 'organization_login' });
 			var user = new StackMob.User({ });
@@ -119,9 +119,9 @@
 							/* var val = array[i].media_id;
 							 $('#media_id').attr('value', val);*/
 							 
-							 var val = array[i].mobile_no;
+							 var val = array[i].mobile_number;
 							 $('#mobile_number').attr('value', val);
-							 
+							 							 
 						
 							 
 							  var val = array[i].audio;
@@ -130,17 +130,7 @@
 							 var val = array[i].media_lat+","+array[i].media_lang;
 							$('#latlng').attr('value', val);
 							
-							/* for(var i=0; i<=2; i++)
-							{
-							  var val = array[i].user_name;
-							$('#data'+i).attr('value', val);
-							} 
-							
-							 for(var i=0; i<=2; i++)
-							{
-							  var val = array[i].geolocation.lat+","+array[i].geolocation.lon;
-							  $('#latlng'+i).attr('value', val);
-							} */
+						
 							
 							initialize();
 							exit();
@@ -170,10 +160,16 @@
 			var latlngStr = input.split(",",2);
 			var lat = parseFloat(latlngStr[0]);
 			var lng = parseFloat(latlngStr[1]);
+			//alert(lat);
+			//alert(lng);
+			
+			
 			var latlng = new google.maps.LatLng(lat, lng);
 			geocoder.geocode({'latLng': latlng}, function(results, status) {
 			  //var address = results[4].formatted_address;
 			  var address = results[0].formatted_address;
+			  //
+//alert(address);
 			  //var address = input;
 			$("#test").html(address);
 		//	console.log(results[4].formatted_address);
@@ -191,7 +187,8 @@
 					 });
 					 autocomplete.bindTo('bounds', map);
 					 var place = autocomplete.getPlace();*/
-					 alert(place.name); 
+					
+					 //alert(place.name); 
 				
 				 markersArray.push(marker);
 				 
@@ -200,18 +197,28 @@
                     }); */ 
 					//var device_id = document.getElementById("device_id").getAttribute("value");
 					//var media_id = document.getElementById("media_id").getAttribute("value");
+					
 					var mobile_number = document.getElementById("mobile_number").getAttribute("value");
+					//alert(mobile_number);
 					var audio = document.getElementById("audio").getAttribute("value");
-					var org_logo = document.getElementById("org_logo").getAttribute("value");
+					//alert(audio);
+					//var org_logo = document.getElementById("org_logo").getAttribute("value");
+					//alert(org_logo);
+					var last_mod_date=document.getElementById("last_mod_date").getAttribute("value");
+					//var address=document.getElementById("address").getAttribute("value");
+					//alert(address);
 					var infowindow = new google.maps.InfoWindow();
-					//infowindow.setContent("Device-id  : " +device_id + "<br/> Mobile_no : "+mobile_no + "<br/> Model : "+model + "<br/> Address : "+address);
-					infowindow.setContent("<a href='"+array[i].audio+"' style='width:150px; height:50px;' /><br/> Mobile_no : "+mobile_nubmer + "<br/> Address : "+address);
+					//alert("infowindow")
+					//infowindow.setContent("Device-id  : " +device_id + "<br/> Mobile_n : "+mobile_no + "<br/> Model : "+model + "<br/> Address : "+address);
+					infowindow.setContent( "Mobile No : " + mobile_number + "<br/><a href='"+audio+"'>Audio:"+audio+"</a><br/>Address :" + address);
+					
+					
 				//google.maps.event.addListener(marker, 'click', function(event) {
                         infowindow.open(map, marker);
                     //});		 
 				
 			  
-				alert("Geocode was not successful for the following reason: " + media);
+				//alert("Geocode was not successful for the following reason: " + media);
 			  }
 			});
 		   });
@@ -242,7 +249,7 @@
 				//var current_date_time = Math.ceil(currentTime.getTime()/1000);
 				
 				// fetch the data from database
-			var media = StackMob.Model.extend({ schemaName: 'medio' });
+			var media = StackMob.Model.extend({ schemaName: 'media' });
 
 			//var demo = new Device({ device_id: '1234567890' });
 			/*
