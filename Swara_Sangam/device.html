@@ -32,37 +32,98 @@ StackMob.init({
  * This code declares your class and saves an object "blogentry" to the table on StackMob.
  * StackMob will create the table for you automatically based on your JSON.
  */
-var device = StackMob.Model.extend({ schemaName: 'device' });
-var mydevice = new device({ });
-var q = new StackMob.Collection.Query();
-q.orderDesc('lastmoddate');
-mydevice.query(q,{
-	success:function(model) {
-						array = model.toJSON();
-						//console.debug(array);
-						var key;
-						var count = 0;
-						for(key in array) {
-							 if(array.hasOwnProperty(key)) {
-							  count ++;
-							 }
-						 }
-						 //alert(count);
-						$(".count").html("count:"+ count +'<br/><tr/>');
-						for(var i=0; i<=count; i++)
-						{
-							//console.debug(array[i].user_name);
-							//$(".data1").append("user_name:"+ array[i].user_name +"<br/>");
-	                        $("#ui").append("<tr><td>"+array[i].device_IMEI +"</td><td>"+array[i].device_model+"</td><td>"+array[i].device_petName+"</td><td >"+array[i].device_org+"</td></tr>");
-	                       /* $("#device_modal").append(array[i].device_modal+"<br/></tr>");
-	
-	                        $("#device_petName").append(array[i].device_petName+"<br/></tr>");
-	                        $("#device").append(array[i].device+ "<br/></tr>");
-							*/
+$(document).ready(function() {
+			result();
+			function result() {
+						
+	  		var device = StackMob.Model.extend({ schemaName: 'device' });
+			var mydevice = new device({ });
+					var q = new StackMob.Collection.Query();
+					q.orderDesc('lastmoddate');
+					mydevice.query(q, {
+						success: function(modal) {
+							//After StackMob returns "Bill Watterson", print out the result
+						   	var array = modal.toJSON();
+							 // console.debug(array);
+							 //$('#data').html(array[0].user_name);
+							 var val = array[0].lastmoddate;
+							 $('#last_mod_date').attr('value', val);
+							 
+								var key;
+								var count = 0;
+								for(key in array) {
+									 if(array.hasOwnProperty(key)) {
+									  count ++;
+									 }
+								 }
+								 //alert(count);
+							for(var i=0; i<=count; i++)
+							{
+							//	if(array[i].org_img == localStorage.getItem("stackmob.oauth2.user"))
+							
+								//alert(array[i].org_img);
+									//$('#last_mod_date').html(array[0].lastmoddate);
+									
+									//alert(val);
+									$("#ui").append("<tr><td>"+array[i].device_IMEI+"</td><td>"+array[i].device_model+"</td><td>"+array[i].device_petName+"</td><td>"+array[i].device_org+"</td><td>"+ new Date(array[i].lastmoddate)+"</td><tr>");
+																
+								 //end if condition
+							} // end for loop
+						} //end success
+				 	 }); // end imagesearch schema query
+					 } // end result function
+					 
+			setInterval(check_newentry,1000);
+					 
+					 function check_newentry() {
+					 	var device = StackMob.Model.extend({ schemaName: 'device' });
+			var mydevice = new device({  });
+					var q = new StackMob.Collection.Query();
+					q.orderDesc('lastmoddate');
+					mydevice.query(q, {
+						success: function(modal) {
+							//After StackMob returns "Bill Watterson", print out the result
+						   	var array = modal.toJSON();
+							 // console.debug(array);
+							 //$('#data').html(array[0].user_name);
+							 
+							 
+							// alert(lastmod_date_old +"..."+ lastmod_date);
+							 if(lastmod_date_old < lastmod_date)
+							{
+								
+								var val = array[0].lastmoddate;
+								 $('#last_mod_date').attr('value', val);
+								
+								var key;
+								var count = 0;
+								var counter=0;
+								for(key in array) {
+									 if(array.hasOwnProperty(key)) {
+									  count ++;
+									 }
+								 }
+								 //alert(count);
+						 for(var i=0; i<=count; i++)
+							{
+								
+								if(counter<50)
+								{
+								
+									$("#ui").append("<tr><td>"+array[i].device_IMEI+"</td><td>"+array[i].device_model+"</td><td>"+array[i].device_petName+"</td><td>"+array[i].device_org+"</td><td>"+new Date(array[i].lastmoddate)+"</td><tr>");
+							
+									//------------------------------------------- end device schema code
+									counter++;
+								
+								}
+								else
+								exit();
+							}
 						}
-					
-    }
-});
+						}
+				 	 });
+					 } // end check_newentry 
+					 });
 
 </script>
 <style>
@@ -147,8 +208,9 @@ padding-top:0px;
 		<th>Device-IMEI</th>
 
 		<th>Device-Model</th>
-		<th>Device_petname</th>
-		<th>Device_org</th>
+		<th>Device-NICKNAME</th>
+		<th>Device_Org</th>
+		<th>Time</th>
 		
 	</tr>
 	</table>
