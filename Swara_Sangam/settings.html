@@ -91,6 +91,9 @@ padding-top:0px;
 			  <li class="" id="device">
                 <a href="device.html">DEVICE</a>
               </li>
+			  <li class="" id="topic">
+                <a href="topic.html">TOPIC</a>
+              </li>
               <li class="" id="logout_btn">
                 <a id="logout" href="#LOGOUT">LOGOUT</a>
 
@@ -107,8 +110,10 @@ padding-top:0px;
 	
             <h3 id="myModalLabel"> My Application Settings</h3>
     </div>
-    <div class="modal-body">    <label for='upload'>File to Upload:</label>
-    <input type="file" id="files" name="files[]" multiple />
+    <div class="modal-body">    <label for='upload'>File to Upload:</label><input type="file" id="files" name="files[]" multiple />
+	</div>
+	<div class="save">    <label for='upload'>Topic tags Limit:</label><input type="number" id="Integer" name="integers" />
+	<input type="button"   id="submit" value="Save" />
 	</div>
 	<div class="modal-footer">
 	
@@ -181,6 +186,29 @@ padding-top:0px;
   document.getElementById('files').addEventListener('change', handleFileSelect, false);
   //document.getElementById('submit').addEventListener('click', handleFileSelect, false);
  });
+ $('#submit').click(function () {
+   updateThis($('.a')[0])
+});
+function updateThis(a) {
+
+var value_topic_tags=document.getElementById('Integer').value;
+alert(value_topic_tags);
+
+var organization = StackMob.Model.extend({ schemaName: 'organization' });
+var organization = new organization({ organization_id:'1', topic_tags:value_topic_tags });
+organization.save({}, {
+    success: function(model) {
+        console.debug(model.toJSON());
+		alert("worked");
+    },
+    error: function(model, response) {
+        console.debug(response);
+    }
+});
+
+alert("saved");
+
+}
 </script>
 
 <script type="text/javascript">
