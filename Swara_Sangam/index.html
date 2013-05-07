@@ -1,3 +1,4 @@
+
 <html>
 	<head>
     <title>Your First API Call</title>
@@ -19,7 +20,7 @@
       /* <![CDATA[ */
         li { padding-top: 10px; }
       /* ]]> */
-	 
+
     </style>
 		<!--
 		*************************************
@@ -72,18 +73,18 @@
 					success:function(modal) {
 						array = modal.toJSON();
 						console.debug(array);
-						var val = array[0].org_logo;
-						$('#org_logo').attr('value', val);
+						var val = array[0].media;
+						$('#audio').attr('value', val);
 						//alert(val);
 					} 
 				});  
 	  	// end organisation icon
-		
+
 	  var markersArray = [];
 	  			//fetch the current date and time and convert it into timestamp
 	  			//var currentTime = new Date();
 				//var current_date_time = Math.ceil(currentTime.getTime()/1000);
-				
+
 				// fetch the data from database
 	  		var media = StackMob.Model.extend({ schemaName: 'media' });
 			var mymedia = new media({  });
@@ -105,56 +106,56 @@
 							 //$('#data').html(array[0].user_name);
 					for(var i=0; i<=count; i++)
 					{
-						
-							 
+
+
 							 $('#last_mod_date').html(array[i].lastmoddate);
 							 //$('.current_date_time').html(current_date_time);
-							 
+
 							 var val = array[i].lastmoddate;
 							 $('#last_mod_date').attr('value', val);
-							 
+
 							 /* var val = array[0].deviceid;
 							 $('#device_id').attr('value', val); */
-							 
+
 							/* var val = array[i].media_id;
 							 $('#media_id').attr('value', val);*/
-							 
+
 							 var val = array[i].mobile_number;
 							 $('#mobile_number').attr('value', val);
-							 							 
-						
-							 
+
+
+
 							  var val = array[i].audio;
 							 $('#audio').attr('value', val);
-							 
+
 							 var val = array[i].media_lat+","+array[i].media_lang;
 							$('#latlng').attr('value', val);
-							
-						
-							
+
+
+
 							initialize();
 							exit();
 							 //  end if condition
 						} //end for loop
 					} //end success
 				  }); //  end imagesearcj schema query
-					 
+
 		// If your schema name is different than `place`, then you need to replace `place` with your schema
 		//setInterval(result,1000);
-	  
+
 	  		var geocoder;
 			  var map;
 			  var marker;
-		
+
 			 function initialize() {
-			  
+
 			geocoder = new google.maps.Geocoder();
 			show_marker();
 			setInterval(check_newentry,1000);
-			
+
 			function show_marker() { // start show_marker function
 			clearOverlays();
-			
+
 			var input = document.getElementById("latlng").getAttribute("value"); 
 		   //alert(input);
 			var latlngStr = input.split(",",2);
@@ -162,8 +163,8 @@
 			var lng = parseFloat(latlngStr[1]);
 			//alert(lat);
 			//alert(lng);
-			
-			
+
+
 			var latlng = new google.maps.LatLng(lat, lng);
 			geocoder.geocode({'latLng': latlng}, function(results, status) {
 			  //var address = results[4].formatted_address;
@@ -180,74 +181,74 @@
 					map: map,
 					position: results[0].geometry.location,
 				});
-				
+
 				// to find the place name by latlng
 					/* var autocomplete = new google.maps.places.Autocomplete(input, {
 						 types: ["geocode"]
 					 });
 					 autocomplete.bindTo('bounds', map);
 					 var place = autocomplete.getPlace();*/
-					
+
 					 //alert(place.name); 
-				
+
 				 markersArray.push(marker);
-				 
+
 					 /* var infowindow = new google.maps.InfoWindow({
                         content: name
                     }); */ 
 					//var device_id = document.getElementById("device_id").getAttribute("value");
 					//var media_id = document.getElementById("media_id").getAttribute("value");
-					
+
 					var mobile_number = document.getElementById("mobile_number").getAttribute("value");
 					//alert(mobile_number);
 					var audio = document.getElementById("audio").getAttribute("value");
 					//alert(audio);
-					var org_logo = document.getElementById("org_logo").getAttribute("value");
-					alert(org_logo);
+					//var org_logo = document.getElementById("org_logo").getAttribute("value");
+					//alert(org_logo);
 					var last_mod_date=document.getElementById("last_mod_date").getAttribute("value");
 					//var address=document.getElementById("address").getAttribute("value");
 					//alert(address);
 					var infowindow = new google.maps.InfoWindow();
 					//alert("infowindow")
 					//infowindow.setContent("Device-id  : " +device_id + "<br/> Mobile_n : "+mobile_no + "<br/> Model : "+model + "<br/> Address : "+address);
-					infowindow.setContent( "Mobile No : " + mobile_number + "<br/><a href='"+audio+"'>Audio:"+audio+"</a><br/>Address :" + address+ "  <br/>Time : "+new Date);
-					
-					
+					infowindow.setContent( "Mobile No : " + mobile_number + "<br/><a href='"+audio+"'>Audio:"+audio+"</a><br/>Address :" + address);
+
+
 				//google.maps.event.addListener(marker, 'click', function(event) {
                         infowindow.open(map, marker);
                     //});		 
-				
-			  
+
+
 				//alert("Geocode was not successful for the following reason: " + media);
 			  }
 			});
 		   });
-		   
+
 			 }  //end show_marker function
-			 
+
 			 /* var timeInterval = 1000;
 				for (var i = 0; i <= 2; i++ ) {
 					setTimeout(show_marker, timeInterval);
 					timeInterval += 1000;
 				} */
-			 
-			 
+
+
 			 var mapOptions = {
 			  zoom: 10,
 			  center: new google.maps.LatLng(37.4419, -22.1419),
 			  mapTypeId: google.maps.MapTypeId.TERRAIN,
 			  mapTypeControl: false,
 			  streetViewControl: false
-		 
+
 			}
 			map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-			
-			
+
+
 			function check_newentry() {
 		//fetch current date and time 
 				//var currentTime = new Date();
 				//var current_date_time = Math.ceil(currentTime.getTime()/1000);
-				
+
 				// fetch the data from database
 			var media = StackMob.Model.extend({ schemaName: 'media' });
 
@@ -264,7 +265,7 @@
 							//After StackMob returns "Bill Watterson", print out the result
 						   	var array = modal.toJSON();
 							 // console.debug(array);
-							 
+
 							 var array = modal.toJSON();
 							var key;
 							var count = 0;
@@ -274,38 +275,38 @@
 								 }
 							}
 								 //alert(count);
-							 
+
 					for(var i=0; i<=count; i++)
 					{
-						
+
 							 //var entry_date_time = array[0].entry_date_time;
 							  //var lastmod_date = Math.ceil(((array[0].lastmoddate)/1000)+1);
 							  var lastmod_date = array[i].lastmoddate;
-							  
+
 							  //$('#data').html(array[0].user_name);
 							 $('#last_mod_date').html(lastmod_date);
 							 //$('.current_date_time').html(current_date_time);
-							 
+
 							 var lastmod_date_old = document.getElementById("last_mod_date").getAttribute("value");
-							 
+
 							 /*var val = array[0].deviceid;
 							 $('#device_id').attr('value', val); */
-							 
+
 							/* var val = array[i].media_id;
 							 $('#media_id').attr('value', val);*/
-							 
+
 							 var val = array[i].mobile_number;
 							 $('#mobile_number').attr('value', val);
-							 
+
 							 /* var val = array[0].model;
 							 $('#model').attr('value', val); */
-							 
+
 							 var val = array[i].audio;
 							 $('#audio').attr('value', val);
-							 
+
 							var val = array[i].media_lat+","+array[i].media_lang;
 							$('#latlng').attr('value', val);
-							 
+
 							 /* for(var i=0; i<=2; i++)
 							{
 							  var val = array[i].geolocation.lat+","+array[i].geolocation.lon;
@@ -317,7 +318,7 @@
 							  var val = array[i].user_name;
 							$('#data'+i).attr('value', val);
 							} */
-							
+
 							if(lastmod_date_old < lastmod_date)
 							{
 								/* var timeInterval = 1000;
@@ -326,19 +327,19 @@
 									timeInterval += 1000;
 								} */
 								show_marker();
-								
+
 								var val = array[i].lastmoddate;
 							 $('#last_mod_date').attr('value', val);
 								//alert("current time is equal or small");
 							}
-				
+
 							exit();
 						// end if condition
 					  } // end for loop
 					} // end success
 				}); // end imagesearcj query
 			} // end check_newentry
-			
+
 		  } 
   	
 				function clearOverlays() {
@@ -420,9 +421,6 @@ padding-top:0px;
               </li>
 			  <li class="" id="device">
                 <a href="device.html">DEVICE</a>
-              </li>
-			  <li class="" id="topic">
-                <a href="topic.html">TOPIC</a>
               </li>
               <li class="" id="logout_btn">
                 <a id="logout" href="#LOGOUT">LOGOUT</a>
@@ -509,7 +507,7 @@ $( "#dialog-confirm" ).dialog({
         },
         "NO": function() {
           $( this ).dialog( "close" );
-		
+
         }
       }
     });
