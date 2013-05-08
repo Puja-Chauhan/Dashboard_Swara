@@ -20,7 +20,6 @@
 		userSchema: 'organization_login', //the schema you are using as a User Object
 		loginField: 'organization_id', //the username you are using as the login field
 		passwordField: 'password', //the password field you are using as the password field
-		org_flag:'true',
 		apiVersion : 0
         
       });
@@ -42,10 +41,10 @@
       <p>
 
  <form id="login_form">
-          <label for="username">Enter Organization ID: </label>
+          <label for="username">Enter Organization Id: </label>
 	<input type="text" id="name"/>
 	<div class="alert alert-block alert-error fade in" id="error_name">
-	Please enter a valid organization ID
+	Please enter a valid organization id
 <button type="button" class="close" data-dismiss="alert">x</button>
 </div>
             
@@ -88,13 +87,13 @@ $(".alert").hide();
 		else
 		{
 var User = StackMob.Model.extend({ schemaName: 'organization_login' });
-var user = new StackMob.User({ organization_id: name, password: password,org_flag:"true" });
+var user = new StackMob.User({ organization_id: name, password: password });
  
 //Makes a call to StackMob to request a login
 user.login(true, {
   success: function(model) {
     //show a success message/update your UI
-	alert("success");
+	//alert("success");
 	window.location="index.html"
   }, 
   error: function(model, response) {
