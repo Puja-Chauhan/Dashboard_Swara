@@ -59,23 +59,116 @@ StackMob.init({
 									  count ++;
 									 }
 								 }
+								 								//	$("#ui").append("<tr><td>"+array[i].device_IMEI+"</td><td>"+array[i].device_model+"</td><td>"+array[i].device_permission+"<select id='abc' ><option value='true'>Approve</option><option value='false'>DisApprove</option></select></td> <td>"+ new Date(array[i].lastmoddate)+"</td><tr>");
+
 								 //alert(count);
 							for(var i=0; i<=count; i++)
 							{
 							//	if(array[i].org_img == localStorage.getItem("stackmob.oauth2.user"))
 							
 								//alert(array[i].org_img);
-									//$('#last_mod_date').html(array[0].lastmoddate);
-									
+									$('#last_mod_date').html(array[0].lastmoddate);
+									//$('#device_id').attr('value',disapprov);
 									//alert(val);
-									$("#ui").append("<tr><td>"+array[i].device_IMEI+"</td><td>"+array[i].device_model+"</td><td>"+array[i].device_permission+"</td><td>"+ new Date(array[i].lastmoddate)+"</td><tr>");
-																
+									var name=array[i].device_permission;
+									var vall;
+									//alert(name);
+									
+									if(name==false)
+									{
+									name="Disapprove";
+									vall="Approve";
+									
+									}
+									else
+									{
+									name="Approve"
+									vall="Disapprove"
+									}
+									
+									$("#ui").append("<tr><td class='ids'></td><td>"+array[i].device_IMEI+"</td><td>"+array[i].device_model+"</td><td id='Example'><select id='abc' ><option >"+name+"</option><option value='vall'>"+vall+"</option></select></td> <td>"+ new Date(array[i].lastmoddate)+"</td><tr>");
+									//alert(array[i].device_id);
+	$(document).on('change', 'select#abc', function(){
+ // do something
+ //alert("Updated");
+var value=$(this[this.selectedIndex]).text();
+//alert(value);
+
+//var currentCellText = $(this).text();
+ var id = $(this).parent().siblings('.ids').text();
+//alert(currentCellText);
+//alert(value);
+ //alert(id); 
+// var col = $(this).parent().children().index($(this).value);
+ //alert(col);
+  
+
+ // alert(sel);
+ 
+ if(value=='Approve')
+ {
+ var device = StackMob.Model.extend({ schemaName: 'device' });
+ var status = eval("true");
+// alert(status);
+var device = new device({ device_id:id, device_permission: status});
+device.save({}, {
+    success: function(model) {
+        console.debug(model.toJSON());
+		
+		location.reload();
+    },
+    error: function(model, response) {
+        console.debug(response);
+		alert(" Network Issue Please try again");
+    }
+});
+ alert("Device Approved");
+ }
+ else
+ {
+ var device = StackMob.Model.extend({ schemaName: 'device' });
+ var status = eval("false");
+ var device = new device({ device_id:id, device_permission: status});
+device.save({}, {
+    success: function(model) {
+        console.debug(model.toJSON());
+		//alert("worked");
+		location.reload();
+		
+    },
+    error: function(model, response) {
+        console.debug(response);
+		alert(" Network Issue Please try again");
+    }
+});
+ alert("Device Disapproved");
+ }
+ 
+
+
+//alert("saved");
+
+
+
+ exit;
+
+});
+
+
 								 //end if condition
 							} // end for loop
+
+
+	
+
 						} //end success
+	
+	
 				 	 }); // end imagesearch schema query
+	
 					 } // end result function
-					 
+
+	
 			setInterval(check_newentry,1000);
 					 
 					 function check_newentry() {
@@ -93,6 +186,7 @@ StackMob.init({
 							 
 							// alert(lastmod_date_old +"..."+ lastmod_date);
 							 if(lastmod_date_old < lastmod_date)
+
 							{
 								
 								var val = array[0].lastmoddate;
@@ -113,9 +207,12 @@ StackMob.init({
 								if(counter<50)
 								{
 								
-									$("#ui").append("<tr><td>"+array[i].device_IMEI+"</td><td>"+array[i].device_model+"</td><td>"+array[i].device_permission+"</td><td>"+new Date(array[i].lastmoddate)+"</td><tr>");
+									//$("#ui").append("<tr><td>"+array[i].device_IMEI+"</td><td>"+array[i].device_model+"</td><td>"+array[i].device_permission+"</td><td>"+new Date(array[i].lastmoddate)+"</td><tr>");
 							
 									//------------------------------------------- end device schema code
+																		$("#ui").append("<tr><td>"+array[i].device_IMEI+"</td><td>"+array[i].device_model+"</td><td>"+array[i].device_permission+"<select id='myList'><option value='true'>Approve</option><option value='false'>DisApprove</option></select></td> <td>"+ new Date(array[i].lastmoddate)+"</td><tr>");
+				
+	
 									counter++;
 								
 								}
@@ -168,6 +265,7 @@ padding-top:0px;
 padding-top:0px;
 }
 
+
 		</style>
 		</head>
 
@@ -211,6 +309,7 @@ padding-top:0px;
     <div class="modal-body" style=''>
 <table  class="data  table-bordered table table-striped" id="ui">
 	<tr>
+	<th></th>
 		<th>Device-IMEI</th>
 
 		<th>Device-Model</th>
@@ -220,6 +319,18 @@ padding-top:0px;
 	</tr>
 	</table>
 </div>
+ <div class="pagination">
+              <ul>
+                <li><a id="prev">Prev</a></li>
+                <!-- 
+                <li><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                 -->
+                <li><a id="next">Next</a></li>
+              </ul>
+            </div>
 <div class="modal-footer">
 	</div>
 </div>
