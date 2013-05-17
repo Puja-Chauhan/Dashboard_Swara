@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>Dashboard</title>
+<title>Topic Information</title>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 <script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.8.0-bundled-min.js"></script>
 
@@ -17,9 +17,9 @@
 <link type="text/css" rel="stylesheet" href="style/css/bootstrap.css"></link>
 <script type="text/javascript">
 StackMob.init({
-    appName: "swara_sangam",
+     appName: "drishti_sangam",
     clientSubdomain: "ankitguptamixorgcom",
-    publicKey: "a21c4638-f221-4a70-925b-65cc30de4c30",
+	 publicKey:       "67a42252-b873-42ad-a04d-9b5346b35a8c",
     apiVersion: 0,
 	 userSchema: 'organization_login',
 	    loginField: 'organization_id',
@@ -39,7 +39,7 @@ StackMob.init({
 	  		var topic = StackMob.Model.extend({ schemaName: 'topic' });
 			var mytopic = new topic({ });
 					var q = new StackMob.Collection.Query();
-					q.equals('org_topic', 1);
+					//q.equals('org_topic', 1);
 					q.setRange(0,9).orderDesc('lastmoddate');
 				  
 					mytopic.query(q, {
@@ -60,22 +60,101 @@ StackMob.init({
 									 }
 								 }
 								 //alert(count);
+								 var sn=1;
 							for(var i=0; i<=count; i++)
 							{
 							//	if(array[i].org_img == localStorage.getItem("stackmob.oauth2.user"))
 							
 								//alert(array[i].org_img);
-									$('#last_mod_date').html(array[0].lastmoddate);
+									//$('#last_mod_date').html(array[0].lastmoddate);
 									
 									//alert(val);
-									//$("#ui").append("<tr><td>"+array[i].topic_id+"</td><td><div class='device-name' contenteditable>"+array[i].topic_description+"</div></td><td><div class='device-name' contenteditable><a href='"+array[i].topic_logo+"' target='_blank'>"+array[i].topic_logo+"</div></a></td><td>"+ new Date(array[i].lastmoddate)+"</td><tr>");
-									$("#ui").append("<tr><td>"+array[i].topic_id+"</td><td><div class='device-name' contenteditable>"+array[i].topic_description+"</div></td><td id='a' ><img  src='"+array[i].topic_logo+"' height='40' width='40'  border='3' ></td><td>"+ new Date(array[i].lastmoddate)+"</td><td><input type='button' id='topic_id' value='save' ></td><tr>");
-								
+									
+									$("#ui").append("<tr><td class='ids'>"+array[i].topic_id+"<td>"+sn+"</td><td><div class='device-name' contenteditable>"+array[i].topic_description+"</div></td><td ><img  src='"+array[i].topic_url+"' height='50' width='50'  border='3' ><input type='file' id='files' name='files[]' multiple /></td><td>"+ new Date(array[i].lastmoddate)+"</td><tr>");
+	                            sn=sn+1;
+	$('a').click(function(){
+//alert("onclick");
+var id = $(this).parent().siblings('.ids').text();
+alert(id);
+//for updating the topic
+$(function(){
+
+	 var topic= StackMob.Model.extend({
+		 schemaName:'topic'
+	 });
+  var topicInstance = new topic({ topic_id: id });
+  /* var Todo = StackMob.Model.extend({
+    schemaName: 'organization'
+  });
+ 
+  var todoInstance = new Todo(); */
+  var fieldname = 'topic_logo'; //name of binary field that you created in your schema
+  
+  function handleFileSelect(evt) {
+    var files = evt.target.files; // FileList object
+	
+    // Loop through the FileList
+    for (var i = 0, f; f = files[i]; i++) {
+ 		
+      var reader = new FileReader();
+ 
+      // Closure to capture the file information
+      reader.onload = (function(theFile) {
+        return function(e) {
+ 			
+          /*
+            e.target.result will return "data:image/jpeg;base64,[base64 encoded data]...".
+            We only want the "[base64 encoded data] portion, so strip out the first part
+          */
+          var base64Content = e.target.result.substring(e.target.result.indexOf(',') + 1, e.target.result.length);
+          var fileName = theFile.name;
+          var fileType = theFile.type;
+			if((fileType=="image/jpeg")||(fileType=="image/png")||(fileType=="image/gif")||(fileType=="image/jpg"))
+			{
+          topicInstance.setBinaryFile(fieldname, fileName, fileType, base64Content);
+          topicInstance.save();
+		  alert('image saved');
+		  location.reload();
+		  document.getElementById('files').value = '';
+		 
+		  }
+		  else
+		  {
+		  alert("Please upload only image file in following format[jpeg,png,gif,jpg]");
+		  }
+         // todoInstance.setBinaryFile(fieldname, fileName, fileType, base64Content);
+         // todoInstance.save();
+//	  alert('Image saved');
+ 
+        };
+      })(f);
+ 
+      // Read in the file as a data URL
+      fileContent = reader.readAsDataURL(f);
+ 		//$('.data').html(fileContent);
+    }
+  }
+ 
+  document.getElementById('files').addEventListener('change', handleFileSelect, false);
+  //document.getElementById('submit').addEventListener('click', handleFileSelect, false);
+ });
+
+exit;
+
+});
+				
+			
 								 //end if condition
-							} // end for loop
+							}
+				// end for loop
+							
 						} //end success
 				 	 }); // end imagesearch schema query
 					 } // end result function
+
+					 
+					
+					
 					 
 			setInterval(check_newentry,1000);
 					 
@@ -114,9 +193,8 @@ StackMob.init({
 								if(counter<50)
 								{
 								
-									//$("#ui").append("<tr><td>"+array[i].topic_id+"</td><td><div class='device-name' contenteditable>"+array[i].topic_description+"</td><td><a href='"+array[i].topic_logo+"' target='_blank'>"+array[i].topic_logo+"</td><td>"+new Date(array[i].lastmoddate)+"</td><tr>");
-							$("#ui").append("<tr><td>"+array[i].topic_id+"</td><td><div class='device-name' contenteditable>"+array[i].topic_description+"</div></td><td id='a' ><img  src='"+array[i].topic_logo+"' height='40' width='40'  border='3' ></td><td>"+ new Date(array[i].lastmoddate)+"</td><td><input type='button' id='topic_id' value='save' ></td><tr>");
-	
+									$("#ui").append("<tr><td>"+array[i].topic_id+"</td><td><div class='device-name' contenteditable>"+array[i].topic_description+"</td><td><img src='"+array[i].topic_logo+"' ></td><td>"+new Date(array[i].lastmoddate)+"</td><tr>");
+							
 									//------------------------------------------- end device schema code
 									counter++;
 								
@@ -129,18 +207,33 @@ StackMob.init({
 				 	 });
 					 } // end check_newentry 
 					 });
- $('#submit').click(function () {
-   updateThis($('.a')[0])
+ 
+
+function updateThis(ui) {
+//var value_topic=document.getElementById('String').value;
+
+var topic = StackMob.Model.extend({ schemaName: 'topic' });
+var topic = new topic({ });
+topic.save({}, {
+    success: function(model) {
+        console.debug(model.toJSON());
+		alert("worked");
+    },
+    error: function(model, response) {
+        console.debug(response);
+		alert("saved...");
+    }
 });
-function updateThis(a) {
 
 
-alert("saved");
 
 }
 					 
 		</script>
-<style>
+
+		
+		</head>
+		<style>
 				 #footer {
 	 width: 100%;
 position: fixed;
@@ -180,13 +273,13 @@ padding-top:0px;
 }
 
 		</style>
-		</head>
 
+<body>
 <body>
 
 <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
-          <a class="brand" href="">Swara<img src="style/img/swara_icon.jpg" width="26" height="26"/>Dashboard</a>
+          <a class="brand" href="">Drishti<img src="style/img/camer.png" width="26" height="26"/>Dashboard</a>
           <div class="nav-collapse collapse pull-right">
             <ul class="nav">
               <li class="" id="home">
@@ -216,89 +309,31 @@ padding-top:0px;
 	<header class="jumbotron subhead" style="height:45px;"></header>
 <div class="device"  style='' >
   <div class="modal-header">
-	
-            <h3 id="myModalLabel"> Topic Information</h3>
-    </div>
+<form>
+<h3 id="myModalLabel"> Topic Information</h3>
+   
     <div class="modal-body" style=''>
 <table  class="data  table-bordered table table-striped" id="ui">
-
+   
 	<tr>
-		<th>Topic-Id</th>
-
-		<th>Topic-Description</th>
+		<th>Topic Id</th>
+<th>Serial Number</th>
+		<th>Topic Description</th>
+		<th>Topic Logo</th>
 		
-		<th>Topic-Logo</th>
-		<th>Time</th>
+ 		<th >Time</th>
+		<th></th>
 	</tr>
 	</table>
 </div>
+</form>
 <div class="modal-footer">
 	</div>
 </div>
-<div id="footer">
-      <div class="container">
-        <p class="muted credit">Design and Developed by <a href="http://mixorg.com">MIXORG</a> </p>
-      </div>
-    </div>
-<script type="text/javascript">
-$(function(){
-//onload validation
-var username=localStorage.getItem("stackmob.oauth2.user");
-//alert(username);
-StackMob.isLoggedIn({
-  yes: function(username){
-    console.log(username + " is logged in.");
-  },
-  no: function(){
-   // console.log("No one is currently logged in.");
-   window.location="login.html";
-  }
-});
-  
 
 
 
-
-
-$("#logout").click(function(e){
-$( "#dialog-confirm" ).dialog( "open" );
-});
-
-var User = StackMob.Model.extend({ schemaName: 'organization_login' });		
-var user = new StackMob.User({ organization_id: localStorage.getItem("stackmob.oauth2.user") });
-$( "#dialog-confirm" ).dialog({
- 
-	 autoOpen: false,
-      resizable: true,
-      height:160,
-      modal: true,
-      buttons: {
-        "YES": function() {
-		user.logout({
-  success: function(model) {
-    //show a success message/update your UI
-		window.location="login.html"
-  }, 
-  error: function(model, response) {
-    //show a failure message in your app    
-	alert("error");
-  }
-});
-          $( this ).dialog( "close" );
-        },
-        "NO": function() {
-          $( this ).dialog( "close" );
-		
-        }
-      }
-    });
-
-
- 
-
-});
-
-</script>
+	
 
 </body>
 <html>

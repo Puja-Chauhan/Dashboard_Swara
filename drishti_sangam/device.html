@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>Dashboard</title>
+<title> Device Information </title>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 <script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.8.0-bundled-min.js"></script>
 
@@ -17,9 +17,9 @@
 <link type="text/css" rel="stylesheet" href="style/css/bootstrap.css"></link>
 <script type="text/javascript">
 StackMob.init({
-    appName: "swara_sangam",
+    appName: "drishti_sangam",
     clientSubdomain: "ankitguptamixorgcom",
-    publicKey: "a21c4638-f221-4a70-925b-65cc30de4c30",
+	 publicKey:       "67a42252-b873-42ad-a04d-9b5346b35a8c",
     apiVersion: 0,
 	 userSchema: 'organization_login',
 	    loginField: 'organization_id',
@@ -36,13 +36,13 @@ StackMob.init({
 			result();
 			function result() {
 						
-	  		var topic = StackMob.Model.extend({ schemaName: 'topic' });
-			var mytopic = new topic({ });
+	  		var device = StackMob.Model.extend({ schemaName: 'device' });
+			var mydevice = new device({ });
 					var q = new StackMob.Collection.Query();
-					q.equals('org_topic', 1);
+					q.equals('device_org', 1);
 					q.setRange(0,9).orderDesc('lastmoddate');
 				  
-					mytopic.query(q, {
+					mydevice.query(q, {
 						success: function(modal) {
 							//After StackMob returns "Bill Watterson", print out the result
 						   	var array = modal.toJSON();
@@ -59,6 +59,8 @@ StackMob.init({
 									  count ++;
 									 }
 								 }
+								 								//	$("#ui").append("<tr><td>"+array[i].device_IMEI+"</td><td>"+array[i].device_model+"</td><td>"+array[i].device_permission+"<select id='abc' ><option value='true'>Approve</option><option value='false'>DisApprove</option></select></td> <td>"+ new Date(array[i].lastmoddate)+"</td><tr>");
+
 								 //alert(count);
 							for(var i=0; i<=count; i++)
 							{
@@ -66,25 +68,116 @@ StackMob.init({
 							
 								//alert(array[i].org_img);
 									$('#last_mod_date').html(array[0].lastmoddate);
-									
+									//$('#device_id').attr('value',disapprov);
 									//alert(val);
-									//$("#ui").append("<tr><td>"+array[i].topic_id+"</td><td><div class='device-name' contenteditable>"+array[i].topic_description+"</div></td><td><div class='device-name' contenteditable><a href='"+array[i].topic_logo+"' target='_blank'>"+array[i].topic_logo+"</div></a></td><td>"+ new Date(array[i].lastmoddate)+"</td><tr>");
-									$("#ui").append("<tr><td>"+array[i].topic_id+"</td><td><div class='device-name' contenteditable>"+array[i].topic_description+"</div></td><td id='a' ><img  src='"+array[i].topic_logo+"' height='40' width='40'  border='3' ></td><td>"+ new Date(array[i].lastmoddate)+"</td><td><input type='button' id='topic_id' value='save' ></td><tr>");
-								
+									var name=array[i].device_permission;
+									var vall;
+									//alert(name);
+									
+									if(name==false)
+									{
+									name="Disapprove";
+									vall="Approve";
+									
+									}
+									else
+									{
+									name="Approve"
+									vall="Disapprove"
+									}
+									
+									$("#ui").append("<tr><td class='ids' hidden>"+array[i].device_id+"</td><td>"+array[i].device_IMEI+"</td><td>"+array[i].device_model+"</td><td id='Example'><select id='abc' ><option >"+name+"</option><option value='vall'>"+vall+"</option></select></td> <td>"+ new Date(array[i].lastmoddate)+"</td><tr>");
+									
+									//alert(array[i].device_id);
+	$(document).on('change', 'select#abc', function(){
+ // do something
+ //alert("Updated");
+var value=$(this[this.selectedIndex]).text();
+//alert(value);
+
+//var currentCellText = $(this).text();
+ var id = $(this).parent().siblings('.ids').text();
+//alert(currentCellText);
+//alert(value);
+ //alert(id); 
+// var col = $(this).parent().children().index($(this).value);
+ //alert(col);
+  
+
+ // alert(sel);
+ 
+ if(value=='Approve')
+ {
+ var device = StackMob.Model.extend({ schemaName: 'device' });
+ var status = eval("true");
+// alert(status);
+var device = new device({ device_id:id, device_permission: status});
+device.save({}, {
+    success: function(model) {
+        console.debug(model.toJSON());
+		
+		location.reload();
+    },
+    error: function(model, response) {
+        console.debug(response);
+		alert(" Network Issue Please try again");
+    }
+});
+ alert("Device Approved");
+ }
+ else
+ {
+ var device = StackMob.Model.extend({ schemaName: 'device' });
+ var status = eval("false");
+ var device = new device({ device_id:id, device_permission: status});
+device.save({}, {
+    success: function(model) {
+        console.debug(model.toJSON());
+		//alert("worked");
+		location.reload();
+		
+    },
+    error: function(model, response) {
+        console.debug(response);
+		alert(" Network Issue Please try again");
+    }
+});
+ alert("Device Disapproved");
+ }
+ 
+
+
+//alert("saved");
+
+
+
+ exit;
+
+});
+
+
 								 //end if condition
 							} // end for loop
+
+
+	
+
 						} //end success
+	
+	
 				 	 }); // end imagesearch schema query
+	
 					 } // end result function
-					 
+
+	
 			setInterval(check_newentry,1000);
 					 
 					 function check_newentry() {
-					 	var topic = StackMob.Model.extend({ schemaName: 'topic' });
-			var mytopic = new topic({  });
+					 	var device = StackMob.Model.extend({ schemaName: 'device' });
+			var mydevice = new device({  });
 					var q = new StackMob.Collection.Query();
 					q.orderDesc('lastmoddate');
-					mytopic.query(q, {
+					mydevice.query(q, {
 						success: function(modal) {
 							//After StackMob returns "Bill Watterson", print out the result
 						   	var array = modal.toJSON();
@@ -94,6 +187,7 @@ StackMob.init({
 							 
 							// alert(lastmod_date_old +"..."+ lastmod_date);
 							 if(lastmod_date_old < lastmod_date)
+
 							{
 								
 								var val = array[0].lastmoddate;
@@ -114,10 +208,12 @@ StackMob.init({
 								if(counter<50)
 								{
 								
-									//$("#ui").append("<tr><td>"+array[i].topic_id+"</td><td><div class='device-name' contenteditable>"+array[i].topic_description+"</td><td><a href='"+array[i].topic_logo+"' target='_blank'>"+array[i].topic_logo+"</td><td>"+new Date(array[i].lastmoddate)+"</td><tr>");
-							$("#ui").append("<tr><td>"+array[i].topic_id+"</td><td><div class='device-name' contenteditable>"+array[i].topic_description+"</div></td><td id='a' ><img  src='"+array[i].topic_logo+"' height='40' width='40'  border='3' ></td><td>"+ new Date(array[i].lastmoddate)+"</td><td><input type='button' id='topic_id' value='save' ></td><tr>");
-	
+									//$("#ui").append("<tr><td>"+array[i].device_IMEI+"</td><td>"+array[i].device_model+"</td><td>"+array[i].device_permission+"</td><td>"+new Date(array[i].lastmoddate)+"</td><tr>");
+							
 									//------------------------------------------- end device schema code
+																		$("#ui").append("<tr><td>"+array[i].device_IMEI+"</td><td>"+array[i].device_model+"</td><td>"+array[i].device_permission+"<select id='myList'><option value='true'>Approve</option><option value='false'>DisApprove</option></select></td> <td>"+ new Date(array[i].lastmoddate)+"</td><tr>");
+				
+	
 									counter++;
 								
 								}
@@ -129,15 +225,6 @@ StackMob.init({
 				 	 });
 					 } // end check_newentry 
 					 });
- $('#submit').click(function () {
-   updateThis($('.a')[0])
-});
-function updateThis(a) {
-
-
-alert("saved");
-
-}
 					 
 		</script>
 <style>
@@ -186,7 +273,7 @@ padding-top:0px;
 
 <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
-          <a class="brand" href="">Swara<img src="style/img/swara_icon.jpg" width="26" height="26"/>Dashboard</a>
+          <a class="brand" href="">Drishti<img src="style/img/camer.png" width="26" height="26"/>Dashboard</a>
           <div class="nav-collapse collapse pull-right">
             <ul class="nav">
               <li class="" id="home">
@@ -198,10 +285,10 @@ padding-top:0px;
               <li class="" id="settings">
                 <a href="settings.html">SETTINGS</a>
               </li>
-			  <li class="" id="device">
+			  <li class="active">
                 <a href="device.html">DEVICE</a>
               </li>
-			  <li class="active">
+			  <li class="" id="topic">
                 <a href="topic.html">TOPIC</a>
               </li>
               <li class="" id="logout_btn">
@@ -217,21 +304,23 @@ padding-top:0px;
 <div class="device"  style='' >
   <div class="modal-header">
 	
-            <h3 id="myModalLabel"> Topic Information</h3>
+            <h3 id="myModalLabel"> Devices Information</h3>
     </div>
     <div class="modal-body" style=''>
 <table  class="data  table-bordered table table-striped" id="ui">
-
 	<tr>
-		<th>Topic-Id</th>
+	
+		<th>Device-IMEI</th>
 
-		<th>Topic-Description</th>
+		<th>Device-Model</th>
 		
-		<th>Topic-Logo</th>
+		<th>Device_Permission</th>
 		<th>Time</th>
 	</tr>
 	</table>
 </div>
+ 
+ 
 <div class="modal-footer">
 	</div>
 </div>
