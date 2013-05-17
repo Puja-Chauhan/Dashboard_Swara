@@ -84,6 +84,7 @@
 	  		var media = StackMob.Model.extend({ schemaName: 'media' });
 			var mymedia = new media({  });
 					var q = new StackMob.Collection.Query();
+					q.equals('media_org', 1);
 					q.orderDesc('lastmoddate');
 					mymedia.query(q, {
 						success: function(modal) {
@@ -254,6 +255,7 @@
 			 */
 			 var mymedia = new media({  });
 					var q = new StackMob.Collection.Query();
+					q.equals('media_org', 1);
 					q.orderDesc('lastmoddate');
 					mymedia.query(q, {
 						success: function(modal) {
