@@ -70,12 +70,12 @@ StackMob.init({
 									
 									//alert(val);
 									
-									$("#ui").append("<tr><td class='ids'>"+array[i].topic_id+"<td>"+sn+"</td><td><div class='device-name' contenteditable>"+array[i].topic_description+"</div></td><td ><img  src='"+array[i].topic_url+"' height='50' width='50'  border='3' ><input type='file' id='files' name='files[]' multiple /></td><td>"+ new Date(array[i].lastmoddate)+"</td><tr>");
+									$("#ui").append("<tr><td class='ids' hidden>"+array[i].topic_id+"<td>"+sn+"</td><td><div class='device-name' contenteditable>"+array[i].topic_description+"</div></td><td ><img  src='"+array[i].topic_url+"' height='50' width='50'  border='3' ><input type='file' id='files' name='files[]' multiple /></td><td>"+ new Date(array[i].lastmoddate)+"</td><tr>");
 	                            sn=sn+1;
 	$('a').click(function(){
 //alert("onclick");
 var id = $(this).parent().siblings('.ids').text();
-alert(id);
+//alert(id);
 //for updating the topic
 $(function(){
 
@@ -316,7 +316,7 @@ padding-top:0px;
 <table  class="data  table-bordered table table-striped" id="ui">
    
 	<tr>
-		<th>Topic Id</th>
+		
 <th>Serial Number</th>
 		<th>Topic Description</th>
 		<th>Topic Logo</th>
@@ -333,7 +333,65 @@ padding-top:0px;
 
 
 
-	
+	<script type="text/javascript">
+$(function(){
+//onload validation
+var username=localStorage.getItem("stackmob.oauth2.user");
+//alert(username);
+StackMob.isLoggedIn({
+  yes: function(username){
+    console.log(username + " is logged in.");
+  },
+  no: function(){
+   // console.log("No one is currently logged in.");
+   window.location="login.html";
+  }
+});
+  
+
+
+
+
+
+$("#logout").click(function(e){
+$( "#dialog-confirm" ).dialog( "open" );
+});
+
+var User = StackMob.Model.extend({ schemaName: 'organization_login' });		
+var user = new StackMob.User({ organization_id: localStorage.getItem("stackmob.oauth2.user") });
+$( "#dialog-confirm" ).dialog({
+ 
+	 autoOpen: false,
+      resizable: true,
+      height:160,
+      modal: true,
+      buttons: {
+        "YES": function() {
+		user.logout({
+  success: function(model) {
+    //show a success message/update your UI
+		window.location="login.html"
+  }, 
+  error: function(model, response) {
+    //show a failure message in your app    
+	alert("error");
+  }
+});
+          $( this ).dialog( "close" );
+        },
+        "NO": function() {
+          $( this ).dialog( "close" );
+		
+        }
+      }
+    });
+
+
+ 
+
+});
+
+</script>
 
 </body>
 <html>
