@@ -86,7 +86,8 @@ StackMob.init({
 									vall="Disapprove"
 									}
 									
-									$("#ui").append("<tr><td class='ids'></td><td>"+array[i].device_IMEI+"</td><td>"+array[i].device_model+"</td><td id='Example'><select id='abc' ><option >"+name+"</option><option value='vall'>"+vall+"</option></select></td> <td>"+ new Date(array[i].lastmoddate)+"</td><tr>");
+									$("#ui").append("<tr><td class='ids' hidden>"+array[i].device_id+"</td><td>"+array[i].device_IMEI+"</td><td>"+array[i].device_model+"</td><td id='Example'><select id='abc' ><option >"+name+"</option><option value='vall'>"+vall+"</option></select></td> <td>"+ new Date(array[i].lastmoddate)+"</td><tr>");
+									
 									//alert(array[i].device_id);
 	$(document).on('change', 'select#abc', function(){
  // do something
@@ -265,7 +266,6 @@ padding-top:0px;
 padding-top:0px;
 }
 
-
 		</style>
 		</head>
 
@@ -309,7 +309,7 @@ padding-top:0px;
     <div class="modal-body" style=''>
 <table  class="data  table-bordered table table-striped" id="ui">
 	<tr>
-	<th></th>
+	
 		<th>Device-IMEI</th>
 
 		<th>Device-Model</th>
@@ -319,18 +319,8 @@ padding-top:0px;
 	</tr>
 	</table>
 </div>
- <div class="pagination">
-              <ul>
-                <li><a id="prev">Prev</a></li>
-                <!-- 
-                <li><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                 -->
-                <li><a id="next">Next</a></li>
-              </ul>
-            </div>
+ 
+ 
 <div class="modal-footer">
 	</div>
 </div>
