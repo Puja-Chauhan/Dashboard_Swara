@@ -59,6 +59,7 @@ $(document).ready(function() {
 									 }
 								 }
 								 //alert(count);
+								 var sn=1;
 							for(var i=0; i<=count; i++)
 							{
 							 $('ui').bind('click', function(){
@@ -99,8 +100,9 @@ $(document).ready(function() {
 	
 	
 	
-									 $("#ui").append("<tr><td>"+array[i].mobile_number +"</td><td><a href><img src ="+array[i].image_url +" height='50' width='50'  border='3'  target='_blank'></a></td><td><a href='"+array[i].media_lat+","+array[i].media_lang+"' target='_blank'>"+array[i].media_lat+","+array[i].media_lang+"</td><td>"+new Date(array[i].lastmoddate)+"</td></tr>");					
-								 //end if condition
+									 $("#ui").append("<tr><td class='ids' hidden>"+array[i].media_id+"<td>"+sn+"</td><td>"+array[i].mobile_number +"</td><td><a href><img src ="+array[i].image_url +" height='50' width='50'  border='3'  target='_blank'></a></td><td><a href='"+array[i].media_lat+","+array[i].media_lang+"' target='_blank'>"+array[i].media_lat+","+array[i].media_lang+"</td><td>"+new Date(array[i].lastmoddate)+"</td></tr>");					
+								sn=sn+1;
+								//end if condition
 								// alert("append worked");
 								 	  
 							} // end for loop
@@ -268,6 +270,7 @@ background-clip: padding-box;
     <div class="modal-body" style=''>
 <table  class="data  table-bordered table table-striped" id="ui">
 	<tr>
+	<th>S.No</th>
 		<th>Mobile-number</th>
 
 		<th>IMAGE-URL</th>
