@@ -60,6 +60,7 @@ $(document).ready(function() {
 									 }
 								 }
 								 //alert(count);
+								 var sn=1;
 							for(var i=0; i<=count; i++)
 							{
 							 $('ui').bind('click', function(){
@@ -98,7 +99,8 @@ $(document).ready(function() {
 	
 	
 	
-									 $("#ui").append("<tr><td>"+array[i].mobile_number +"</td><td><a href='"+array[i].audio +"' target='_blank'>open</a></td><td>"+address +"</td><td>"+new Date(array[i].lastmoddate)+"</td></tr>");					
+									 $("#ui").append("<tr><td class='ids' hidden>"+array[i].media_id+"<td>"+sn+"</td><td>"+array[i].mobile_number +"</td><td><a href='"+array[i].audio +"' target='_blank'>open</a></td><td>"+address +"</td><td>"+new Date(array[i].lastmoddate)+"</td></tr>");					
+								 sn=sn+1;
 								 //end if condition
 								// alert("append worked");
 								 	  
@@ -267,6 +269,7 @@ background-clip: padding-box;
     <div class="modal-body" style=''>
 <table  class="data  table-bordered table table-striped" id="ui">
 	<tr>
+	<th>S.No</th>
 		<th>Mobile-number</th>
 
 		<th>Audio</th>

@@ -73,9 +73,9 @@ StackMob.init({
 									$("#ui").append("<tr><td class='ids' hidden>"+array[i].topic_id+"<td>"+sn+"</td><td><div class='device-name' contenteditable>"+array[i].topic_description+"</div></td><td ><a href><img  src='"+array[i].topic_logo+"' height='50' width='50'  border='3' ><input type='file' id='files' name='files[]' multiple /> </a></td><td>"+ new Date(array[i].lastmoddate)+"</td><tr>");
 	                            sn=sn+1;
 	$('a').click(function(){
-alert("onclick");
+//alert("onclick");
 var id = $(this).parent().siblings('.ids').text();
-alert(id);
+//alert(id);
 //for updating the topic
 $(function(){
 
@@ -217,7 +217,7 @@ var topic = new topic({ });
 topic.save({}, {
     success: function(model) {
         console.debug(model.toJSON());
-		alert("worked");
+		//alert("worked");
     },
     error: function(model, response) {
         console.debug(response);
@@ -316,8 +316,7 @@ padding-top:0px;
 <table  class="data  table-bordered table table-striped" id="ui">
    
 	<tr>
-		<th>Topic Id</th>
-<th>Serial Number</th>
+<th>S.No.</th>
 		<th>Topic Description</th>
 		<th>Topic Logo</th>
 		

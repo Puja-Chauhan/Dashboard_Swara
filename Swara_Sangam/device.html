@@ -62,6 +62,7 @@ StackMob.init({
 								 								//	$("#ui").append("<tr><td>"+array[i].device_IMEI+"</td><td>"+array[i].device_model+"</td><td>"+array[i].device_permission+"<select id='abc' ><option value='true'>Approve</option><option value='false'>DisApprove</option></select></td> <td>"+ new Date(array[i].lastmoddate)+"</td><tr>");
 
 								 //alert(count);
+								 var sn=1;
 							for(var i=0; i<=count; i++)
 							{
 							//	if(array[i].org_img == localStorage.getItem("stackmob.oauth2.user"))
@@ -86,8 +87,8 @@ StackMob.init({
 									vall="Disapprove"
 									}
 									
-									$("#ui").append("<tr><td class='ids' hidden>"+array[i].device_id+"</td><td>"+array[i].device_IMEI+"</td><td>"+array[i].device_model+"</td><td id='Example'><select id='abc' ><option >"+name+"</option><option value='vall'>"+vall+"</option></select></td> <td>"+ new Date(array[i].lastmoddate)+"</td><tr>");
-									
+									$("#ui").append("<tr><td class='ids' hidden>"+array[i].device_id+"<td>"+sn+"</td><td>"+array[i].device_IMEI+"</td><td>"+array[i].device_model+"</td><td id='Example'><select id='abc' ><option >"+name+"</option><option value='vall'>"+vall+"</option></select></td> <td>"+ new Date(array[i].lastmoddate)+"</td><tr>");
+									sn=sn+1;
 									//alert(array[i].device_id);
 	$(document).on('change', 'select#abc', function(){
  // do something
@@ -309,7 +310,7 @@ padding-top:0px;
     <div class="modal-body" style=''>
 <table  class="data  table-bordered table table-striped" id="ui">
 	<tr>
-	
+	<th>S.No</th>
 		<th>Device-IMEI</th>
 
 		<th>Device-Model</th>
