@@ -1,0 +1,205 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Untitled Document</title>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.9.1-bundled-min.js"></script>
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+	 <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/dark-hive/jquery-ui.css" />
+	<!-- <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/redmond/jquery-ui.css" />-->
+	  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+	  
+	 <script type="text/javascript" src="style/js/bootstrap.js"></script>
+	 <script type="text/javascript" src="style/js/modal.js"></script>
+	
+	<link type="text/css" rel="stylesheet" href="style/css/bootstrap.css"></link>
+
+<script type="text/javascript">
+      /* <![CDATA[ */
+      StackMob.init({
+        publicKey: '9394d214-e532-4603-8363-c5159facad75',
+        apiVersion : 0
+      });
+      /* ]]> */
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+var user_org_id = localStorage.getItem("org_id");
+var org_login_points = localStorage.getItem("login_points");
+//alert(org_id);
+	/* $("#logout").click(function(){
+		//alert(org_id);
+		if ('org_id' in localStorage) 
+		{
+			alert("You are logged out");
+			localStorage.removeItem("org_id");
+			window.open("index.html","_top");
+		}
+	}); */
+	
+		if ('org_id' in localStorage) 
+		{
+		}
+		else 
+		{
+			window.open("index.html","_top");
+		}
+	
+});
+</script>
+
+<style type="text/css">
+	#form_wrapper
+		{
+			width:100%;
+			margin-top:15%;
+		}
+		
+	#org_form
+	{
+		width: 300px;
+		min-height: 120px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	#ok
+	{
+		background:url(images/mobile.png) no-repeat;
+		width:50px;
+		height:50px;
+		cursor:pointer;
+	}           
+</style>
+</head>
+
+<body>
+	
+		<div id="form_wrapper">
+			<form id="org_form" name="org_form" method="post">
+				<input type="text" name="mobile_no" maxlength="10" id="mobile_no" placeholder="Mobile-no" style="margin-top:10px;" />
+				<input type="button" value="" id="ok" name="ok" />
+			</form>
+		</div>
+				
+				<script type="text/javascript">
+					//$(document).ready(function() {
+						//alert($.session.get('org_id'));
+						$("#ok").click(function(){
+							var user_mobile_no = $("#mobile_no").val();
+							if(user_mobile_no == '')
+							{
+								alert("Please enter the mobile no.");
+								$("#ok").focus();
+								//exit();
+							}	
+							else
+							{
+								var Userdata_schema = StackMob.Model.extend({ schemaName: 'userdata' });
+								var userdata = new Userdata_schema({ });
+								var q = new StackMob.Collection.Query();
+								q.orderDesc('user_points');
+								userdata.query(q, {
+									  success: function(model, result, options) {
+											console.debug(model.toJSON());
+											var array = model.toJSON();
+										
+											//count total records in image search schema
+												var key;
+												var count = 0;
+												for(key in array) {
+													 if(array.hasOwnProperty(key)) {
+													  count ++;
+													 }
+												 }
+												 //alert(count);
+											 //end count total records in image search schema
+										 	var user_org_id = localStorage.getItem("org_id");
+											var org_login_points = localStorage.getItem("login_points");
+											var org_login_points = eval(org_login_points) ;
+											//var user_flag;
+											
+											for(var i=0; i<=count; i++)
+											{
+												var org_id = array[i].org_id;
+												var mobile_no = array[i].mobile_number;
+												var userdata_id = array[i].userdata_id;
+												//var user_points = array[i].user_points;
+												
+												 if((user_mobile_no == mobile_no) && (user_org_id == org_id))
+												{
+													//user_flag = 'true';
+													localStorage.setItem("mobile_no",user_mobile_no);
+													localStorage.setItem("userdata_id",userdata_id);
+													var mobile_no = localStorage.getItem("mobile_no");
+													var userdata_id = localStorage.getItem("userdata_id");
+													//alert(mobile_no);
+													//alert(userdata_id);
+													//alert("flag = true");
+													window.open("karna_home.html","_top");
+													exit();
+												} // end if condition
+												else
+												{
+													//user_flag = 'false';
+													
+													if(i == count-1)
+													{
+														//alert(i+"......"+count);
+														//create new user in userdata schema
+														var Userdata_schema = StackMob.Model.extend({ schemaName: 'userdata' });
+ 
+														var userdata_schema = new Userdata_schema({ mobile_number: user_mobile_no, org_id: user_org_id, user_lat: '28.5191412', user_long:' 77.2012273', user_points: org_login_points });
+														
+															userdata_schema.create({
+																success: function(model) {
+																	//console.debug(model.toJSON());
+																	window.open("karna_home.html","_top");
+																	//alert("user created");
+																},
+																error: function(model, response) {
+																	//console.debug(response);
+																	//alert(response);
+																	alert("try again");
+																}
+															}); //end create userdata function
+														//end create userdata 
+													} //end i==count i if condition 
+												} //end else 
+											} // end for loop 
+											
+											/* if(user_flag == 'false')
+											{	
+												//alert("check false flag");
+												//create new user in userdata schema
+													var Userdata_schema = StackMob.Model.extend({ schemaName: 'userdata' });
+													var userdata_schema = new Userdata_schema({ mobile_number: user_mobile_no, org_id: user_org_id, user_lat: '28.5191412', user_long:' 77.2012273', user_points: org_login_points });
+													
+													userdata_schema.create({
+														success: function(model, result, options) {
+															console.debug(model.toJSON());
+															//alert("flag = false");
+														},
+														error: function(model, error, options) {
+															//console.debug(response);
+															//alert("error");
+														}
+													}); //end create userdata function
+												//end create userdata
+											} //end flag if condition  */
+																						
+									  },  //end success
+									  
+									  error: function(model, result, options) {
+									  	//alert("error");
+									  } //end error
+								}); //end fetch userdata
+							}	//end else			
+						}); //end click button function
+					//});
+				</script>
+
+				<!-- <div id="logout">logout</div> -->
+</body>
+</html>

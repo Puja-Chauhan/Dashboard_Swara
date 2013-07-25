@@ -1,0 +1,328 @@
+<html>
+    <head>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.9.1-bundled-min.js"></script>
+	
+	 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+	 <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/dark-hive/jquery-ui.css" />
+	<!-- <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/redmond/jquery-ui.css" />-->
+	  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+	  <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
+	 <script type="text/javascript" src="style/js/bootstrap.js"></script>
+	 <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+	<link type="text/css" rel="stylesheet" href="style/css/bootstrap.css"></link>
+	
+<link href="style/css/bootstrap-responsive.css" rel="stylesheet">
+	
+	
+        <title>Karna - Hospital </title>
+		
+		<script type="text/javascript">
+      /* <![CDATA[ */
+      // Initialize StackMob object
+      // Copy your init data from here: https://dashboard.stackmob.com/sdks/js/config
+      // Your other app information is here: https://dashboard.stackmob.com/settings
+      StackMob.init({
+        publicKey: '9394d214-e532-4603-8363-c5159facad75',
+		//secure: StackMob.NEVER ,
+		//userSchema: 'organisation',
+	   // loginField: 'organisation_id',
+	   // passwordField: 'password',
+        apiVersion : 0
+      });
+      /* ]]> */
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+var user_org_id = localStorage.getItem("org_id");
+var org_login_points = localStorage.getItem("login_points");
+//alert(org_id);
+//to hide the hospital tab in others
+if(user_org_id==6)
+{
+$("#health_tab").show();
+
+}
+else
+{
+//alert("else");
+$("#health_tab").hide();
+}
+	$("#logout").click(function(){
+		//alert(org_id);
+		if ('org_id' in localStorage) 
+		{
+			alert("You are logged out");
+			localStorage.removeItem("org_id");
+			localStorage.removeItem("login_points");
+			localStorage.removeItem("mobile_no");
+			localStorage.removeItem("userdata_id");
+			window.open("index.html","_top");
+		}
+	});
+	
+		if ('org_id' in localStorage) 
+		{
+		}
+		else 
+		{
+			window.open("index.html","_top");
+		}
+	
+});
+</script>
+
+						<script type="text/javascript">
+							$(document).ready(function() {
+								var userdata_id = localStorage.getItem("userdata_id");
+								//fetch the user points ans show in header
+								
+									var Userdata_schema = StackMob.Model.extend({ schemaName: 'userdata' });
+									var userdata_schema = new Userdata_schema({ });
+									var q = new StackMob.Collection.Query();
+									q.equals('userdata_id', userdata_id);
+									userdata_schema.query(q, {
+										success: function(modal) {
+											//After StackMob returns "Bill Watterson", print out the result
+											var array = modal.toJSON();
+											console.debug(array);
+											var user_points = array[0].user_points;
+											
+											$("#user_points").html(user_points);
+										} //end success
+									}); // end equals query
+								//end fetch the user points ans show in header
+							});
+        				</script>
+						
+<script type="text/javascript">
+$(document).ready(function() {		
+	result();
+	function result() {
+	
+				var Userdata_schema = StackMob.Model.extend({ schemaName: 'location_content' });
+			var userdata = new Userdata_schema({ });
+					var q = new StackMob.Collection.Query();
+					q.orderAsc('createddate');
+					 userdata.query(q, {
+						success: function(modal) {
+							//After StackMob returns "Bill Watterson", print out the result
+						   	var array = modal.toJSON();
+							 console.debug(array);
+							  console.debug("after sorting");
+							// alert(array[0].address);
+							 
+							 //count total records in image search schema
+								var key;
+								var count = 0;
+								for(key in array) {
+									 if(array.hasOwnProperty(key)) {
+									  count ++;
+									 }
+								 }
+								 //alert(count);
+							 //end count total records in image search schema
+									
+								var counter = 0;					
+							 var user_org_id = localStorage.getItem("org_id");
+							// var number=9453144225;
+							//fetch user records with login org id
+							  	for(var i=0; i<count; i++)
+								{	
+									if(counter <10) 
+									{
+										if(array[i].org_id == user_org_id) // check the organisation name
+										{
+									
+									//	alert(array[i].address);
+										
+											$("#ui").append("<tr><td><a class='anchorclass' href='#'>"+array[i].content_name+"</a></td><td> <a href='tel:"+array[i].contact_number+"' data-rel='external'><img src='images/phone.png' style='width:30px; height:30px;background-color: #CCEEFF;padding-right: 10px ' /></a>  <a href='show_map.html?id="+array[i].location_content_id+"' target='_blank'><img src='images/map.png' style='width:30px; height:30px; padding-right: 10px'/></a><a href='media_content.html'><img src='images/voice.png' style='width:30px; height:30px; background-color: #CCEEFF;'/></a></td></tr>");
+											counter++;
+	
+										} //end organisation name if condition
+																				$(function(){
+      function yourfunction(event) {
+           // alert('some anchor clicked');
+		   //for getting which row number selected.(-1 because need to start with zero)
+		   var j=(($(this).closest("tr")[0].rowIndex)-1);
+		   
+			window.alert(array[j].address);
+			
+            exit;
+      }
+    
+      $('a.anchorclass').click(yourfunction);
+      
+});
+									} //end counter if condition
+								} // end i for loop
+							//end fetch user records with login org id
+		
+						} //end success
+				 	 }); // end imagesearch schema query
+				
+		} //end result function
+				
+	});
+        </script>
+
+
+<style>
+				 #footer {
+	 width: 100%;
+position: fixed;
+bottom: 0px;
+background-color: #000;
+height: auto;
+}
+.container .credit {
+float: right;
+margin: 10px 0;
+}
+.muted {
+color: #999999;
+}
+		.ui-dialog .ui-dialog-title {
+
+font-weight: bold;
+font-size: 18px;
+}
+.ui-dialog .ui-dialog-buttonpane {
+font-size: 14px;
+}
+		.content
+		{
+		display:none;
+		}
+		.ui-dialog-titlebar-close {
+  visibility: hidden;
+}
+.active
+{
+padding-top:0px;
+}
+.navbar .nav > li {
+padding-right:10px;
+padding-top:0px;
+}
+.dashboard
+{
+/*margin-left: 35%;
+position: absolute;
+width: 25%;
+height: 70%;*/
+position:center;
+width:auto;
+height:auto;
+
+background-color: #ffffff;
+border: 1px solid #999;
+border: 1px solid rgba(0, 0, 0, 0.3);
+-webkit-border-radius: 6px;
+-moz-border-radius: 6px;
+border-radius: 6px;
+-webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+-moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+-webkit-background-clip: padding-box;
+-moz-background-clip: padding-box;
+background-clip: padding-box;
+}
+</style>
+
+<style>
+.navbar-inner {
+	min-height: 55px;
+}
+.modal-header {
+	padding:0px 15px;
+}
+.dropdown-menu {
+ 	padding:0px;
+}
+.dropdown-menu a {
+	padding: 1px 20px;
+}
+.modal-body {
+	max-height:90%;
+	height:90%;
+}
+#user_points
+{
+	line-height: 50px;
+	font-weight: bold;
+	color: #ffffff;
+	margin-left:5%;
+}
+</style>
+<!-- css for pagination -->
+        <style type="text/css">
+            p{
+                text-align: center;
+            }
+        </style>
+		<!--end css for pagination -->
+    </head>
+    <body>
+		<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+	   <div class="container">
+	    <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <!-- <a class="brand" href="">Karna<img src="style/img/karna.png"/>Dashboard</a> -->
+		   <a class="brand" href="" style="color:#FFFFFF;">Karna<img src="style/img/karna.png"/>Application</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="" id="home">
+                <a href="karna_home.html"><img src="images/home.png" style="width:30px; height:30px;" alt="HOME" /></a>
+              </li>
+              <li class="active" id="leaderboard">
+                <a href="leaderboard.html"><img src="images/leaderboard.png" style="width:30px; height:30px;" alt="LEADERBOARD" /></a>
+              </li>
+			   <li class="" id="health_tab">
+			  <a href="hospital_tab.html"> <img src="images/hospital.png" style="width:30px; height:30px;" alt="health_tab" /></a>
+			  </li>
+			  <li class=""> 
+			  	<div id="user_points"></div>
+			  </li>
+              <li class="" id="logout_btn">
+                <a id="logout" href="#LOGOUT"><img src="images/logout.png" style="width:30px; height:30px;" alt="LOGOUT" /></a>
+              </li>
+            </ul>
+          </div>
+		  
+        </div>
+      </div>
+	
+	
+	<div class="dashboard"  style='' >
+  	<!-- <div class="modal-header">
+           <h5 id="myModalLabel"> Users Information</h5>
+    </div> -->
+    <div class="modal-body" style="height:90%;">
+		<table class="data  table-bordered table table-striped" id="ui" style="font-size:12px; margin-bottom:0px;">
+			<tr>
+				<th>Hospital Name</th>
+				<th>Options</th>
+			</tr>
+		</table>
+	</div>
+	<!-- <div class="modal-footer" style="font-size:12px; padding:0px;">
+		<p class="page1">Leaderboard</p>
+	</div> -->
+</div>
+
+<div id="footer">
+      <div class="container">
+        <p>Design and Developed by <a href="http://mobileharvest.in">Mobile Harvest</a> </p>
+      </div>
+</div>
+ <div id="last_mod_date" value=""></div> 
+  <div id="last_mod_date_new" value=""></div>       
+      
+    </body>
+</html>

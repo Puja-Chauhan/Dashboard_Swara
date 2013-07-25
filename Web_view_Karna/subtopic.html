@@ -1,0 +1,369 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Sub-topics</title>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.9.1-bundled-min.js"></script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXZG_t7ZYAOL0SgxiB3HIH2Warac77Hjc&sensor=false"></script>
+ <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+ <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/dark-hive/jquery-ui.css" />
+<!-- <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/redmond/jquery-ui.css" />-->
+  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+  <script type="text/javascript" src="style/js/modal.js"></script>
+ <script type="text/javascript" src="style/js/bootstrap.js"></script>
+ 
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+	<link type="text/css" rel="stylesheet" href="style/css/bootstrap.css"></link>
+	
+<link href="style/css/bootstrap-responsive.css" rel="stylesheet">   
+
+<script type="text/javascript">
+      /* <![CDATA[ */
+      StackMob.init({
+        publicKey: '9394d214-e532-4603-8363-c5159facad75',
+        apiVersion : 0
+      });
+      /* ]]> */
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	
+	var user_org_id = localStorage.getItem("org_id");
+	var org_login_points = localStorage.getItem("login_points");
+
+	var mobile_no = localStorage.getItem("mobile_no");
+	var userdata_id = localStorage.getItem("userdata_id");
+	//alert(org_id);
+	//to hide the hospital tab in others
+if(user_org_id==6)
+{
+$("#health_tab").show();
+
+}
+else
+{
+//alert("else");
+$("#health_tab").hide();
+}
+		$("#logout").click(function(){
+			//alert(org_id);
+			if ('org_id' in localStorage) 
+			{
+				alert("You are logged out");
+				localStorage.removeItem("org_id");
+				localStorage.removeItem("login_points");
+				localStorage.removeItem("mobile_no");
+				localStorage.removeItem("userdata_id");
+				window.open("index.html","_top");
+			}
+		});
+		
+			if ('org_id' in localStorage) 
+			{
+			}
+			else 
+			{
+				window.open("index.html","_top");
+			}
+		
+	});
+</script>
+		<script type="text/javascript">
+							$(document).ready(function() {
+								var userdata_id = localStorage.getItem("userdata_id");
+								//fetch the user points ans show in header
+									var Userdata_schema = StackMob.Model.extend({ schemaName: 'userdata' });
+									var userdata_schema = new Userdata_schema({ });
+									var q = new StackMob.Collection.Query();
+									q.equals('userdata_id', userdata_id);
+									userdata_schema.query(q, {
+										success: function(modal) {
+											//After StackMob returns "Bill Watterson", print out the result
+											var array = modal.toJSON();
+											console.debug(array);
+											var user_points = array[0].user_points;
+											$("#user_points").html(user_points);
+										} //end success
+									}); // end equals query
+								//end fetch the user points ans show in header
+							});
+        				</script>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+			
+	result();
+	function result() {
+			
+			var previous_url = document.referrer; // fetch the subtopic file url with topic id
+			//$('#back').html("<a href='"+previous_url+"'>Back</a>"); // set back link value
+			
+			var url = location.href; // fetch the current url
+					//alert(url);
+					
+					//in case fb comment id variable is added in the url
+					if (url.indexOf('=') == -1)
+					{
+						var url_arr = url.split('/'); //convert url string in array	
+						url = url_arr[0]+"topic.html";
+						window.open(url, '_top'); 
+					}
+					
+					//fetch id from url
+					var url_arr = url.split('='); //convert url string in array	
+					var url_topic_id= url_arr[1]; //fetch the value of id from url
+					
+							//fetch the topic image
+									var Topic_schema = StackMob.Model.extend({ schemaName: 'topic' });
+									var topic = new Topic_schema({ });
+									var q = new StackMob.Collection.Query();
+									q.equals('topic_id', url_topic_id);
+									topic.query(q, {
+										success: function(modal) {
+											//After StackMob returns "Bill Watterson", print out the result
+											var array2 = modal.toJSON();
+											console.debug(array2);
+											$("#super_id").html("<img src='"+array2[0].topic_url+"' style='width: 80px; height:70px;' />");
+										} //end success
+									}); // end equals query
+							//end fetch the topic image
+	
+				var Topic_schema = StackMob.Model.extend({ schemaName: 'topic' });
+			var topic = new Topic_schema({ });
+					 topic.fetchExpanded(1, {
+						success: function(modal) {
+							//After StackMob returns "Bill Watterson", print out the result
+						   	var array = modal.toJSON();
+							 // console.debug(array);
+
+							 //count total records in image search schema
+								var key;
+								var count = 0;
+								var counter=0;
+								for(key in array) {
+									 if(array.hasOwnProperty(key)) {
+									  count ++;
+									 }
+								 }
+								 //alert(count);
+							 //end count total records in image search schema
+							 
+							 $("#topic_id").html("Topic id - "+url_topic_id);
+														 
+							for(var i=0; i<=count; i++)
+							{
+									if(array[i].topic_id == url_topic_id)
+									{
+									
+										var subtopic_array = array[i].subtopic;
+									
+										var key2;
+										var count2 = 0;
+										for(key2 in subtopic_array) {
+											 if(subtopic_array.hasOwnProperty(key2)) {
+											  count2 ++;
+											 }
+										 }
+										 //alert(count);
+										 
+										 for(var j=0; j<=count2; j++)
+										 {
+											$("#ui").append("<tr><td><a href='media_subtopic.html?id="+subtopic_array[j].subtopic_id+"'><img src='"+subtopic_array[j].subtopic_url+"'  style='width: 80px; height:70px;'  /></a></td></tr>");
+											
+										} //end j for loop
+									} // end topic-id if condition
+								
+							} // end for loop
+						} //end success
+				 	 }); // end imagesearch schema query
+				// code for pagenation
+			
+		} //end result function
+			
+	});
+        </script>
+
+<style>
+				 #footer {
+	 width: 100%;
+position: fixed;
+bottom: 0px;
+background-color: #000;
+height: auto;
+}
+.container .credit {
+float: right;
+margin: 10px 0;
+}
+.muted {
+color: #999999;
+}
+		.ui-dialog .ui-dialog-title {
+
+font-weight: bold;
+font-size: 18px;
+}
+.ui-dialog .ui-dialog-buttonpane {
+font-size: 14px;
+}
+		.content
+		{
+		display:none;
+		}
+		.ui-dialog-titlebar-close {
+  visibility: hidden;
+}
+.active
+{
+padding-top:0px;
+}
+.navbar .nav > li {
+padding-right:10px;
+padding-top:0px;
+}
+.dashboard
+{
+
+/*margin-left: 5%;
+position: absolute;
+width: 90%;
+height: 90%;*/
+
+position:center;
+width:auto;
+height:auto;
+
+background-color: #ffffff;
+border: 1px solid #999;
+border: 1px solid rgba(0, 0, 0, 0.3);
+-webkit-border-radius: 6px;
+-moz-border-radius: 6px;
+border-radius: 6px;
+-webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+-moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+-webkit-background-clip: padding-box;
+-moz-background-clip: padding-box;
+background-clip: padding-box;
+}
+</style>
+
+<style>
+.navbar-inner {
+	min-height: 55px;
+}
+.modal-header {
+	padding:0px 15px;
+}
+.dropdown-menu {
+ 	padding:0px;
+}
+.dropdown-menu a {
+	padding: 1px 20px;
+}
+.modal-body {
+	max-height:78%;
+	height:70%;
+}
+#user_points
+{
+	line-height: 50px;
+	font-weight: bold;
+	color: #ffffff;
+	margin-left:5%;
+}
+</style>
+<!-- css for pagination -->
+        <style type="text/css">
+            p{
+                text-align: center;
+            }
+        </style>
+		<!--end css for pagination -->
+    </head>
+    <body>
+			<div class="navbar navbar-inverse navbar-fixed-top" style="overflow:hidden">
+      <div class="navbar-inner">
+	   <div class="container">
+	    <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <!-- <a class="brand" href="">Karna<img src="style/img/karna.png"/>Dashboard</a> -->
+		   <a class="brand" href="" style="color:#FFFFFF;">Karna<img src="style/img/karna.png"/>Application</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="" id="home">
+                <a href="karna_home.html"><img src="images/home.png" style="width:30px; height:30px;" alt="HOME" /></a>
+              </li>
+              <li class="" id="leaderboard">
+                <a href="leaderboard.html"><img src="images/leaderboard.png" style="width:30px; height:30px;" alt="LEADERBOARD" /></a>
+              </li>
+			  <li class=""> 
+			  	<div id="user_points"></div>
+			  </li>
+              <li class="" id="logout_btn">
+                <a id="logout" href="#LOGOUT"><img src="images/logout.png" style="width:30px; height:30px;" alt="LOGOUT" /></a>
+              </li>
+            </ul>
+          </div>
+		 
+		  
+        </div>
+      </div>
+	<header class="jumbotron subhead" style="height:10px;"></header>
+	
+	<div class="dashboard"  style='' >
+   		<div class="modal-header">
+			<ul>
+				<li style="display:inline-block; list-style:none;"><div id="super_id"></div></li>
+			</ul>
+    	</div> 
+    <div class="modal-body">
+	<table class="data  table-bordered table table-striped" id="ui" style="font-size:12px; margin-bottom:0px;">
+	<tr>
+		<th>Subtopics</th>
+	</tr>
+	</table>
+	<!-- <form>
+			<input type="hidden" name="filename" value="user_data.csv" id="filename" />
+			<textarea cols="60" rows="10" name="data" id="data"></textarea>
+			<p id="downloadify">
+				You must have Flash 10 installed to download this file.
+			</p>
+		</form> -->
+       
+		<div id="current_subtopic_id" value=""></div> 
+        <!-- <h2>Demo 2</h2>
+        <p class="page2">No page selected</p>
+        <p class="demo2"></p>
+        <h2>Demo 3</h2>
+        <p class="page3">No page selected</p>
+        <p class="demo3"></p> -->
+		</div>
+<div class="modal-footer" style="font-size:12px; padding:0px;">
+<!-- <p class="page1">No page selected</p> -->
+	
+	<div id="page_no" style="width:745px; float:left;">
+        <p class="demo1" style="margin: 10px;">
+		</p>
+	</div>	
+		
+		
+	</div>
+</div>
+
+<div id="footer">
+      <div class="container">
+        <p>Design and Developed by <a href="http://mobileharvest.in">Mobile Harvest</a> </p>
+      </div>
+</div>
+ <div id="last_mod_date" value=""></div> 
+  <div id="last_mod_date_new" value=""></div>       
+      
+    </body>
+</html>

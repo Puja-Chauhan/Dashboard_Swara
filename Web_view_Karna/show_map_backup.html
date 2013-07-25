@@ -1,0 +1,588 @@
+<html>
+	<head>
+    <title>Karna Dashboard</title>
+    <link href="http://www.stackmob.com/platform/favicon.ico" type="image/vnd.microsoft.icon" rel="icon" />
+    <link href="http://www.stackmob.com/platform/favicon.png" type="image/png" rel="icon" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.9.1-bundled-min.js"></script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXZG_t7ZYAOL0SgxiB3HIH2Warac77Hjc&sensor=false"></script>
+ <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+ <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/dark-hive/jquery-ui.css" />
+<!-- <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/redmond/jquery-ui.css" />-->
+  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+  <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
+ <script type="text/javascript" src="style/js/bootstrap.js"></script>
+ 
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+	<link type="text/css" rel="stylesheet" href="style/css/bootstrap.css"></link>
+	
+<link href="style/css/bootstrap-responsive.css" rel="stylesheet">    
+    <style type="text/css" media="screen">
+      /* <![CDATA[ */
+        /* li { padding-top: 10px; } */
+      /* ]]> */
+	 
+    </style>
+		<!--
+		*************************************
+		STACKMOB JS SDK DEPENDENCIES
+		Include these in your pages where you want to use the StackMob js sdk
+		*************************************
+		-->
+		<!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.8.0-bundled-min.js"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=place"></script> -->
+		<!--
+		*************************************
+		INITIALIZE THE JS SDK BELOW
+
+		Copy/Paste the init method from:
+		https://dashboard.stackmob.com/sdks/js/config
+		*************************************
+		-->
+	  <script type="text/javascript">
+      /* <![CDATA[ */
+      // Initialize StackMob object
+      // Copy your init data from here: https://dashboard.stackmob.com/sdks/js/config
+      // Your other app information is here: https://dashboard.stackmob.com/settings
+      StackMob.init({
+        publicKey: '9394d214-e532-4603-8363-c5159facad75',
+		//secure: StackMob.NEVER ,
+		//userSchema: 'organisation',
+	   // loginField: 'organisation_id',
+	   // passwordField: 'password',
+        apiVersion : 0
+      });
+      /* ]]> */
+</script>
+
+		<!--
+		*************************************
+		StackMob JS SDK code that creates and saves a TestObject
+		*************************************
+		-->
+		
+		<script type="text/javascript">
+$(document).ready(function() {
+var user_org_id = localStorage.getItem("org_id");
+	var org_login_points = localStorage.getItem("login_points");
+	
+	var mobile_no = localStorage.getItem("mobile_no");
+	var userdata_id = localStorage.getItem("userdata_id");
+	
+	
+//alert( user_org_id);
+
+//to hide the hospital tab in others
+if(user_org_id==6)
+{
+$("#health_tab").show();
+
+}
+else
+{
+//alert("else");
+$("#health_tab").hide();
+}
+/*	$("#logout").click(function(){
+		//alert(org_id);
+		if ('org_id' in localStorage) 
+		{
+			alert("You are logged out");
+			localStorage.removeItem("org_id");
+			localStorage.removeItem("login_points");
+			localStorage.removeItem("mobile_no");
+			localStorage.removeItem("userdata_id");
+			window.open("index.html","_top");
+		}
+	});
+	
+		if ('org_id' in localStorage) 
+		{
+		
+		}
+		else 
+		{
+			window.open("index.html","_top");
+		}
+	
+});
+*/
+</script>
+	<script type="text/javascript">
+							$(document).ready(function() {
+								var userdata_id = localStorage.getItem("userdata_id");
+								//fetch the user points ans show in header
+									var Userdata_schema = StackMob.Model.extend({ schemaName: 'userdata' });
+									var userdata_schema = new Userdata_schema({ });
+									var q = new StackMob.Collection.Query();
+									q.equals('userdata_id', userdata_id);
+									userdata_schema.query(q, {
+										success: function(modal) {
+											//After StackMob returns "Bill Watterson", print out the result
+											var array = modal.toJSON();
+											console.debug(array);
+											var user_points = array[0].user_points;
+											$("#user_points").html(user_points);
+										} //end success
+									}); // end equals query
+								//end fetch the user points ans show in header
+							});
+        				</script>
+						
+		<script type="text/javascript">
+      /* <![CDATA[ */
+      $(document).ready(function() {
+	  
+					// check organisation super admin
+						/* var User = StackMob.Model.extend({ schemaName: 'organisation' });
+						var user = new StackMob.User({ });
+						var q = new StackMob.Collection.Query();
+						q.equals('organisation_id', localStorage.getItem("stackmob.oauth2.user"));
+						user.query(q, {
+								success:function(modal) {
+									array = modal.toJSON();
+									console.debug(array);
+									var super_admin = array[0].super_admin;
+									//alert(super_admin);
+									if(super_admin == "true") {
+										$('#admin_settings').show();
+									}
+								} 
+							}); */
+					// end check organisation super admin
+						  		
+			// organisation app icon image
+			/* var User = StackMob.Model.extend({ schemaName: 'organisation' });
+			var user = new StackMob.User({ });
+			var q = new StackMob.Collection.Query();
+			q.equals('organisation_id', localStorage.getItem("stackmob.oauth2.user"));
+			user.query(q, {
+					success:function(modal) {
+						array = modal.toJSON();
+						console.debug(array);
+						var val = array[0].organisation_image_header;
+						$('#org_icon').attr('value', val);
+						//alert(val);
+					} 
+				}); */
+	  	// end organisation icon
+		
+	  var markersArray = [];
+	  			//fetch the current date and time and convert it into timestamp
+	  			//var currentTime = new Date();
+				//var current_date_time = Math.ceil(currentTime.getTime()/1000);
+				
+				// fetch the data from database
+	  		var Userdata_schema = StackMob.Model.extend({ schemaName: 'userdata' });
+			var userdata = new Userdata_schema({  });
+					var q = new StackMob.Collection.Query();
+					q.orderDesc('lastmoddate');
+					userdata.query(q, {
+						success: function(modal) {
+							//After StackMob returns "Bill Watterson", print out the result
+						   	var array = modal.toJSON();
+							var key;
+							var count = 0;
+							for(key in array) {
+								 if(array.hasOwnProperty(key)) {
+									 count ++;
+								 }
+							}
+								 //alert(count);
+							 // console.debug(array);
+							 //$('#data').html(array[0].user_name);
+					for(var i=0; i<=count; i++)
+					{
+						if(array[i].org_id == localStorage.getItem("stackmob.oauth2.user"))
+						{
+							
+							 //$('#last_mod_date').html(array[i].lastmoddate);
+							 //$('.current_date_time').html(current_date_time);
+							 
+							 var val = array[i].lastmoddate;
+							 $('#last_mod_date').attr('value', val);
+							 
+							 var val = array[i].mobile_number;
+							 $('#mobile_no').attr('value', val);
+							 
+							  var val = array[i].user_points;
+							 $('#points').attr('value', val); 
+							 
+							 var val = array[i].user_lat+","+array[i].user_long;
+							$('#latlng').attr('value', val);
+							
+							initialize();
+							//alert("The map will show the information and location for the latest user");
+							exit();
+							} //  end if condition
+						} //end for loop
+					} //end success
+				  }); //  end imagesearcj schema query
+					 
+		// If your schema name is different than `place`, then you need to replace `place` with your schema
+		//setInterval(result,1000);
+	  
+	  		var geocoder;
+			  var map;
+			  var marker;
+		
+			 function initialize() {
+			  
+			geocoder = new google.maps.Geocoder();
+			show_marker();
+			setInterval(check_newentry,1000);
+			
+			function show_marker() { // start show_marker function
+			clearOverlays();
+			
+			var input = document.getElementById("latlng").getAttribute("value"); 
+		   //alert(input);
+			var latlngStr = input.split(",",2);
+			var lat = parseFloat(latlngStr[0]);
+			var lng = parseFloat(latlngStr[1]);
+			var latlng = new google.maps.LatLng(lat, lng);
+			geocoder.geocode({'latLng': latlng}, function(results, status) {
+			  //var address = results[4].formatted_address;
+			  var address = results[0].formatted_address;
+			  //var address = input;
+			$("#test").html(address);
+		//	console.log(results[4].formatted_address);
+		geocoder.geocode( { 'address': address}, function(results, status) {
+			  if (status == google.maps.GeocoderStatus.OK) {
+				map.setCenter(results[0].geometry.location);
+				var marker = new google.maps.Marker({
+					map: map,
+					position: results[0].geometry.location,
+				});
+				
+				 markersArray.push(marker);
+				 
+					 /* var infowindow = new google.maps.InfoWindow({
+                        content: name
+                    }); */ 
+					var mobile_no = document.getElementById("mobile_no").getAttribute("value");
+					var points = document.getElementById("points").getAttribute("value");
+					var lastmod_date = document.getElementById("last_mod_date").getAttribute("value");
+					//alert(org_icon);
+					var infowindow = new google.maps.InfoWindow();
+					
+					//infowindow.setContent("<img src='"+org_icon+"' style='width:50px; height:60px;' /> <br/><br/> Image-id  : " +image_id + "<br/> Mobile_no : "+mobile_no + "<br/> Address : "+address + "<br/> Feedback : "+feedback+"<br/>Device model  : " +model);
+						
+					//infowindow.setContent("<b>Time  :</b> " +new Date(lastmod_date/1000) + "<br/><b>Mobile_no : </b>"+mobile_no + "<br/><b>Points : </b>"+points + "<br/> <b>Address :</b> "+address);
+					
+					infowindow.setContent("<b>Mobile_no : </b>"+mobile_no + "<br/><b>Points : </b>"+points + "<br/> <b>Address :</b> "+address);
+				
+                    infowindow.open(map, marker);
+                   	
+					google.maps.event.addListener(marker, 'click', function(event) {
+                        infowindow.open(map, marker);
+                    });		 
+				
+			  } else {
+				alert("Geocode was not successful for the following reason: " + status);
+			  }
+			});
+		   });
+		   
+			 }  //end show_marker function
+			 
+			 var mapOptions = {
+			  zoom: 10,
+			  center: new google.maps.LatLng(37.4419, -22.1419),
+			  mapTypeId: google.maps.MapTypeId.TERRAIN,
+			  mapTypeControl: false,
+			  streetViewControl: false
+		 
+			}
+			map = new google.maps.Map(document.getElementById("Flexible-container"), mapOptions);
+			
+		function check_newentry() {
+		//fetch current date and time 
+				//var currentTime = new Date();
+				//var current_date_time = Math.ceil(currentTime.getTime()/1000);
+				
+				// fetch the data from database
+			var Device_schema = StackMob.Model.extend({ schemaName: 'userdata' });
+
+			//var demo = new Device({ device_id: '1234567890' });
+			/*
+			var demo = new Device({ });
+			 demo.fetch({
+			 */
+			 var device = new Device_schema({  });
+					var q = new StackMob.Collection.Query();
+					q.orderDesc('lastmoddate');
+					device.query(q, {
+						success: function(modal) {
+							//After StackMob returns "Bill Watterson", print out the result
+						   	var array = modal.toJSON();
+							 // console.debug(array);
+							 
+							 var array = modal.toJSON();
+							var key;
+							var count = 0;
+							for(key in array) {
+								 if(array.hasOwnProperty(key)) {
+									 count ++;
+								 }
+							}
+								 //alert(count);
+							 
+					for(var i=0; i<=count; i++)
+					{
+						if(array[i].org_id == localStorage.getItem("stackmob.oauth2.user"))
+						{
+						
+							 //var entry_date_time = array[0].entry_date_time;
+							  //var lastmod_date = Math.ceil(((array[0].lastmoddate)/1000)+1);
+							  var lastmod_date = array[i].lastmoddate;
+							  
+							  //$('#data').html(array[0].user_name);
+							 //$('#last_mod_date').html(lastmod_date);
+							 //$('.current_date_time').html(current_date_time);
+							 
+							 var lastmod_date_old = document.getElementById("last_mod_date").getAttribute("value");
+							 
+							 var val = array[i].mobile_number;
+							 $('#mobile_no').attr('value', val);
+							 
+							 var val = array[i].user_points;
+							 $('#points').attr('value', val);
+							 
+							var val = array[i].user_lat+","+array[i].user_long;
+							$('#latlng').attr('value', val);
+							
+													 
+							if(lastmod_date_old < lastmod_date)
+							{
+								/* var timeInterval = 1000;
+								for (var i = 0; i <= 2; i++ ) {
+									setTimeout(show_marker, timeInterval);
+									timeInterval += 1000;
+								} */
+								show_marker();
+								
+								var val = array[i].lastmoddate;
+							 $('#last_mod_date').attr('value', val);
+								//alert("current time is equal or small");
+							}
+							else {
+								//alert("current time is greater");
+							}
+							exit();
+						}// end if condition
+					  } // end for loop
+					} // end success
+				}); // end imagesearcj query
+			} // end check_newentry
+			
+		  } 
+  	
+				function clearOverlays() {
+					  if (markersArray) {
+						for (i in markersArray) {
+						  markersArray[i].setMap(null);
+						}
+					  }
+				 	}
+				});
+
+     
+      /* ]]> */
+		</script>
+	<style>
+				 #footer {
+	 width: 100%;
+position: fixed;
+bottom: 0px;
+background-color: #000;
+height: auto;
+}
+.container .credit {
+float: right;
+margin: 10px 0;
+}
+.muted {
+color: #999999;
+}
+		.ui-dialog .ui-dialog-title {
+
+font-weight: bold;
+font-size: 18px;
+}
+.ui-dialog .ui-dialog-buttonpane {
+font-size: 14px;
+}
+		.content
+		{
+		display:none;
+		}
+		.ui-dialog-titlebar-close {
+  visibility: hidden;
+}
+.active
+{
+padding-top:0px;
+}
+.navbar .nav > li {
+
+padding-top:0px;
+padding-right:10px;
+}
+.dashboard
+{
+
+
+
+position:center;
+width:auto;
+height:auto;
+
+background-color: #ffffff;
+border: 1px solid #999;
+border: 1px solid rgba(0, 0, 0, 0.3);
+-webkit-border-radius: 6px;
+-moz-border-radius: 6px;
+border-radius: 6px;
+-webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+-moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+-webkit-background-clip: padding-box;
+-moz-background-clip: padding-box;
+background-clip: padding-box;
+}
+</style>
+
+<style>
+.navbar-inner {
+	min-height: 55px;
+}
+.modal-header {
+	padding:0px 15px;
+}
+.dropdown-menu {
+ 	padding:0px;
+}
+.dropdown-menu a {
+	padding: 1px 20px;
+}
+.modal-body {
+	max-height:78%;
+	height:70%;
+}
+
+#user_points
+{
+	line-height: 50px;
+	font-weight: bold;
+	color: #ffffff;
+	margin-left:5%;
+}
+/* Flexible iFrame */
+
+.Flexible-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    padding-top: 30px;
+    height: 0;
+    overflow: hidden;
+}
+
+.Flexible-container iframe,   
+.Flexible-container object,  
+.Flexible-container embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+</style>
+<!-- css for pagination -->
+        <style type="text/css">
+            p{
+                text-align: center;
+            }
+        </style>
+		<!--end css for pagination -->
+</head>
+<body>
+			<div class="navbar navbar-inverse navbar-fixed-top" >
+			
+      <div class="navbar-inner">
+	  
+	   <div class="container">
+	
+	    <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+		  <!-- <a class="brand" href="http://jamboreeindia.com/"><img src="images/mh_logo.png"/></a> -->
+           <a class="brand" href="" style="color:#FFFFFF;">Karna<img src="style/img/karna.png"/>Application</a>
+          <div class="nav-collapse collapse">
+		    
+            <ul class="nav">
+			
+              <li class="" id="home">
+                <a href="karna_home.html"><img src="images/home.png" style="width:30px; height:30px;" alt="HOME" /></a>
+              </li>
+              <li class="" id="leaderboard">
+                <a href="leaderboard.html"><img src="images/leaderboard.png" style="width:30px; height:30px;" alt="LEADERBOARD" /></a>
+              </li>
+			  <li  id="health_tab">
+			  <a href="hospital_tab.html"> <img src="images/hospital.png" style="width:30px; height:30px;" alt="health_tab" /></a>
+			  </li>
+			  
+			  <li class=""> 
+			  
+			  	            <div id="user_points" ></div>
+			
+			  </li>
+              <li class="" id="logout_btn">
+                <a id="logout" href="#LOGOUT"><img src="images/logout.png" style="width:30px; height:30px;" alt="LOGOUT" /></a>
+              </li>
+            </ul>
+          </div>
+		  
+        </div>
+      </div>
+	
+	
+	<div>
+	
+		<div>
+			<ul>
+				<li style="display:inline-block; list-style:none;"><div id="super_id"></div></li>
+				<li style="display:inline-block; list-style:none;"><div id="media_id"></div></li>
+			</ul>
+		</div>
+		<div>
+			<!-- <table class="data  table-bordered table table-striped" id="ui" style="font-size:12px; margin-bottom:0px;">
+			<tr>
+				<th>Media Name</th>
+				<th>Media Type</th>
+				<th>Media URL</th>
+				<th>Points</th>
+				<th>Youtube Link</th>
+			</tr>
+			</table> -->
+			<div id="Flexible-container" >
+   
+</div>
+		<!-- <div class="modal-footer" style="font-size:12px; padding:0px;">
+			<p>Media</p> 
+		</div> -->
+	
+	</div>
+
+	<div id="footer">
+		  <div class="container">
+			<p class="">Design and Developed by <a href="http://mobileharvest.in">Mobile Harvest</a> </p>
+		  </div>
+	</div>
+  
+</body>
+</html>

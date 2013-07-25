@@ -1,0 +1,308 @@
+<html>
+    <head>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.9.1-bundled-min.js"></script>
+	
+	 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+	 <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/dark-hive/jquery-ui.css" />
+	<!-- <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/redmond/jquery-ui.css" />-->
+	 <!-- <script type="text/javascript" src="https://towtruck.mozillalabs.com/towtruck.js"></script> --> 
+	<!-- <script type="text/javascript" src="sort.js"></script> -->
+	  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+	  <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
+	 <script type="text/javascript" src="style/js/bootstrap.js"></script>
+	 
+	<link type="text/css" rel="stylesheet" href="style/css/bootstrap.css"></link>
+	
+        <title>Karna - Leaderboard</title>
+		
+		<script type="text/javascript">
+      /* <![CDATA[ */
+      // Initialize StackMob object
+      // Copy your init data from here: https://dashboard.stackmob.com/sdks/js/config
+      // Your other app information is here: https://dashboard.stackmob.com/settings
+      StackMob.init({
+        publicKey: '9394d214-e532-4603-8363-c5159facad75',
+		//secure: StackMob.NEVER ,
+		//userSchema: 'organisation',
+	   // loginField: 'organisation_id',
+	   // passwordField: 'password',
+        apiVersion : 0
+      });
+      /* ]]> */
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+var user_org_id = localStorage.getItem("org_id");
+var org_login_points = localStorage.getItem("login_points");
+//alert(org_id);
+	$("#logout").click(function(){
+		//alert(org_id);
+		if ('org_id' in localStorage) 
+		{
+			alert("You are logged out");
+			localStorage.removeItem("org_id");
+			window.open("index.html","_top");
+		}
+	});
+	
+		if ('org_id' in localStorage) 
+		{
+		}
+		else 
+		{
+			window.open("index.html","_top");
+		}
+	
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	var data; 
+	result();
+	function result() {
+				var Userdata_schema = StackMob.Model.extend({ schemaName: 'userdata' });
+			var userdata = new Userdata_schema({ });
+					var q = new StackMob.Collection.Query();
+					q.orderDesc('lastmoddate');
+					 userdata.query(q, {
+						success: function(modal) {
+							//After StackMob returns "Bill Watterson", print out the result
+						   	var data = modal.toJSON();
+							//console.debug(data);
+							console.log("after sorting");
+							data.sort(function(a, b) {
+    						return a.user_points - b.user_points;
+							})
+							console.log(data);
+							
+							//alert(array);
+
+							
+							//var array2 =  new Array();
+							/*var array2 = {};
+							 
+							 //count total records in image search schema
+								var key;
+								var count = 0;
+								for(key in array) {
+									 if(array.hasOwnProperty(key)) {
+									  count ++;
+									 }
+								 }
+								 //alert(count);
+							 //end count total records in image search schema
+							
+							 var user_org_id = localStorage.getItem("org_id");
+							//make an array of user records with login org id
+							 	var counter = 0;
+							  	for(var i=0; i<=count; i++)
+								{	alert(array[i].org_id);
+									if(array[i].org_id == user_org_id) // check the organisation name
+									{
+										//alert(array[i].userdata_id);
+										//alert(counter);
+										array2[[counter][0]] = array[i].userdata_id;
+										array2[[counter][1]] = array[i].mobile_number;
+										array2[[counter][2]] = array[i].user_points;
+										//alert(array2[[0][0]]);
+										counter++;
+									} //end organisation name if condition
+								} // end i for loop
+							//end make an array of user records with login org id
+							 //var record_no=0;
+							 
+							 var position = 0;
+
+
+
+
+							 var swap;
+							 for(var i=0; i<=counter-1; i++)
+							 {
+								position = i;
+								for(var j=0; j<=counter; j++)
+								{
+									if(array2[i][2] > array2[j][2])
+									{
+										swap1 = array2[i][0];
+										swap2 = array2[i][1];
+										swap3 = array2[i][2];
+										
+										array2[i][0] = array2[position][0];
+										array2[i][1] = array2[position][1];
+										array2[i][2] = array2[position][2];
+										
+										array2[position][0] = swap[i][0];
+										array2[position][1] = swap[i][1];
+										array2[position][2] = swap[i][2]; 
+											
+									}
+									
+									if ( position != i )
+									{
+										position = j;
+									}
+									//$("#ui").append("<tr><td>"+array[i].mobile_number+"</td><td>"+array[i].user_points+"</td><td>"+array[i].org_id+"</td></tr>");
+								}// end j for loop
+							} // end i for loop */
+							
+							 
+							for(var i=0; i<10; i++)
+							{
+									//for(var j=0; j<2; j++)
+									//{
+										//$("#ui").append("<tr><td>"+array[[i][1]]+"</td><td>"+array[[i][2]]+"</td><td>"+array[i].org_id+"</td></tr>");
+									//}// end j for loop
+							} // end i for loop
+						} //end success
+				 	 }); // end imagesearch schema query
+				
+				
+				
+		} //end result function
+				
+	});
+	
+        </script>
+		<script type="text/javascript">
+
+		
+  </script>
+
+<style>
+				 #footer {
+	 width: 100%;
+position: fixed;
+bottom: 0px;
+background-color: #000;
+height: auto;
+}
+.container .credit {
+float: right;
+margin: 10px 0;
+}
+.muted {
+color: #999999;
+}
+		.ui-dialog .ui-dialog-title {
+
+font-weight: bold;
+font-size: 18px;
+}
+.ui-dialog .ui-dialog-buttonpane {
+font-size: 14px;
+}
+		.content
+		{
+		display:none;
+		}
+		.ui-dialog-titlebar-close {
+  visibility: hidden;
+}
+.active
+{
+padding-top:0px;
+}
+.navbar .nav > li {
+
+padding-top:0px;
+}
+.dashboard
+{
+
+margin-left: 5%;
+position: absolute;
+width: 90%;
+height: 90%;
+
+background-color: #ffffff;
+border: 1px solid #999;
+border: 1px solid rgba(0, 0, 0, 0.3);
+-webkit-border-radius: 6px;
+-moz-border-radius: 6px;
+border-radius: 6px;
+-webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+-moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+-webkit-background-clip: padding-box;
+-moz-background-clip: padding-box;
+background-clip: padding-box;
+}
+</style>
+
+<style>
+.modal-header {
+	padding:0px 15px;
+}
+.dropdown-menu {
+ 	padding:0px;
+}
+.dropdown-menu a {
+	padding: 1px 20px;
+}
+</style>
+<!-- css for pagination -->
+        <style type="text/css">
+            p{
+                text-align: center;
+            }
+        </style>
+		<!--end css for pagination -->
+    </head>
+    <body>
+		<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+          <a class="brand" href="">Karna<img src="style/img/karna.png"/>Dashboard</a>
+          <div class="nav-collapse collapse pull-right" style="min-height:115px;">
+            <ul class="nav">
+              <li class="" id="home">
+                <a href="topic.html">HOME</a>
+              </li>
+              <li class="active" id="leaderboard">
+                <a href="leaderboard.html">Leaderboard </a>
+              </li>
+              <li class="" id="logout_btn">
+                <a id="logout" href="#LOGOUT">LOGOUT</a>
+              </li>
+            </ul>
+          </div>
+		  
+      </div>
+	 </div>
+	<header class="jumbotron subhead" style="height:45px;"></header>
+	
+	<div class="dashboard"  style='' >
+  	<!-- <div class="modal-header">
+           <h5 id="myModalLabel"> Users Information</h5>
+    </div> -->
+    <div class="modal-body" style="height:90%;">
+		<table class="data  table-bordered table table-striped" id="ui" style="font-size:12px; margin-bottom:0px;">
+			<tr>
+				<th>Mobile-no</th>
+				<th>Points</th>
+			</tr>
+		</table>
+	</div>
+	<!-- <div class="modal-footer" style="font-size:12px; padding:0px;">
+		<p class="page1">Leaderboard</p>
+	</div> -->
+</div>
+
+<div id="footer">
+      <div class="container">
+        <p class="muted credit">Design and Developed by <a href="http://mixorg.com">MIXORG</a> </p>
+      </div>
+</div>  
+  
+  <script type="text/javascript">
+  TowTruckConfig_enableAnalytics = true;
+  TowTruckConfig_cloneClicks = "#run, .toggler";
+</script>
+<!-- <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script> -->
+<script src="https://towtruck.mozillalabs.com/towtruck.js"></script>
+      
+    </body>
+</html>

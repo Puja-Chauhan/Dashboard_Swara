@@ -1,0 +1,495 @@
+<html>
+    <head>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.9.1-bundled-min.js"></script>
+	
+	 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+	 <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/dark-hive/jquery-ui.css" />
+	<!-- <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/redmond/jquery-ui.css" />-->
+	  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+	  
+	 <script type="text/javascript" src="style/js/bootstrap.js"></script>
+	 <script type="text/javascript" src="style/js/modal.js"></script>
+	
+	<link type="text/css" rel="stylesheet" href="style/css/bootstrap.css"></link>
+		
+        <title>Karna - Media</title>
+		
+		<script type="text/javascript">
+      /* <![CDATA[ */
+      // Initialize StackMob object
+      // Copy your init data from here: https://dashboard.stackmob.com/sdks/js/config
+      // Your other app information is here: https://dashboard.stackmob.com/settings
+      StackMob.init({
+        publicKey: '9394d214-e532-4603-8363-c5159facad75',
+		//secure: StackMob.NEVER ,
+		//userSchema: 'organisation',
+	   // loginField: 'organisation_id',
+	   // passwordField: 'password',
+        apiVersion : 0
+      });
+      /* ]]> */
+</script>
+
+<style type="text/css">
+#media_type_img
+{
+	min-height:50px;
+	min-width:50px;
+}
+</style>
+
+<script type="text/javascript">
+$(document).ready(function() {
+var user_org_id = localStorage.getItem("org_id");
+	var org_login_points = localStorage.getItem("login_points");
+
+	var mobile_no = localStorage.getItem("mobile_no");
+	var userdata_id = localStorage.getItem("userdata_id");
+	
+//alert(org_id);
+	$("#logout").click(function(){
+		//alert(org_id);
+		if ('org_id' in localStorage) 
+		{
+			alert("You are logged out");
+			localStorage.removeItem("org_id");
+			localStorage.removeItem("login_points");
+			localStorage.removeItem("mobile_no");
+			localStorage.removeItem("userdata_id");
+			window.open("index.html","_top");
+		}
+	});
+	
+		if ('org_id' in localStorage) 
+		{
+		}
+		else 
+		{
+			window.open("index.html","_top");
+		}
+	
+});
+</script>
+ 
+ 						<script type="text/javascript">
+							$(document).ready(function() {
+								var userdata_id = localStorage.getItem("userdata_id");
+								//fetch the user points ans show in header
+									var Userdata_schema = StackMob.Model.extend({ schemaName: 'userdata' });
+									var userdata_schema = new Userdata_schema({ });
+									var q = new StackMob.Collection.Query();
+									q.equals('userdata_id', userdata_id);
+									userdata_schema.query(q, {
+										success: function(modal) {
+											//After StackMob returns "Bill Watterson", print out the result
+											var array = modal.toJSON();
+											//console.debug(array);
+											var user_points = array[0].user_points;
+											$("#user_points").html(user_points);
+										} //end success
+									}); // end equals query
+								//end fetch the user points ans show in header
+							});
+        				</script>
+ 
+<script type="text/javascript">
+$(document).ready(function() {
+			
+	result();
+	function result() {
+	
+			var url = location.href; // fetch the current url
+					//alert(url);
+					
+					//in case user direct come to media page
+					if (url.indexOf('=') == -1)
+					{
+						var url_arr = url.split('/'); //convert url string in array	
+						url = url_arr[0]+"topic.html";
+						window.open(url, '_top'); 
+					}
+					
+					//fetch id from url
+					var url_arr = url.split('='); //convert url string in array	
+					var url_media_id= url_arr[1]; //fetch the value of id from url
+					
+								//fetch and show the like status from media_analytics schema
+									var Media_analytics_schema = StackMob.Model.extend({ schemaName: 'media_analytics' });
+									var media_analytics_schema = new Media_analytics_schema({ });
+									var q = new StackMob.Collection.Query();
+									q.orderDesc('media_analytics_id');
+									media_analytics_schema.query(q, {
+										success: function(modal) {
+											//After StackMob returns "Bill Watterson", print out the result
+											var array = modal.toJSON();
+											console.debug(array);
+											//count total records in image search schema
+												var key;
+												var count = 0;
+												for(key in array) {
+													 if(array.hasOwnProperty(key)) {
+													  count ++;
+													 }
+												 }
+												 //alert(count);
+												 //alert(array[0].mobile_number);
+											 //end count total records in image search schema
+											
+											var mobile_no = localStorage.getItem("mobile_no");
+											
+											// show the like or dislike button
+											
+											for(var i=0; i<=count; i++)
+											{ 
+												if((array[i].mobile_number == mobile_no) && (array[i].media_id == url_media_id))
+												{ 
+													if(array[i].likes == 'like')
+													{	//alert("already liked");
+														//$("#like_wrapper").html("<input type='button' value=Dislike' class='dislike' />");
+														$("#dislike_wrapper").html("<img src='images/dislike.png' class='like' like='dislike' />");
+														exit();
+													}
+												} //end if condition
+												else
+												{
+													if( i == count-1)
+													{
+														//alert("do like");
+														//$("#like_wrapper").html("<input type='button' value='like' class='like' />");
+														$("#like_wrapper").html("<img src='images/like.png' class='like' like='like' />");
+													}
+												} //end else
+											} //end for loop
+											//end show the like or dislike button
+										} //end success
+									}); // end equals query
+								//end fetch and show the like status from media_analytics schema
+	
+				var Media_schema = StackMob.Model.extend({ schemaName: 'media' });
+				var media = new Media_schema({ });
+				var q = new StackMob.Collection.Query();
+				q.equals('media_id', url_media_id);
+				media.query(q, {
+						success: function(modal) {
+							//After StackMob returns "Bill Watterson", print out the result
+						   	var array = modal.toJSON();
+							 //console.debug(array);
+
+								var media_type = array[0].media_type;
+								
+								if(media_type == 'PNG')
+								{
+									$("#media_type").html("<img src='images/image_type.png' id='media_type_img' />"); //show media type icon
+									$("#media_show").html("<img src='"+array[0].media_url+"' />"); //show media
+								}
+								
+								else if(media_type == '3GP')
+								{
+									$("#media_type").html("<img src='images/audio_type.png' id='media_type_img' />");
+									$("#media_show").html("<audio controls> <source src='"+array[0].media_url+"' type='audio/mpeg'> Your browser does not support the audio tag. </audio>");
+								}
+								
+								else if(media_type == '3GPVID')
+								{
+									$("#media_type").html("<img src='images/video_type.png' id='media_type_img' />");
+									$("#media_show").html("<video width='320' height='240' controls> <source src='"+array[0].media_url+"' type='video/mp4' autoplay='autoplay'> Your browser does not support the video tag. </video>");
+								}
+								
+								else
+								{
+									$("#media_type").html("<img src='images/youtube_type.png' id='media_type_img' />");
+									$("#media_show").html("<a href='"+array[0].youtube_link+"' target='_blank'><img src='images/play_green.png' alt='video' /></a>");
+								}
+								
+								if(array[0].media_topic != '')
+								{
+									var Topic_schema = StackMob.Model.extend({ schemaName: 'topic' });
+									var topic = new Topic_schema({ });
+									var q = new StackMob.Collection.Query();
+									q.equals('topic_id', array[0].media_topic);
+									topic.query(q, {
+										success: function(modal) {
+											//After StackMob returns "Bill Watterson", print out the result
+											var array2 = modal.toJSON();
+											//console.debug(array2);
+											$("#super_id").html("<img src='"+array2[0].topic_url+"' style='width: 80px; height:70px;' />");
+										} //end success
+									}); // end equals query
+								} // end media topic if condition
+								
+								if(array[0].media_subtopic != '')
+								{
+									var Subtopic_schema = StackMob.Model.extend({ schemaName: 'subtopic' });
+									var subtopic = new Subtopic_schema({ });
+									var q = new StackMob.Collection.Query();
+									q.equals('subtopic_id', array[0].media_subtopic);
+									subtopic.query(q, {
+										success: function(modal) {
+											//After StackMob returns "Bill Watterson", print out the result
+											var array2 = modal.toJSON();
+											//console.debug(array2);
+											$("#super_id").html("<img src='"+array2[0].subtopic_url+"' style='width: 80px; height:70px;' />");
+										} //end success
+									}); // end equals query
+								} // end media subtopic if condition
+								
+								//add media points in the user points
+								var userdata_id = localStorage.getItem("userdata_id");
+								var media_points = 0;
+								var user_points_old = 0;
+								var Userdata_schema = StackMob.Model.extend({ schemaName: 'userdata' });
+								var userdata_schema = new Userdata_schema({ });
+									var q = new StackMob.Collection.Query();
+									q.equals('userdata_id', userdata_id);
+									userdata_schema.query(q, {
+										success: function(modal) {
+											//After StackMob returns "Bill Watterson", print out the result
+											var array2 = modal.toJSON();
+											//console.debug(array);
+											media_points = array[0].points;
+											user_points_old = array2[0].user_points;
+											user_points = user_points_old + media_points;
+											//alert("userpoints="+array2[0].user_points+"....media points="+array[0].points);
+											
+											//update user points - add media points
+											var Userdata_schema = StackMob.Model.extend({ schemaName: 'userdata' });
+											var userdata_schema = new Userdata_schema({ userdata_id: userdata_id });
+											userdata_schema.save({ user_points: user_points }, {
+												success: function(model, result, options) 
+												{ 
+													//console.debug(model.toJSON()); 
+													//alert("user points updated");
+												},
+												error: function(model, result, options) 
+												{
+													//alert("error in update user points");
+												}
+											});
+											//end update user points - add media points
+											
+										} //end success
+									}); // end equals query
+									//end add media points in the user points
+								
+								
+								//$("#ui").append("<tr><td>"+array[0].media_name+"</td><td><a href='media_show.html?id="+array[0].media_id+"'>"+array[0].media_type+"</a></td><td>"+array[0].media_url+"</td><td>"+array[0].points+"</td><td>"+array[0].youtube_link+"</td></tr>");
+											
+						} //end success
+				 	 }); // end imagesearch schema query
+		
+			} //end result function	
+									
+	});
+        </script>
+
+<style>
+				 #footer {
+	 width: 100%;
+position: fixed;
+bottom: 0px;
+background-color: #000;
+height: auto;
+}
+.container .credit {
+float: right;
+margin: 10px 0;
+}
+.muted {
+color: #999999;
+}
+		.ui-dialog .ui-dialog-title {
+
+font-weight: bold;
+font-size: 18px;
+}
+.ui-dialog .ui-dialog-buttonpane {
+font-size: 14px;
+}
+		.content
+		{
+		display:none;
+		}
+		.ui-dialog-titlebar-close {
+  visibility: hidden;
+}
+.active
+{
+padding-top:0px;
+}
+.navbar .nav > li {
+padding-right:10px;
+padding-top:0px;
+}
+.dashboard
+{
+
+margin-left: 5%;
+position: absolute;
+width: 90%;
+height: 90%;
+
+background-color: #ffffff;
+border: 1px solid #999;
+border: 1px solid rgba(0, 0, 0, 0.3);
+-webkit-border-radius: 6px;
+-moz-border-radius: 6px;
+border-radius: 6px;
+-webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+-moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+-webkit-background-clip: padding-box;
+-moz-background-clip: padding-box;
+background-clip: padding-box;
+}
+</style>
+
+<style>
+.navbar-inner {
+	min-height: 55px;
+}
+.modal-header {
+	padding:0px 15px;
+}
+.dropdown-menu {
+ 	padding:0px;
+}
+.dropdown-menu a {
+	padding: 1px 20px;
+}
+.modal-body {
+	max-height:78%;
+	height:70%;
+}
+#user_points
+{
+	line-height: 50px;
+	font-weight: bold;
+	color: #ffffff;
+}
+</style>
+<!-- css for pagination -->
+        <style type="text/css">
+            p{
+                text-align: center;
+            }
+        </style>
+		<!--end css for pagination -->
+</head>
+<body>
+		<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+          <!-- <a class="brand" href="">Karna<img src="style/img/karna.png"/>Dashboard</a> -->
+          <div class="nav-collapse collapse pull-right" style="min-height:60px;">
+            <ul class="nav">
+              <li class="active" id="home">
+                <a href="karna_home.html"><img src="images/home.png" style="width:30px; height:30px;" alt="HOME" /></a>
+              </li>
+              <li class="" id="leaderboard">
+                <a href="leaderboard.html"><img src="images/leaderboard.png" style="width:30px; height:30px;" alt="LEADERBOARD" /></a>
+              </li>
+			  <li class=""> 
+			  	<div id="user_points"></div>
+			  </li>
+              <li class="" id="logout_btn">
+                <a id="logout" href="#LOGOUT"><img src="images/logout.png" style="width:30px; height:30px;" alt="LOGOUT" /></a>
+              </li>
+            </ul>
+          </div>
+		  
+        </div>
+      </div>
+	<header class="jumbotron subhead" style="height:65px;"></header>
+	
+	<div class="dashboard"  style='' >
+	
+		<div class="modal-header">
+			<ul>
+				<li style="display:inline-block; list-style:none;"><div id="super_id"></div></li>
+				<li style="display:inline-block; list-style:none;"><div id="media_type"></div></li>
+			</ul>
+		</div>
+		<div class="modal-body">
+			<!-- <table class="data  table-bordered table table-striped" id="ui" style="font-size:12px; margin-bottom:0px;">
+			<tr>
+				<th>Media Name</th>
+				<th>Media Type</th>
+				<th>Media URL</th>
+				<th>Points</th>
+				<th>Youtube Link</th>
+			</tr>
+			</table> -->
+			<div class="media_wrapper" style="height:100%;">
+				<div id="media_show" style="text-align:center; margin-top:30px;"> </div>
+				<div id="like_wrapper"></div>
+				<div id="dislike_wrapper"></div>
+					<script type="text/javascript">
+							//onclick like button
+							$("#like_wrapper").click(function(){ 
+								//fetch media_id from url
+									var url = location.href; // fetch the current url
+									//alert(url);
+									
+									//in case user direct come to media page
+									if (url.indexOf('=') == -1)
+									{
+										var url_arr = url.split('/'); //convert url string in array	
+										url = url_arr[0]+"topic.html";
+										window.open(url, '_top'); 
+									}
+									
+									//fetch id from url
+									var url_arr = url.split('='); //convert url string in array	
+									var url_media_id= url_arr[1]; //fetch the value of id from url
+								//end fetch media_id from url
+								
+								var mobile_no = localStorage.getItem("mobile_no");
+								var like = $(this).attr('like');
+								//var like = $(".").attr('value');
+								//create new entry in media_analytics schema
+									alert(like);
+									
+									//if(like == 'like')
+									//{
+										var Media_analytics_schema = StackMob.Model.extend({ schemaName: 'media_analytics' });
+			 
+										var media_analytics_schema = new Media_analytics_schema({ likes: 'like', mobile_number: mobile_no, media_id: url_media_id });
+																	
+										media_analytics_schema.create({
+											success: function(model) {
+												//console.debug(model.toJSON());
+												//$("#like_wrapper").html("<input type='button' value='dislike' class='dislike' />");
+												$("#like_wrapper").html("");
+												$("#dislike_wrapper").html("<img src='images/dislike.png' class='dislike' like='dislike' />");
+												alert("like created");
+											},
+											error: function(model, response) {
+												//console.debug(response);
+												alert(response);
+											}
+										}); //end create userdata function
+									//}
+									if(like == 'dislike')
+									{
+										alert("liked");
+									}
+								//create new entry in media_analytics schema
+							});	 //end click like function
+						//onclick like button
+				</script>
+			</div>
+		</div>
+		<!-- <div class="modal-footer" style="font-size:12px; padding:0px;">
+			<p>Media</p> 
+		</div> -->
+	
+	</div>
+
+	<div id="footer">
+		  <div class="container">
+			<p class="muted credit">Design and Developed by <a href="http://mixorg.com">MIXORG</a> </p>
+		  </div>
+	</div>
+  
+</body>
+</html>
