@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Dashboard</title>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.8.0-bundled-min.js"></script>
+
+
+ <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+ <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/dark-hive/jquery-ui.css" />
+<!-- <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/redmond/jquery-ui.css" />-->
+  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+  <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
+ <script type="text/javascript" src="style/js/bootstrap.js"></script>
+ 
+<link type="text/css" rel="stylesheet" href="style/css/bootstrap.css"></link>
+<script type="text/javascript">
+StackMob.init({
+    appName: "swara_sangam",
+    publicKey: "a21c4638-f221-4a70-925b-65cc30de4c30",
+    apiVersion: 0,
+	 
+});
+</script>
+<script type="text/javascript">
+/**
+ * This code declares your class and saves an object "blogentry" to the table on StackMob.
+ * StackMob will create the table for you automatically based on your JSON.
+ */
+ $(document).ready(function() {
+			result();
+			function result() {
+			var Media_schema = StackMob.Model.extend({ schemaName: 'media' });
+								var media = new Media_schema({ });
+									media.fetchExpanded(1, {
+										success: function(modal) {
+										alert(modal);
+											//After StackMob returns "Bill Watterson", print out the result
+											var array = modal.toJSON();
+											//alert(array.tagged_topic);
+											 console.log(array);
+	
+											 //count total records in image search schema
+												var key;
+												var count = 0;
+												var counter=0;
+												for(key in array) {
+													 if(array.hasOwnProperty(key)) {
+													  count ++;
+													 }
+												 }
+												 //alert(count);
+											 //end count total records in image search schema
+											 
+											for(var i=0; i<=count; i++)
+											{
+											     //alert(array[i].media_topictags);
+												if(array[i].media_id=='3276f09f891d467f972ec3877e27354f')
+												{
+													var subtopic_array = array[i].media_topictags;
+										
+													var key2;
+													var count2 = 0;
+													for(key2 in subtopic_array) {
+														 if(subtopic_array.hasOwnProperty(key2)) {
+														  count2 ++;
+														 }
+													 }
+													 //alert(count2++);
+													 
+													for(var j=0; j<=count2; j++)
+													{
+													    //alert(subtopic_array[0].subtopic_desc);
+														//$("#ui").append("<tr><td>"+sn+"</td><td>"subtopic_array[i].tagged_topic+"</td><tr>");
+														//$("#subtopic_id1").append("<option value='"+subtopic_array[j].subtopic_id+"'>"+subtopic_array[j].subtopic_desc+"</option>");
+													}// end j for loop
+													 
+												} //end tpoic id if condition 
+											} //end i for loop
+										} //end fetch expand success
+									}); //end fetch expand
+			
+					 } 
+					 });
+								
+</script>
+
+		
+		</head>
+		<style>
+				 #footer {
+	 width: 100%;
+position: fixed;
+bottom: 0px;
+background-color: #000;
+height: auto;
+}
+.container .credit {
+float: right;
+margin: 10px 0;
+}
+.muted {
+color: #999999;
+}
+		.ui-dialog .ui-dialog-title {
+
+font-weight: bold;
+font-size: 18px;
+}
+.ui-dialog .ui-dialog-buttonpane {
+font-size: 14px;
+}
+		.content
+		{
+		display:none;
+		}
+		.ui-dialog-titlebar-close {
+  visibility: hidden;
+}
+.active
+{
+padding-top:0px;
+}
+.navbar .nav > li {
+
+padding-top:0px;
+}
+
+		</style>
+
+<body>
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+          <a class="brand" href="">Swara<img src="style/img/swara_icon.jpg" width="26" height="26"/>Dashboard</a>
+          <div class="nav-collapse collapse pull-right">
+            <ul class="nav">
+              <li class="" id="home">
+                <a href="index.html">HOME</a>
+              </li>
+              <li class="" id="inbox">
+                <a href="inbox.html">INBOX </a>
+              </li>
+              <li class="" id="settings">
+                <a href="settings.html">SETTINGS</a>
+              </li>
+			  <li class="" id="device">
+                <a href="device.html">DEVICE</a>
+              </li>
+			  <li class="active">
+                <a href="topic.html">TOPIC</a>
+              </li>
+              <li class="" id="logout_btn">
+                <a id="logout" href="#LOGOUT">LOGOUT</a>
+
+              </li>
+            </ul>
+          </div> 
+          </div>
+      </div>
+	<header class="jumbotron subhead" style="height:45px;"></header>
+<div class="device"  style='' >
+  <div class="modal-header">
+<form>
+<h4 id="myModalLabel"> Topic Information</h4>
+           
+   
+    <div class="modal-body" style=''>
+<table  class="data  table-bordered table table-striped" id="ui">
+   
+	<tr>
+<th>S.No.</th>
+<th>tagged id</th>
+	</tr>
+	</table>
+	
+</div>
+</form>
+<div class="modal-footer">
+	</div>
+</div>
+<div id="footer">
+      <div class="container">
+        <p class="muted credit">Design and Developed by <a href="http://mixorg.com">MIXORG</a> </p>
+      </div>
+    </div>
+	<div id="lastmod_date_old" value=""></div> 
+
+
+	
+
+</body>
+<html>

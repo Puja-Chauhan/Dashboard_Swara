@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Dashboard</title>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.8.0-bundled-min.js"></script>
+
+
+ <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+ <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/dark-hive/jquery-ui.css" />
+<!-- <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/redmond/jquery-ui.css" />-->
+  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+  <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
+ <script type="text/javascript" src="style/js/bootstrap.js"></script>
+ 
+<link type="text/css" rel="stylesheet" href="style/css/bootstrap.css"></link>
+<script type="text/javascript">
+StackMob.init({
+    appName: "swara_sangam",
+    clientSubdomain: "ankitguptamixorgcom",
+    publicKey: "a21c4638-f221-4a70-925b-65cc30de4c30",
+    apiVersion: 0,
+	 userSchema: 'organization_login',
+	    loginField: 'organization_id',
+	    passwordField: 'password',
+		org_flag:'true'
+		
+});
+</script>
+<script type="text/javascript">
+$(document).ready(function() {
+			
+	result();
+	function result() {
+			
+			//var previous_url = document.referrer; // fetch the subtopic file url with topic id
+			//$('#back').html("<a href='"+previous_url+"'>Back</a>"); // set back link value
+			
+			var url = location.href; // fetch the current url
+					//alert(url);
+					
+					//in case fb comment id variable is added in the url
+					/*if (url.indexOf('=') == -1)
+					{
+						var url_arr = url.split('/'); //convert url string in array	
+						url = url_arr[0]+"topic.html";
+						window.open(url, '_top'); 
+					}*/
+					
+					//fetch id from url
+					var url_arr = url.split('='); //convert url string in array	
+					var url_topic_id= url_arr[1]; //fetch the value of id from url
+					//alert(url_topic_id);
+	
+				var Topic_schema = StackMob.Model.extend({ schemaName: 'media' });
+			var topic = new Topic_schema({ });
+					 topic.fetchExpanded(1, {
+						success: function(modal) {
+							//After StackMob returns "Bill Watterson", print out the result
+						   	var array = modal.toJSON();
+							 // console.debug(array);
+
+							 //count total records in image search schema
+								var key;
+								var count = 0;
+								var counter=0;
+								for(key in array) {
+									 if(array.hasOwnProperty(key)) {
+									  count ++;
+									 }
+								 }
+								 console.debug(array);
+								 //alert(count);
+							 //end count total records in image search schema
+							 
+							 //$("#topic_id").html("Topic id - "+url_topic_id);
+							 //$("#ui").html("<tr><th>S.No.</th> <th>Sub-topic-id</th> <th>Media</th> <th>Sub-topic Description</th> <th>Sub-topic Image</th> <th>Last Modified Time</th> <th>Delete</th></tr>");
+							 
+							 //var max_page_records = 5;
+							 //var first_record_no = 1;
+														 
+							for(var i=0; i<=count; i++)
+							{
+							    //alert(url_arr[i]);
+									if(array[i].media_id == url_topic_id)
+									{
+									
+										var subtopic_array = array[i].media_topictags;
+										var key2;
+										var count2 = 0;
+										for(key2 in subtopic_array) {
+											 if(subtopic_array.hasOwnProperty(key2)) {
+											  count2 ++;
+											 }
+										 }
+										 //alert(count);
+										 
+										 for(var j=0; j<=count2; j++)
+										 {
+											 //$("#ui").append("<tr><td>"+(counter+1)+"</td><td>"+subtopic_array[j].tagged_topic+"</td></tr>");
+											 //alert(subtopic_array[j].tagged_topic);
+											 //var subtopic = subtopic_array[j].tagged_topic;
+											 //alert(subtopic);
+											 var Topic = StackMob.Model.extend({schemaName:'topic'});
+							                  var mytopic = new Topic({ });
+							                   var r = new StackMob.Collection.Query();
+							                   r.equals('topic_id', subtopic_array[j].tagged_topic);
+							                    mytopic.query(r, {
+										               success:function(modal) {
+											           var array = modal.toJSON();
+													   //alert("hello");
+											          
+													   
+													    $("#ui").append("<tr><td>"+(counter+1)+"</td><td><img src='"+array[0].topic_logo+"' style='width: 50px; height:50px;'/></td></tr>");
+														//$("#ui").append("<tr><td>"+(counter+1)+"</td><td>"+subtopic+"</td><td></td></tr>");
+										                 counter++;                  
+																		    } 
+										                   }); 
+										  
+										     // $("#ui").append("<tr><td>"+(counter+1)+"</td><td>"+subtopic_array[j].tagged_topic+"</td></tr>");
+											 //end counter if condition
+											
+											//on click of the delete button
+											
+										 }	
+									  } // end topic-id if condition
+								
+							} // end for loop
+						} //end success
+				 	 }); // end imagesearch schema query
+				// code for pagenation
+				
+			
+			//setTimeout(pagination, 10000);
+			 // end pagination function
+			
+		} //end result function
+		
+		//setInterval(check_newentry,1000);
+					 
+			
+				
+	});
+        </script>
+		
+		</head>
+		<style>
+				 #footer {
+	 width: 100%;
+position: fixed;
+bottom: 0px;
+background-color: #000;
+height: auto;
+}
+.container .credit {
+float: right;
+margin: 10px 0;
+}
+.muted {
+color: #999999;
+}
+		.ui-dialog .ui-dialog-title {
+
+font-weight: bold;
+font-size: 18px;
+}
+.ui-dialog .ui-dialog-buttonpane {
+font-size: 14px;
+}
+		.content
+		{
+		display:none;
+		}
+		.ui-dialog-titlebar-close {
+  visibility: hidden;
+}
+.active
+{
+padding-top:0px;
+}
+.navbar .nav > li {
+
+padding-top:0px;
+}
+
+		</style>
+
+<body>
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+          <a class="brand" href="">Swara<img src="style/img/swara_icon.jpg" width="26" height="26"/>Dashboard</a>
+          <div class="nav-collapse collapse pull-right">
+            <ul class="nav">
+              <li class="" id="home">
+                <a href="index.html">HOME</a>
+              </li>
+              <li class="" id="inbox">
+                <a href="inbox.html">INBOX </a>
+              </li>
+              <!--<li class="" id="settings">
+                <a href="settings.html">SETTINGS</a>-->
+              </li>
+			  <li class="" id="device">
+                <a href="device.html">DEVICE</a>
+              </li>
+			  <li class="active">
+                <a href="topic.html">TOPIC</a>
+              </li>
+              <li class="" id="logout_btn">
+                <a id="logout" href="#LOGOUT">LOGOUT</a>
+
+              </li>
+            </ul>
+          </div> 
+		  <div id="dialog-confirm"  title="Logout" style="font-size:14px;"><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>Do you really want to Logout? </div>
+          </div>
+      </div>
+	<header class="jumbotron subhead" style="height:45px;"></header>
+<div class="device"  style='' >
+  <div class="modal-header">
+<form>
+<h4 id="myModalLabel"> Tagged Topics Information <br/><b id="topic_id"></b></h4>
+           
+   
+    <div class="modal-body" style=''>
+<table  class="data  table-bordered table table-striped" id="ui">
+   
+	<tr>
+<th>S.No.</th>
+
+<th>Topic Logo</th>
+
+	</tr>
+	</table>
+	
+</div>
+</form>
+</div>
+<div id="footer">
+      <div class="container">
+        <p class="muted credit">Design and Developed by <a href="http://mixorg.com">MIXORG</a> </p>
+      </div>
+    </div>
+
+<script type="text/javascript">
+$(function(){
+//onload validation
+var username=localStorage.getItem("stackmob.oauth2.user");
+//alert(username);
+StackMob.isLoggedIn({
+  yes: function(username){
+    console.log(username + " is logged in.");
+  },
+  no: function(){
+   // console.log("No one is currently logged in.");
+   window.location="login.html";
+  }
+});
+  
+
+
+
+
+
+$("#logout").click(function(e){
+$( "#dialog-confirm" ).dialog( "open" );
+});
+
+var User = StackMob.Model.extend({ schemaName: 'organization_login' });		
+var user = new StackMob.User({ organization_id: localStorage.getItem("stackmob.oauth2.user") });
+$( "#dialog-confirm" ).dialog({
+ 
+	 autoOpen: false,
+      resizable: true,
+      height:160,
+      modal: true,
+      buttons: {
+        "YES": function() {
+		user.logout({
+  success: function(model) {
+    //show a success message/update your UI
+		window.location="login.html"
+  }, 
+  error: function(model, response) {
+    //show a failure message in your app    
+	alert("error");
+  }
+});
+          $( this ).dialog( "close" );
+        },
+        "NO": function() {
+          $( this ).dialog( "close" );
+		
+        }
+      }
+    });
+
+
+ 
+
+});
+
+</script>	
+
+
+	
+
+</body>
+<html>

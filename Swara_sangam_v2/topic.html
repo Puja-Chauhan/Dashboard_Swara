@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Dashboard</title>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.8.0-bundled-min.js"></script>
+
+
+ <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+ <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/dark-hive/jquery-ui.css" />
+<!-- <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/redmond/jquery-ui.css" />-->
+  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+  <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
+ <script type="text/javascript" src="style/js/bootstrap.js"></script>
+ 
+<link type="text/css" rel="stylesheet" href="style/css/bootstrap.css"></link>
+<script type="text/javascript">
+StackMob.init({
+    appName: "swara_sangam",
+    clientSubdomain: "ankitguptamixorgcom",
+    publicKey: "a21c4638-f221-4a70-925b-65cc30de4c30",
+    apiVersion: 0,
+	 userSchema: 'organization_login',
+	    loginField: 'organization_id',
+	    passwordField: 'password',
+});
+</script>
+
+</script><script type="text/javascript">
+/**
+ * This code declares your class and saves an object "blogentry" to the table on StackMob.
+ * StackMob will create the table for you automatically based on your JSON.
+ */
+ $(document).ready(function() {
+			result();
+			function result() {
+						
+	  		var topic = StackMob.Model.extend({ schemaName: 'topic' });
+			var mytopic = new topic({ });
+					var q = new StackMob.Collection.Query();
+					q.equals('org_topic', 1);
+					q.setRange(0,9).orderDesc('lastmoddate');
+				  
+					mytopic.query(q, {
+						success: function(modal) {
+							//After StackMob returns "Bill Watterson", print out the result
+						   	var array = modal.toJSON();
+							 // console.debug(array);
+							 //$('#data').html(array[0].user_name);
+							 var val = array[0].lastmoddate;
+							 $('#last_mod_date').attr('value', val);
+							 //alert($('#last_mod_date').attr('value', val));
+							 
+							 
+								var key;
+								var count = 0;
+								for(key in array) {
+									 if(array.hasOwnProperty(key)) {
+									  count ++;
+									 }
+								 }
+								 //alert(count);
+								 var sn=1;
+							for(var i=0; i<=count; i++)
+							{
+							//if(array[i].org_img == localStorage.getItem("stackmob.oauth2.user"))
+							
+								//alert(array[i].org_img);
+									//$('#last_mod_date').html(array[0].lastmoddate);
+									
+									//alert(val);
+									
+									$("#ui").append("<tr><td class='ids' hidden>"+array[i].topic_id+"<td>"+sn+"</td><td><div class='device-name' contenteditable>"+array[i].topic_description+"</div></td><td><a href><img  src='"+array[i].topic_logo+"'style='width: 60px; height:60px;' border='3' ><input type='file' id='files' name='files[]' multiple /> </a></td><td>"+ new Date(array[i].lastmoddate)+"</td><td><input type='button' class='topic_delete' id='"+array[i].topic_id+"' topic_id='"+array[i].topic_id+"' value='Delete' style='cursor:pointer;' /></td><tr>");
+	                            sn=sn+1;
+								
+								//on click of the delete button
+				
+								$(".topic_delete").click(function(e){
+												var topic_id = $(this).attr('topic_id');
+												//var topic_subtopic_id = $(this).attr('topic_subtopic_id');
+												//alert(topic_id);
+												//alert(topic_subtopic_id);	
+												//alert(media_id);
+												//set the current click media id in a div value
+												$("#current_topic_id").attr("value", topic_id); 
+												//$("#current_topic_subtopic_id").attr("value", topic_subtopic_id);
+												$( "#dialog-confirm1" ).dialog( "open" );
+											});
+											
+											
+											$( "#dialog-confirm1" ).dialog({
+												 	
+													 autoOpen: false,
+													  resizable: true,
+													  height:160,
+													  width:500,
+													  modal: true,
+													  buttons: {
+														"YES": function() {
+															
+															
+															
+															//after delete subtopic, delete topic from topic schema
+															var topic_id = $("#current_topic_id").attr('value');
+															var Todo_topic = StackMob.Model.extend({ schemaName: 'topic' });
+															var todo_topic = new Todo_topic({ topic_id: topic_id });
+															todo_topic.destroy({
+																success:function(modal) {
+																	alert("Topic deleted successfully.");
+																} // end success - topic delete
+															}); //end destroy topic delete function
+															//end delete topic from topic schema
+																		
+														  	$( this ).dialog( "close" );
+															//result();
+															//window.open(location.href ,'_top');
+														}, //end yes function
+														"NO": function() {
+														  $( this ).dialog( "close" );
+														} 
+													  } //end button
+													}); //end dialog confirm
+									
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+	$('a').click(function(){
+//alert("onclick");
+var id = $(this).parent().siblings('.ids').text();
+//alert(id);
+//for updating the topic
+$(function(){
+
+	 var topic= StackMob.Model.extend({
+		 schemaName:'topic'
+	 });
+  var topicInstance = new topic({ topic_id: id });
+  /* var Todo = StackMob.Model.extend({
+    schemaName: 'organization'
+  });
+ 
+  var todoInstance = new Todo(); */
+  var fieldname = 'topic_logo'; //name of binary field that you created in your schema
+  
+  function handleFileSelect(evt) {
+    var files = evt.target.files; // FileList object
+	
+    // Loop through the FileList
+    for (var i = 0, f; f = files[i]; i++) {
+ 		
+      var reader = new FileReader();
+ 
+      // Closure to capture the file information
+      reader.onload = (function(theFile) {
+        return function(e) {
+ 			
+          /*
+            e.target.result will return "data:image/jpeg;base64,[base64 encoded data]...".
+            We only want the "[base64 encoded data] portion, so strip out the first part
+          */
+          var base64Content = e.target.result.substring(e.target.result.indexOf(',') + 1, e.target.result.length);
+          var fileName = theFile.name;
+          var fileType = theFile.type;
+			if((fileType=="image/jpeg")||(fileType=="image/png")||(fileType=="image/gif")||(fileType=="image/jpg"))
+			{
+          topicInstance.setBinaryFile(fieldname, fileName, fileType, base64Content);
+          topicInstance.save();
+		  alert('image saved');
+		  location.reload();
+		  document.getElementById('files').value = '';
+		 
+		  }
+		  else
+		  {
+		  alert("Please upload only image file in following format[jpeg,png,gif,jpg]");
+		  }
+         // todoInstance.setBinaryFile(fieldname, fileName, fileType, base64Content);
+         // todoInstance.save();
+//	  alert('Image saved');
+ 
+        };
+      })(f);
+ 
+      // Read in the file as a data URL
+      fileContent = reader.readAsDataURL(f);
+ 		//$('.data').html(fileContent);
+    }
+  }
+ 
+  document.getElementById('files').addEventListener('change', handleFileSelect, false);
+  //document.getElementById('submit').addEventListener('click', handleFileSelect, false);
+ });
+
+exit();
+
+});
+				
+			
+								 //end if condition
+							}
+				// end for loop
+							
+						} //end success
+				 	 }); // end imagesearch schema query
+					 } // end result function
+
+					 
+					
+					
+					 
+			setInterval(check_newentry,1000);
+					 
+					 function check_newentry() {
+					 	var topic = StackMob.Model.extend({ schemaName: 'topic' });
+			var mytopic = new topic({  });
+					var q = new StackMob.Collection.Query();
+					q.orderDesc('lastmoddate');
+					mytopic.query(q, {
+						success: function(modal) {
+							//After StackMob returns "Bill Watterson", print out the result
+						   	var array = modal.toJSON();
+							 // console.debug(array);
+							 //$('#data').html(array[0].user_name);
+							 
+							 var lastmod_date_old = $('#last_mod_date').val();
+							 var lastmod_date =  array[0].lastmoddate;
+							 
+							// alert(lastmod_date_old +"..."+ lastmod_date);
+							 if(lastmod_date_old < lastmod_date)
+							{
+								
+								var val = array[0].lastmoddate;
+								 $('#last_mod_date').attr('value', val);
+								
+								var key;
+								var count = 0;
+								var counter=0;
+								for(key in array) {
+									 if(array.hasOwnProperty(key)) {
+									  count ++;
+									 }
+								 }
+								 //alert(count);
+						 for(var i=0; i<=count; i++)
+							{
+								
+								if(counter<50)
+								{
+								
+								    $("#ui").append("<tr><td class='ids' hidden>"+array[i].topic_id+"<td>"+sn+"</td><td><div class='device-name' contenteditable>"+array[i].topic_description+"</div></td><td><a href><img  src='"+array[i].topic_logo+"'style='width: 60px; height:60px;' border='3' ><input type='file' id='files' name='files[]' multiple /> </a></td><td>"+ new Date(array[i].lastmoddate)+"</td><td><input type='button' class='topic_delete' id='"+array[i].topic_id+"' topic_id='"+array[i].topic_id+"' value='Delete' style='cursor:pointer;' /></td><tr>");
+									//$("#ui").append("<tr><td>"+array[i].topic_id+"</td><td><div class='device-name' contenteditable>"+array[i].topic_description+"</td><td><img src='"+array[i].topic_logo+"' ></td><td>"+new Date(array[i].lastmoddate)+"</td><tr>");
+							
+									//------------------------------------------- end device schema code
+									counter++;
+									
+									
+								
+								}
+								else
+								exit();
+								
+								//on click of the delete button
+								$(".topic_delete").click(function(e){
+												var topic_id = $(this).attr('topic_id');
+												//var topic_subtopic_id = $(this).attr('topic_subtopic_id');
+												//alert(topic_id);
+												//alert(topic_subtopic_id);	
+												//alert(media_id);
+												//set the current click media id in a div value
+												$("#current_topic_id").attr("value", topic_id); 
+												//$("#current_topic_subtopic_id").attr("value", topic_subtopic_id);
+												$( "#dialog-confirm1" ).dialog( "open" );
+											});
+											
+											
+											$( "#dialog-confirm1" ).dialog({
+												 	
+													 autoOpen: false,
+													  resizable: true,
+													  height:160,
+													  width:500,
+													  modal: true,
+													  buttons: {
+														"YES": function() {
+															
+															
+															
+															//delete topic from topic schema
+															var topic_id = $("#current_topic_id").attr('value');
+															//alert(topic_id);
+															var Todo_topic = StackMob.Model.extend({ schemaName: 'topic' });
+															var todo_topic = new Todo_topic({ topic_id: topic_id });
+															todo_topic.destroy({
+																success:function(modal) {
+																	alert("Topic deleted successfully.");
+																} // end success - topic delete
+															}); //end destroy topic delete function
+															//end delete topic from topic schema
+																		
+														  	$( this ).dialog( "close" );
+															//result();
+															//window.open(location.href ,'_top');
+														}, //end yes function
+														"NO": function() {
+														  $( this ).dialog( "close" );
+														} 
+													  } //end button
+													}); //end dialog confirm
+									
+								
+								
+								
+							}
+						}
+						}
+				 	 });
+					 } // end check_newentry 
+					 });
+ 
+
+function updateThis(ui) {
+//var value_topic=document.getElementById('String').value;
+
+var topic = StackMob.Model.extend({ schemaName: 'topic' });
+var topic = new topic({ });
+topic.save({}, {
+    success: function(model) {
+        console.debug(model.toJSON());
+		//alert("worked");
+    },
+    error: function(model, response) {
+        console.debug(response);
+		alert("saved...");
+    }
+});
+
+
+
+}
+					 
+		</script>
+
+		
+		</head>
+		<style>
+				 #footer {
+	 width: 100%;
+position: fixed;
+bottom: 0px;
+background-color: #000;
+height: auto;
+}
+.container .credit {
+float: right;
+margin: 10px 0;
+}
+.muted {
+color: #999999;
+}
+		.ui-dialog .ui-dialog-title {
+
+font-weight: bold;
+font-size: 18px;
+}
+.ui-dialog .ui-dialog-buttonpane {
+font-size: 14px;
+}
+		.content
+		{
+		display:none;
+		}
+		.ui-dialog-titlebar-close {
+  visibility: hidden;
+}
+.active
+{
+padding-top:0px;
+}
+.navbar .nav > li {
+
+padding-top:0px;
+}
+
+		</style>
+
+<body>
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+          <a class="brand" href="">Swara<img src="style/img/swara_icon.jpg" width="26" height="26"/>Dashboard</a>
+          <div class="nav-collapse collapse pull-right">
+            <ul class="nav">
+              <li class="" id="home">
+                <a href="index.html">HOME</a>
+              </li>
+              <li class="" id="inbox">
+                <a href="inbox.html">INBOX </a>
+              </li>
+              <!--<li class="" id="settings">
+                <a href="settings.html">SETTINGS</a>-->
+              </li>
+			  <li class="" id="device">
+                <a href="device.html">DEVICE</a>
+              </li>
+			  <li class="active">
+                <a href="topic.html">TOPIC</a>
+              </li>
+              <li class="" id="logout_btn">
+                <a id="logout" href="#LOGOUT">LOGOUT</a>
+
+              </li>
+            </ul>
+          </div>
+		  <div id="dialog-confirm"  title="Logout" style="font-size:14px;"><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>Do you really want to Logout??? </div> 
+          <div id="dialog-confirm1"  title="Delete" style="font-size:14px;"><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>Do you really want to Delete?</div>
+		</div>
+      </div>
+	<header class="jumbotron subhead" style="height:45px;"></header>
+<div class="device"  style='' >
+  <div class="modal-header">
+<form>
+<h4 id="myModalLabel"> Topic Information</h4>
+            <li class="" id="create_content">
+                <a href="createtopic.html">CREATE TOPIC</a>
+			</li>
+			<li class="" id="update_content">
+                <a href="updatetopic.html">EDIT TOPIC</a>
+			</li>
+   
+    <div class="modal-body" style=''>
+<table  class="data  table-bordered table table-striped" id="ui">
+   
+	<tr>
+<th>S.No.</th>
+		<th>Topic Description</th>
+		<th>Topic Logo</th>
+		
+ 		<th >Time</th>
+		<th>Delete</th>
+	</tr>
+	</table>
+	
+	<div id="current_topic_id" value=""></div> 
+	
+</div>
+</form>
+<div class="modal-footer">
+	</div>
+</div>
+<div id="footer">
+      <div class="container">
+        <p class="muted credit">Design and Developed by <a href="http://mixorg.com">MIXORG</a> </p>
+      </div>
+    </div>
+	<div id="lastmod_date_old" value=""></div> 
+
+<script type="text/javascript">
+$(function(){
+//onload validation
+var username=localStorage.getItem("stackmob.oauth2.user");
+//alert(username);
+StackMob.isLoggedIn({
+  yes: function(username){
+    console.log(username + " is logged in.");
+  },
+  no: function(){
+   // console.log("No one is currently logged in.");
+   window.location="login.html";
+  }
+});
+  
+
+
+
+
+
+$("#logout").click(function(e){
+$( "#dialog-confirm" ).dialog( "open" );
+});
+
+var User = StackMob.Model.extend({ schemaName: 'organization_login' });		
+var user = new StackMob.User({ organization_id: localStorage.getItem("stackmob.oauth2.user") });
+$( "#dialog-confirm" ).dialog({
+ 
+	 autoOpen: false,
+      resizable: true,
+      height:160,
+      modal: true,
+      buttons: {
+        "YES": function() {
+		user.logout({
+  success: function(model) {
+    //show a success message/update your UI
+		window.location="login.html"
+  }, 
+  error: function(model, response) {
+    //show a failure message in your app    
+	alert("error");
+  }
+});
+          $( this ).dialog( "close" );
+        },
+        "NO": function() {
+          $( this ).dialog( "close" );
+		
+        }
+      }
+    });
+
+
+ 
+
+});
+
+</script>
+
+	
+
+</body>
+<html>

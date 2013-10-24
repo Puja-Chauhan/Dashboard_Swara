@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.7.0-bundled-min.js"></script>
+<script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
+ <script type="text/javascript" src="style/js/bootstrap.js"></script>
+
+<link type="text/css" rel="stylesheet" href="style/css/bootstrap.css"></link>
+
+<script type="text/javascript">
+      /* <![CDATA[ */
+      // Initialize StackMob object
+      // Copy your init data from here: https://dashboard.stackmob.com/sdks/js/config
+      // Your other app information is here: https://dashboard.stackmob.com/settings
+    StackMob.init({
+    appName: "swara_sangam",
+    clientSubdomain: "ankitguptamixorgcom",
+    publicKey: "a21c4638-f221-4a70-925b-65cc30de4c30",
+		userSchema: 'organization_login', //the schema you are using as a User Object
+		loginField: 'organization_id', //the username you are using as the login field
+		passwordField: 'password', //the password field you are using as the password field
+		org_flag:'true',
+		apiVersion : 0
+        
+      });
+      /* ]]> */
+		</script>
+				
+</head>
+<body>
+
+   <div class="modal hide fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div tabindex="-1"  class="alert alert-block alert-error fade in" id="error_login">Something went wrong. Either you entered a wrong password or your organization id is wrong . Please try again later
+<button type="button" class="close" data-dismiss="alert">x</button>
+</div>
+    <div class="modal-header">
+	
+            <h3 id="myModalLabel">Swara Login Panel</h3>
+    </div>
+    <div class="modal-body">
+      <p>
+
+ <form id="login_form">
+          <label for="username">Enter Organization ID: </label>
+	<input type="text" id="name"/>
+	<div class="alert alert-block alert-error fade in" id="error_name">
+	Please enter a valid organization ID
+<button type="button" class="close" data-dismiss="alert">x</button>
+</div>
+            
+          <label for="password">Enter Organization Password</label>
+          <input type="password" id="password" name="password">
+		  <div class="alert alert-block alert-error fade in" id="error_password">
+		  Please enter your organization passowrd
+<button type="button" class="close" data-dismiss="alert">x</button>
+</div>
+        </form>
+      </p>
+    </div>
+    <div class="modal-footer">
+	
+	<!-- <button class="btn" data-dismiss="modal" aria-hidden="true" style="">Close</button>-->
+      <input type="button" id="submit" value="submit" class="btn btn-primary" form="login_form" value="Login">
+    </div>
+
+ 
+<script type="text/javascript">
+$(function(){
+$('#myModal').modal('toggle');
+$(".alert").hide();
+	$("#submit").click(function(){
+		//e.preventDefault();
+		var name = $("#name").val();
+		var password = $("#password").val();
+		/* Validataion**************/
+		
+		if(name=='')
+		{
+		$("#name").focus();
+		$("#error_name").show();
+		}
+ else if(password=='')
+		{
+		$("#password").focus();
+		$("#error_password").show();
+		}
+		else
+		{
+var User = StackMob.Model.extend({ schemaName: 'organization_login' });
+var user = new StackMob.User({ organization_id: name, password: password,org_flag:"true" });
+ 
+//Makes a call to StackMob to request a login
+user.login(true, {
+  success: function(model) {
+    //show a success message/update your UI
+	//alert("success");
+	window.location="index.html"
+  }, 
+  error: function(model, response) {
+    //show a failure message in your app    
+	//alert("error");
+	$("#error_login").show();
+		$("#name").val('');
+		$("#password").val('');
+	
+  }
+  
+});
+}
+});
+});
+</script>
+ 
+</body>
+</html>

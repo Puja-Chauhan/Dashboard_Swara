@@ -1,0 +1,445 @@
+<html>
+	<head>
+    <title>Swara Dashboard</title>
+    <link href="http://www.stackmob.com/platform/favicon.ico" type="image/vnd.microsoft.icon" rel="icon" />
+    <link href="http://www.stackmob.com/platform/favicon.png" type="image/png" rel="icon" />
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.8.0-bundled-min.js"></script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXZG_t7ZYAOL0SgxiB3HIH2Warac77Hjc&sensor=false"></script>
+ <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+ <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/dark-hive/jquery-ui.css" />
+<!-- <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/redmond/jquery-ui.css" />-->
+  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+  <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
+ <script type="text/javascript" src="style/js/bootstrap.js"></script>
+ 
+<link type="text/css" rel="stylesheet" href="style/css/bootstrap.css"></link>    
+    <style type="text/css" media="screen">
+      /* <![CDATA[ */
+        li { padding-top: 10px; }
+      /* ]]> */
+	 
+    </style>
+		<!--
+		*************************************
+		STACKMOB JS SDK DEPENDENCIES
+		Include these in your pages where you want to use the StackMob js sdk
+		*************************************
+		-->
+		<!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.8.0-bundled-min.js"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=place"></script> -->
+		<!--
+		*************************************
+		INITIALIZE THE JS SDK BELOW
+
+		Copy/Paste the init method from:
+		https://dashboard.stackmob.com/sdks/js/config
+		*************************************
+		-->
+	  <script type="text/javascript">
+      /* <![CDATA[ */
+      // Initialize StackMob object
+      // Copy your init data from here: https://dashboard.stackmob.com/sdks/js/config
+      // Your other app information is here: https://dashboard.stackmob.com/settings
+      StackMob.init({
+        appName: "swara_sangam",
+        clientSubdomain: "ankitguptamixorgcom",
+        publicKey: "a21c4638-f221-4a70-925b-65cc30de4c30",
+        apiVersion: 0,
+		userSchema: 'organization_login',
+	    loginField: 'organization_id',
+	    passwordField: 'password',
+      });
+      /* ]]> */
+	  </script>
+<script type="text/javascript">
+      /* <![CDATA[ */
+      
+      /* <![CDATA[ */
+	   $(document).ready(function() {
+	 
+	  var markersArray = [];
+	  			
+	  	var Topic_schema = StackMob.Model.extend({ schemaName: 'media' });
+			var topic = new Topic_schema({ });
+					 topic.fetchExpanded(1, {
+						success: function(modal) {
+							//After StackMob returns "Bill Watterson", print out the result
+						   	var array = modal.toJSON();
+							 // console.debug(array);
+
+							 //count total records in image search schema
+								var key;
+								var count = 0;
+								var counter=0;
+								for(key in array) {
+									 if(array.hasOwnProperty(key)) {
+									  count ++;
+									 }
+								 }
+								 //alert(count);
+							 //end count total records in image search schema
+							 
+							 //$("#topic_id").html("Topic id - "+url_topic_id);
+							 //$("#ui").html("<tr><th>S.No.</th> <th>Sub-topic-id</th> <th>Media</th> <th>Sub-topic Description</th> <th>Sub-topic Image</th> <th>Last Modified Time</th> <th>Delete</th></tr>");
+							 
+							 //var max_page_records = 5;
+							 //var first_record_no = 1;
+														 
+							for(var i=0; i<=count; i++)
+							{
+							    //alert(url_arr[i]);
+									if(array[i].media_id == 'c96a6569df884e70933675f004d54af4')
+									{
+									
+										var subtopic_array = array[i].media_topictags;
+										var key2;
+										var count2 = 0;
+										for(key2 in subtopic_array) {
+											 if(subtopic_array.hasOwnProperty(key2)) {
+											  count2 ++;
+											 }
+										 }
+										 //alert(count);
+										 
+										 for(var j=0; j<=count2; j++)
+										 {
+											 //$("#ui").append("<tr><td>"+(counter+1)+"</td><td>"+subtopic_array[j].tagged_topic+"</td></tr>");
+											 alert(subtopic_array[j].tagged_topic);
+											 //var subtopic = subtopic_array[j].tagged_topic;
+											 //alert(subtopic);
+											 var Topic = StackMob.Model.extend({schemaName:'topic'});
+							                  var mytopic = new Topic({ });
+							                   var r = new StackMob.Collection.Query();
+							                   r.equals('topic_id', subtopic_array[j].tagged_topic);
+							                    mytopic.query(r, {
+										               success:function(modal) {
+											           var array = modal.toJSON();
+													   //alert("hello");
+											          
+													   
+													   // $("#ui").append("<tr><td>"+(counter+1)+"</td><td><img src='"+array[0].topic_logo+"' style='width: 50px; height:50px;'/></td></tr>");
+														//$("#ui").append("<tr><td>"+(counter+1)+"</td><td>"+subtopic+"</td><td></td></tr>");
+										                 counter++;                  
+																		    } 
+										                   }); 
+										  
+										     // $("#ui").append("<tr><td>"+(counter+1)+"</td><td>"+subtopic_array[j].tagged_topic+"</td></tr>");
+											 //end counter if condition
+											
+											//on click of the delete button
+											
+										 }	
+
+									  } // end topic-id if condition
+									  //initialise();
+									  //exit();
+								
+							} // end for loop
+						} //end success
+				 	 }); // end imagesearch schema query
+
+		// If your schema name is different than `place`, then you need to replace `place` with your schema
+		//setInterval(result,1000);
+
+	  		var geocoder;
+			  var map;
+			  var marker;
+
+			 function initialize() {
+
+			geocoder = new google.maps.Geocoder();
+			show_marker();
+			//setInterval(check_newentry,1000);
+
+			function show_marker() { // start show_marker function
+			clearOverlays();
+
+			var input = document.getElementById("latlng").getAttribute("value"); 
+		   //alert(input);
+			var latlngStr = input.split(",",2);
+			var lat = parseFloat(latlngStr[0]);
+			var lng = parseFloat(latlngStr[1]);
+			//alert(lat);
+			//alert(lng);
+
+
+			var latlng = new google.maps.LatLng(lat, lng);
+			geocoder.geocode({'latLng': latlng}, function(results, status) {
+			  //var address = results[4].formatted_address;
+			  var address = results[0].formatted_address;
+			  //
+//alert(address);
+			  //var address = input;
+			$("#test").html(address);
+		//	console.log(results[4].formatted_address);
+		geocoder.geocode( { 'address': address}, function(results, status) {
+			  if (status == google.maps.GeocoderStatus.OK) {
+				map.setCenter(results[0].geometry.location);
+				var marker = new google.maps.Marker({
+					map: map,
+					position: results[0].geometry.location,
+				});
+
+				// to find the place name by latlng
+					/* var autocomplete = new google.maps.places.Autocomplete(input, {
+						 types: ["geocode"]
+					 });
+					 autocomplete.bindTo('bounds', map);
+					 var place = autocomplete.getPlace();*/
+
+					 //alert(place.name); 
+
+				 markersArray.push(marker);
+
+					 /* var infowindow = new google.maps.InfoWindow({
+                        content: name
+                    }); */ 
+					//var device_id = document.getElementById("device_id").getAttribute("value");
+					//var media_id = document.getElementById("media_id").getAttribute("value");
+
+					var mobile_number = document.getElementById("mobile_number").getAttribute("value");
+					//alert(mobile_number);
+					var audio = document.getElementById("audio").getAttribute("value");
+					
+					var mediatype = document.getElementById("mediatype").getAttribute("value");
+					
+					var media_id = document.getElementById("media_id").getAttribute("value");
+					
+					//alert(mediatype);
+					//alert(array[i].media_type);
+					//var org_logo = document.getElementById("org_logo").getAttribute("value");
+					//alert(org_logo);
+					var last_mod_date=document.getElementById("last_mod_date").getAttribute("value");
+					//var address=document.getElementById("address").getAttribute("value");
+					//alert(address);
+					var infowindow = new google.maps.InfoWindow();
+					//alert("infowindow")
+					//infowindow.setContent("Device-id  : " +device_id + "<br/> Mobile_n : "+mobile_no + "<br/> Model : "+model + "<br/> Address : "+address);
+					if(mediatype=="3GP")
+					  infowindow.setContent( "Mobile No : " + mobile_number + "<br/><a href='"+audio+"'   target='_blank'>Play Recorded Audio</a><br/>Tagged Topics : <a href = 'topictag.html?id="+media_id+"'>View</a><br/>Address :" + address+"<br/>Time : "+new Date);
+                    else if(mediatype=="PNG")
+					  infowindow.setContent( "Mobile No : " + mobile_number + "<br/>Image :<a href><img  src='"+audio+"' style='width: 75px; height:75px;' border='2'/></a><br/>Tagged Topics : <a href = 'topictag.html?id="+media_id+"'>View</a><br/>Address :" +address+"<br/>Time : "+new Date);
+                    else
+					  infowindow.setContent( "Mobile No : " + mobile_number + "<br/><a href='"+audio+"'   target='_blank'>Play Recorded Video</a><br/>Tagged Topics : <a href = 'topictag.html?id="+media_id+"'>View</a><br/>Address :" + address+"<br/>Time : "+new Date);
+					   
+
+				//google.maps.event.addListener(marker, 'click', function(event) {
+                        infowindow.open(map, marker);
+                    //});		 
+
+
+				//alert("Geocode was not successful for the following reason: " + media);
+			  }
+			});
+		   });
+
+			 }  //end show_marker function
+
+			 /* var timeInterval = 1000;
+				for (var i = 0; i <= 2; i++ ) {
+					setTimeout(show_marker, timeInterval);
+					timeInterval += 1000;
+				} */
+
+
+			 var mapOptions = {
+			  zoom: 10,
+			  center: new google.maps.LatLng(37.4419, -22.1419),
+			  mapTypeId: google.maps.MapTypeId.TERRAIN,
+			  mapTypeControl: false,
+			  streetViewControl: false
+
+			}
+			map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+
+			
+
+		  } 
+  	
+				function clearOverlays() {
+					  if (markersArray) {
+						for (i in markersArray) {
+						  markersArray[i].setMap(null);
+						}
+					  }
+				 	}
+				});
+
+     
+      /* ]]> */
+		</script>
+				<style>
+				 #footer {
+	 width: 100%;
+position: fixed;
+bottom: 0px;
+background-color: #000;
+height: auto;
+}
+.container .credit {
+float: right;
+margin: 10px 0;
+}
+.muted {
+color: #999999;
+}
+		.ui-dialog .ui-dialog-title {
+
+font-weight: bold;
+font-size: 18px;
+}
+.ui-dialog .ui-dialog-buttonpane {
+font-size: 14px;
+}
+.popup{
+width: 100%;
+margin: 0 auto;
+display: none;
+position: none;
+z-index: 101;
+}
+		.content
+		{
+		display:none;
+		}
+		.ui-dialog-titlebar-close {
+  visibility: hidden;
+}
+.active
+{
+padding-top:0px;
+}
+.navbar .nav > li {
+
+padding-top:0px;
+}
+
+		</style>
+
+		<head>
+  <body>
+  
+<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+          <a class="brand" href="">Swara<img src="style/img/swara_icon.jpg" width="26" height="26"/>Dashboard</a>
+          <div class="nav-collapse collapse pull-right">
+            <ul class="nav">
+              <li class="active" id="home">
+                <a href="index.html">HOME</a>
+              </li>
+              <li class="" id="inbox">
+                <a href="inbox.html">INBOX </a>
+              </li>
+              <!--<li class="" id="settings">
+                <a href="settings.html">SETTINGS</a>-->
+              </li>
+			  <li class="" id="device">
+                <a href="device.html">DEVICE</a>
+              </li>
+			  <li class="" id="topic">
+                <a href="topic.html">TOPIC</a>
+              </li>
+              <li class="" id="logout_btn">
+                <a id="logout" href="#LOGOUT">LOGOUT</a>
+
+              </li>
+            </ul>
+          </div>
+		  <div id="dialog-confirm"  title="Logout" style="font-size:14px;"><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>Do you really want to Logout??? </div> 
+        </div>
+      </div>
+<header class="jumbotron subhead" style="height:45px;"></header>	
+	<div id="audio" value=""></div>
+  <!-- <div id="device_id" value=""></div> -->
+  <!--<div id="media_id" value=""></div>--->
+  <div id="mobile_number" value=""></div>
+  <div id="audio" value=""></div>
+<div id="address" value=""></div>
+<div id="mediatype" value=""></div>
+<div id="media_id" value=""></div>
+ <!-- <div id="data0" value=""></div>
+  <div id="data1" value=""></div>
+  <div id="data2" value=""></div> -->
+  <div class="current_date_time"></div>
+  <div class="last_mod_date"></div> 
+  
+  <div id="last_mod_date" value="" style="display:none;"></div> 
+  
+   <div id="latlng" value=""></div>
+   <!-- <div id="latlng0" value=""></div>
+   <div id="latlng1" value=""></div>
+   <div id="latlng2" value=""></div> -->
+   
+<!--<div id="test" style='height:50px;'></div>-->
+<div id="map_canvas"  style="width: 80%; height: 85%; border: 1px solid black; margin-left:10%"></div>  
+<div id="footer">
+      <div class="container">
+        <p class="muted credit">Design and Developed by <a href="http://mixorg.com" >MIXORG</a> </p>
+      </div>
+    </div>
+ 
+<script type="text/javascript">
+$(function(){
+//onload validation
+var username=localStorage.getItem("stackmob.oauth2.user");
+//alert(username);
+StackMob.isLoggedIn({
+  yes: function(username){
+    console.log(username + " is logged in.");
+  },
+  no: function(){
+   // console.log("No one is currently logged in.");
+   window.location="login.html";
+  }
+});
+  
+
+
+
+
+
+$("#logout").click(function(e){
+$( "#dialog-confirm" ).dialog( "open" );
+});
+
+var User = StackMob.Model.extend({ schemaName: 'organization_login' });		
+var user = new StackMob.User({ organization_id: localStorage.getItem("stackmob.oauth2.user") });
+$( "#dialog-confirm" ).dialog({
+ 
+	 autoOpen: false,
+      resizable: true,
+      height:160,
+      modal: true,
+      buttons: {
+        "YES": function() {
+		user.logout({
+  success: function(model) {
+    //show a success message/update your UI
+		window.location="login.html"
+  }, 
+  error: function(model, response) {
+    //show a failure message in your app    
+	alert("error");
+  }
+});
+          $( this ).dialog( "close" );
+        },
+        "NO": function() {
+          $( this ).dialog( "close" );
+		
+        }
+      }
+    });
+
+
+ 
+
+});
+
+</script>
+	</body>
+</html>

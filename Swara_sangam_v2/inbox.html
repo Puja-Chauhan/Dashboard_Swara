@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Inbox</title>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.8.0-bundled-min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXZG_t7ZYAOL0SgxiB3HIH2Warac77Hjc&sensor=false"></script>
+ <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+ <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/dark-hive/jquery-ui.css" />
+<!-- <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/redmond/jquery-ui.css" />-->
+  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+  <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
+ <script type="text/javascript" src="style/js/bootstrap.js"></script>
+ 
+<link type="text/css" rel="stylesheet" href="style/css/bootstrap.css"></link>
+<script type="text/javascript">
+StackMob.init({
+    appName: "swara_sangam",
+    clientSubdomain: "ankitguptamixorgcom",
+    publicKey: "a21c4638-f221-4a70-925b-65cc30de4c30",
+    apiVersion: 0,
+	 userSchema: 'organization_login',
+	    loginField: 'organization_id',
+	    passwordField: 'password',
+		org_flag:'true'
+		
+});
+</script>
+</script><script type="text/javascript">
+/**
+ * This code declares your class and saves an object "blogentry" to the table on StackMob.
+ * StackMob will create the table for you automatically based on your JSON.
+ */
+$(document).ready(function() {
+			result();
+			function result() {
+						
+	  		var media = StackMob.Model.extend({ schemaName: 'media' });
+			var mymedia = new media({ });
+					var q = new StackMob.Collection.Query();
+					//q.equals('media_org', 1);
+					q.orderDesc('lastmoddate');
+					mymedia.query(q, {
+						success: function(modal) {
+							//After StackMob returns "Bill Watterson", print out the result
+						   	var array = modal.toJSON();
+							 console.debug(array);
+							 //$('#data').html(array[0].user_name);
+							 var val = array[0].lastmoddate;
+							 $('#last_mod_date').attr('value', val);
+							 
+							    var address;
+								var key;
+								var count = 0;
+								for(key in array) {
+									 if(array.hasOwnProperty(key)) {
+									  count ++;
+									 }
+								 }
+								 //alert(count);
+								 var sn=1;
+							for(var i=0; i<=count; i++)
+							{
+							 $('ui').bind('click', function(){
+                               window.location = 'http://somelocation.com';
+                                  // Or, we can grab the HREF from the first anchor:
+                                 window.location = $('a:first', this).attr('href');
+                                               });
+                             
+							    
+							//	if(array[i].org_img == localStorage.getItem("stackmob.oauth2.user"))
+							
+								//alert(array[i].org_img);
+									//$('#last_mod_date').html(array[0].lastmoddate);
+									
+									//alert(val);
+									
+									var lat=array[i].media_lat;
+									var lng=array[i].media_lang;
+									
+									
+									//alert(lat);
+									//alert(lng);
+									var geocoder;
+									geocoder = new google.maps.Geocoder();
+                                   var latlng = new google.maps.LatLng(lat, lng);
+			                       geocoder.geocode({'latLng': latlng}, function(results, status) {
+			                      //var address = results[4].formatted_address;
+			                      address = results[i].formatted_address;
+			   
+			   									// $("#ui").append("<tr><td>"+array[i].mobile_number +"</td><tr><td>"+array[i].mobile_number +"</td><tr><td>"+array[i].mobile_number +"</td><td><a href='"+array[i].audio +"' target='_blank'>open</a></td><td>"+address+"</td><td>"+new Date(array[i].lastmoddate)+"</td></tr>");					
+
+			                     alert(address);
+		
+	       
+	});
+	
+                                     if(array[i].media_type=="3GP")
+									    {
+	                                     $("#ui").append("<tr><td class='ids' hidden>"+array[i].media_id+"<td>"+sn+"</td><td>"+array[i].mobile_number +"</td><td><a href='"+array[i].audio +"' target='_blank'>Play Audio</a></td><td><a href = 'topictag.html?id="+array[i].media_id+"'>Topic Tags</a></td><td>"+array[i].media_like +"</td><td>"+array[i].media_view +"</td><td>"+array[i].media_lat+","+array[i].media_lang+"</td><td>"+new Date(array[i].lastmoddate)+"</td></tr>");					
+								        }
+ 									 else if(array[i].media_type=="PNG")
+									   {
+									    $("#ui").append("<tr><td class='ids' hidden>"+array[i].media_id+"<td>"+sn+"</td><td>"+array[i].mobile_number +"</td><td><a href ="+array[i].audio +" style='width: 60px; height:60px;' border='3'  target='_blank'>View</a></td><td><a href = 'topictag.html?id="+array[i].media_id+"'>Topic Tags</a></td><td>"+array[i].media_like +"</td><td>"+array[i].media_view +"</td><td>"+array[i].media_lat+","+array[i].media_lang+"</td><td>"+new Date(array[i].lastmoddate)+"</td></tr>");
+									   } 
+                                     else
+                                       {
+                                        $("#ui").append("<tr><td class='ids' hidden>"+array[i].media_id+"<td>"+sn+"</td><td>"+array[i].mobile_number +"</td><td><a href='"+array[i].audio +"' target='_blank'>Play Video</a></td><td><a href = 'topictag.html?id="+array[i].media_id+"'>Topic Tags</a></td><td>"+array[i].media_like +"</td><td>"+array[i].media_view +"</td><td>"+array[i].media_lat+","+array[i].media_lang+"</td><td>"+new Date(array[i].lastmoddate)+"</td></tr>");
+                                       }										
+								 
+								 sn=sn+1;
+								 //end if condition
+								// alert("append worked");
+								 	  
+							} // end for loop
+							
+						} //end success
+				 	 }); // end imagesearch schema query
+					 } // end result function
+					 
+			setInterval(check_newentry,1000);
+					 
+					 function check_newentry() {
+					 	var media = StackMob.Model.extend({ schemaName: 'media' });
+			var mymedia = new media({  });
+					var q = new StackMob.Collection.Query();
+					q.orderDesc('lastmoddate');
+					mymedia.query(q, {
+						success: function(modal) {
+							//After StackMob returns "Bill Watterson", print out the result
+						   	var array = modal.toJSON();
+							 // console.debug(array);
+							 //$('#data').html(array[0].user_name);
+							 
+							 
+							// alert(lastmod_date_old +"..."+ lastmod_date);
+							 if(lastmod_date_old < lastmod_date)
+							{
+								
+								var val = array[0].lastmoddate;
+								 $('#last_mod_date').attr('value', val);
+								
+								var key;
+								var count = 0;
+								var counter=0;
+								for(key in array) {
+									 if(array.hasOwnProperty(key)) {
+									  count ++;
+									 }
+								 }
+								 //alert(count);
+						 for(var i=0; i<=count; i++)
+							{
+	 $('ui').bind('click', function(){
+    window.location = 'http://somelocation.com';
+    // Or, we can grab the HREF from the first anchor:
+     window.location = $('a:first', this).attr('href');
+});
+								if(counter<50)
+								{
+								  if(array[i].media_type=="3GP")
+								      {
+	                                     $("#ui").append("<tr><td class='ids' hidden>"+array[i].media_id+"<td>"+sn+"</td><td>"+array[i].mobile_number +"</td><td><a href='"+array[i].audio +"' target='_blank'>Play</a></td><td>"+array[i].media_like +"</td><td>"+array[i].media_view +"</td><td>"+array[i].media_lat+","+array[i].media_lang+"</td><td>"+new Date(array[i].lastmoddate)+"</td></tr>");					
+								      }
+								  else
+								       { 
+									     $("#ui").append("<tr><td class='ids' hidden>"+array[i].media_id+"<td>"+sn+"</td><td>"+array[i].mobile_number +"</td><td><a href ="+array[i].audio +" style='width: 60px; height:60px;'  border='3'  target='_blank'>View</a></td><td>"+array[i].media_like +"</td><td>"+array[i].media_view +"</td><td>"+array[i].media_lat+","+array[i].media_lang+"</td><td>"+new Date(array[i].lastmoddate)+"</td></tr>");
+									   } 
+								 
+								//$("#ui").append("<tr><td class='ids' hidden>"+array[i].media_id+"<td>"+sn+"</td><td>"+array[i].mobile_number +"</td><td><a href='"+array[i].audio +"' target='_blank'>open</a></td><td>"+array[i].media_like +"</td><td>"+array[i].media_view +"</td><td>"+array[i].media_lat+","+array[i].media_lang+"</td><td>"+new Date(array[i].lastmoddate)+"</td></tr>");
+								 //$("#ui").append("<tr><td>"+array[i].mobile_number +"</td><td><a href='"+array[i].audio +"' target='_blank'>"+array[i].audio+"</a></td><td><a href='"+array[i].media_lat+","+array[i].media_lang+"' target='_blank'>"+array[i].media_lat+","+array[i].media_lang+"</td><td>"+new Date(array[i].lastmoddate)+"</td></tr>");
+									
+									//------------------------------------------- end device schema code
+									counter++;
+								
+								}
+								else
+								exit();
+							}
+						}
+						}
+				 	 });
+					 } // end check_newentry 
+					 });
+</script>
+
+<style>
+				 #footer {
+	 width: 100%;
+position: fixed;
+bottom: 0px;
+background-color: #000;
+height: auto;
+}
+.container .credit {
+float: right;
+margin: 10px 0;
+}
+.muted {
+color: #999999;
+}
+		.ui-dialog .ui-dialog-title {
+
+font-weight: bold;
+font-size: 18px;
+}
+.ui-dialog .ui-dialog-buttonpane {
+font-size: 14px;
+}
+		.content
+		{
+		display:none;
+		}
+		.ui-dialog-titlebar-close {
+  visibility: hidden;
+}
+.active
+{
+padding-top:0px;
+}
+.navbar .nav > li {
+
+padding-top:0px;
+}
+.dashboard
+{
+
+margin-left: 5%;
+position: absolute;
+width: 90%;
+height: 90%;
+
+background-color: #ffffff;
+border: 1px solid #999;
+border: 1px solid rgba(0, 0, 0, 0.3);
+-webkit-border-radius: 6px;
+-moz-border-radius: 6px;
+border-radius: 6px;
+-webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+-moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+-webkit-background-clip: padding-box;
+-moz-background-clip: padding-box;
+background-clip: padding-box;
+}
+
+		</style>
+		</head>
+
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+          <a class="brand" href="">Swara<img src="style/img/swara_icon.jpg" width="26" height="26"/>Dashboard</a>
+          <div class="nav-collapse collapse pull-right">
+            <ul class="nav">
+              <li class="" id="home">
+                <a href="index.html">HOME</a>
+              </li>
+              <li class="active" id="inbox">
+                <a href="inbox.html">INBOX </a>
+              </li>
+             <!-- <li class="" id="settings">
+                <a href="settings.html">SETTINGS</a>-->
+              </li>
+			  <li class="" id="device">
+                <a href="device.html">DEVICE</a>
+              </li>
+			  <li class="" id="topic">
+                <a href="topic.html">TOPIC</a>
+              </li>
+              <li class="" id="logout_btn">
+                <a id="logout" href="#LOGOUT">LOGOUT</a>
+
+              </li>
+            </ul>
+          </div>
+		  <div id="dialog-confirm"  title="Logout" style="font-size:14px;"><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>Do you really want to Logout??? </div> 
+        </div>
+      </div>
+	<header class="jumbotron subhead" style="height:45px;"></header>
+<div class="inbox"  style='' >
+  <div class="modal-header">
+	
+            <h3 id="myModalLabel"> Media Information</h3>
+    </div>
+    <div class="modal-body" style=''>
+<table  class="data  table-bordered table table-striped" id="ui">
+	<tr>
+	<th>S.No</th>
+		<th>Mobile Number</th>
+		<th>Media</th>
+		<th>Tagged Topics</th>
+		<th>Media Like</th>
+		<th>Media View</th>
+		<th>Location</th>
+		<th>Time</th>
+		
+	</tr>
+	</table>
+</div>
+
+
+<div class="modal-footer">
+	</div>
+</div>
+<div id="footer">
+      <div class="container">
+        <p class="muted credit">Design and Developed by <a href="http://mixorg.com">MIXORG</a> </p>
+      </div>
+    </div>
+<script type="text/javascript">
+$(function(){
+//onload validation
+var username=localStorage.getItem("stackmob.oauth2.user");
+//alert(username);
+StackMob.isLoggedIn({
+  yes: function(username){
+    console.log(username + " is logged in.");
+  },
+  no: function(){
+   // console.log("No one is currently logged in.");
+   window.location="login.html";
+  }
+});
+  
+
+
+
+
+
+$("#logout").click(function(e){
+$( "#dialog-confirm" ).dialog( "open" );
+});
+
+var User = StackMob.Model.extend({ schemaName: 'organization_login' });		
+var user = new StackMob.User({ organization_id: localStorage.getItem("stackmob.oauth2.user") });
+$( "#dialog-confirm" ).dialog({
+ 
+	 autoOpen: false,
+      resizable: true,
+      height:160,
+      modal: true,
+      buttons: {
+        "YES": function() {
+		user.logout({
+  success: function(model) {
+    //show a success message/update your UI
+		window.location="login.html"
+  }, 
+  error: function(model, response) {
+    //show a failure message in your app    
+	alert("error");
+  }
+});
+          $( this ).dialog( "close" );
+        },
+        "NO": function() {
+          $( this ).dialog( "close" );
+		
+        }
+      }
+    });
+
+
+ 
+
+});
+
+</script>
+
+</body>
+<html>

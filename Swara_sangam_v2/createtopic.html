@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Dashboard</title>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.8.0-bundled-min.js"></script>
+
+
+ <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+ <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/dark-hive/jquery-ui.css" />
+<!-- <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/redmond/jquery-ui.css" />-->
+  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+  <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
+ <script type="text/javascript" src="style/js/bootstrap.js"></script>
+ 
+<link type="text/css" rel="stylesheet" href="style/css/bootstrap.css"></link>
+<script type="text/javascript">
+StackMob.init({
+    appName: "swara_sangam",
+    clientSubdomain: "ankitguptamixorgcom",
+    publicKey: "a21c4638-f221-4a70-925b-65cc30de4c30",
+    apiVersion: 0,
+	 userSchema: 'organization_login',
+	    loginField: 'organization_id',
+	    passwordField: 'password',
+});
+</script>
+
+<script type="text/javascript">
+	$(document).ready(function() {			
+				// fetch topics for the logged in organisation
+						 var User = StackMob.Model.extend({ schemaName: 'topic' });
+						var user = new User({ });
+						user.fetch({
+								success:function(modal) {
+									console.debug(modal.toJSON());
+									var array = modal.toJSON();
+									console.debug(array);
+									var key;
+									var count = 0;
+									for(key in array) {  //count no. of elements in image_search schema
+										 if(array.hasOwnProperty(key)) {
+											count ++;
+										 }
+									 }
+									 //alert(count);
+									 
+									 /*for(var i=0; i<=count; i++)
+									{
+										if(array[i].org_topic == localStorage.getItem("stackmob.oauth2.user"))  // check the organisation name
+										{
+											$("#select_topic_id").append("<option value='"+array[i].topic_id+"'>"+array[i].topic_description+"</option>");
+											//$("#select_topic_id2").append("<option value='"+array[i].topic_id+"'>"+array[i].topic_description+"</option>");
+										}// end organisation name if condition
+									} //end i for loop*/
+
+								} //end fetch success
+							}); //end fetch query
+					//end fetch topics for the logged in organisation
+					
+	});
+</script>
+		
+		</head>
+		<style>
+				 #footer {
+	 width: 100%;
+position: fixed;
+bottom: 0px;
+background-color: #000;
+height: auto;
+}
+.container .credit {
+float: right;
+margin: 10px 0;
+}
+.muted {
+color: #999999;
+}
+		.ui-dialog .ui-dialog-title {
+
+font-weight: bold;
+font-size: 18px;
+}
+.ui-dialog .ui-dialog-buttonpane {
+font-size: 14px;
+}
+		.content
+		{
+		display:none;
+		}
+		.ui-dialog-titlebar-close {
+  visibility: hidden;
+}
+.active
+{
+padding-top:0px;
+}
+.navbar .nav > li {
+
+padding-top:0px;
+}
+
+		</style>
+</head>
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+          <a class="brand" href="">Swara<img src="style/img/swara_icon.jpg" width="26" height="26"/>Dashboard</a>
+          <div class="nav-collapse collapse pull-right">
+            <ul class="nav">
+              <li class="" id="home">
+                <a href="index.html">HOME</a>
+              </li>
+              <li class="" id="inbox">
+                <a href="inbox.html">INBOX </a>
+              </li>
+              <!--<li class="" id="settings">
+                <a href="settings.html">SETTINGS</a>-->
+              </li>
+			  <li class="" id="device">
+                <a href="device.html">DEVICE</a>
+              </li>
+			  <li class="active">
+                <a href="topic.html">TOPIC</a>
+              </li>
+              <li class="" id="logout_btn">
+                <a id="logout" href="#LOGOUT">LOGOUT</a>
+
+              </li>
+            </ul>
+          </div>
+		  <div id="dialog-confirm"  title="Logout" style="font-size:14px;"><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>Do you really want to Logout??? </div> 
+        </div>
+      </div>
+	<header class="jumbotron subhead" style="height:45px;"></header>
+ <div class="modal" id="myModal" tabindex="-1"  aria-labelledby="myModalLabel" aria-hidden="true" style='z-index:1;left:40%; width:55%; height:485px;'>
+  <div class="modal-header">
+	
+            <h5 id="myModalLabel"> Create Content</h5>
+			<!-- steps tabs -->
+			<ul class="nav nav-tabs" id="myTab">
+			  <li class="active"><a href="#step1"><br>Create new Topic</a></li>
+			</ul>
+			<!-- end step tabs -->
+    </div>
+    <div class="modal-body" style="height:69%;">
+		
+	<div class="tab-content">
+		<!-- step 1 -create topic -->
+		<div class="tab-pane active" id="step1">
+			<label>Topic Description</label>
+			<input type="text" id="topic_desc" name="topic_desc" value=""/>
+			<br/><br>
+	
+			<label>Upload topic image to create the topic.(image formate - jpeg,png,jpg)</label>
+			<input type="file" id="files1" name="files1[]" multiple style="margin-bottom:30px;" />
+			
+		</div> 
+		
+<script>
+  $(function () {
+    $('#myTab a[href="#step1"]').tab('show');
+  });
+  
+  $('#myTab a').click(function (e) {
+		  e.preventDefault();
+		  $(this).tab('show');
+		  			
+							// fetch topics for the logged in organisation
+									 var User = StackMob.Model.extend({ schemaName: 'topic' });
+									var user = new User({ });
+									user.fetch({
+											success:function(modal) {
+												console.debug(modal.toJSON());
+												var array = modal.toJSON();
+												console.debug(array);
+												var key;
+												var count = 0;
+												for(key in array) {  //count no. of elements in image_search schema
+													 if(array.hasOwnProperty(key)) {
+														count ++;
+													 }
+												 }
+												 //alert(count);
+												 $("#select_topic_id").html("<option value='Select a topic'>Select a topic</option>");
+												 //$("#select_topic_id2").html("<option value='Select a topic'>Select a topic</option>");
+												 for(var i=0; i<=count; i++)
+												{
+													if(array[i].org_topic == localStorage.getItem("stackmob.oauth2.user"))  // check the organisation name
+													{
+														$("#select_topic_id").append("<option value='"+array[i].topic_id+"'>"+array[i].topic_desc+"</option>");
+														//$("#select_topic_id2").append("<option value='"+array[i].topic_id+"'>"+array[i].topic_desc+"</option>");
+													}// end organisation name if condition
+												} //end i for loop
+			
+											} //end fetch success
+										}); //end fetch query
+								//end fetch topics for the logged in organisation
+	});
+</script>
+
+<br/><br/>
+	</div>
+<div class="modal-footer" style="font-size:12px; padding:0px;">
+<!-- <p class="page1">No page selected</p> -->
+	</div>
+</div>
+</div>
+
+<div id="footer">
+      <div class="container">
+        <p class="muted credit">Design and Developed by <a href="http://mixorg.com">MIXORG</a> </p>
+      </div>
+</div>
+ 
+
+<!-- STEP 1 - UPLOAD TOPIC IMAGE THUMBNAIL -->
+<script type="text/javascript">
+  //Define your Todo class once on the page.
+ $(function(){
+  document.getElementById('files1').addEventListener('change', upload_topic_image, false);
+  
+  function upload_topic_image(evt) {
+  		var topic_desc = $("#topic_desc").val();
+		if(topic_desc == '')
+		{
+			document.getElementById('files1').value = '';
+			$("#topic_desc").focus();
+			//$("#error_name").show();
+			alert("Please enter the topic desc");
+		}
+		else {
+				
+				var Todo = StackMob.Model.extend({ schemaName: 'topic' });
+				var myTodo = new Todo({ org_topic: localStorage.getItem("stackmob.oauth2.user"), topic_description: topic_desc, });
+				myTodo.create({
+					success: function(model) {
+						var topic_array = model.toJSON();
+						console.debug(model.toJSON());
+						
+						//alert("topic created");
+						//alert(topic_array.topic_id);
+						
+						//upload the image
+						    var Todo = StackMob.Model.extend({ schemaName: 'topic' });
+						 
+						  var todoInstance = new Todo({ topic_id: topic_array.topic_id }); 
+						  var fieldname = 'topic_logo'; //name of binary field that you created in your schema
+				  
+						var files = evt.target.files; // FileList object
+						// Loop through the FileList
+						for (var i = 0, f; f = files[i]; i++) {
+							
+						  var reader = new FileReader();
+					 
+						  // Closure to capture the file information
+						  reader.onload = (function(theFile) {
+							return function(e) {
+							
+							  var base64Content = e.target.result.substring(e.target.result.indexOf(',') + 1, e.target.result.length);
+							  var fileName = theFile.name;
+							  var fileType = theFile.type;
+								if((fileType=="image/jpeg")||(fileType=="image/png")|| (fileType=="image/jpg"))
+								{
+							  todoInstance.setBinaryFile(fieldname, fileName, fileType, base64Content);
+							  todoInstance.save();
+							  alert('Topic created successfully');
+							  document.getElementById('topic_desc').value = '';
+							  document.getElementById('files1').value = '';
+							  }
+							  else
+							  {
+							  alert("Please upload only image file in following format[jpeg,png,jpg]");
+							  }
+							 // todoInstance.setBinaryFile(fieldname, fileName, fileType, base64Content);
+							 // todoInstance.save();
+					//	  alert('Image saved');
+					 
+							};
+						  })(f);
+					 
+						  // Read in the file as a data URL
+						  fileContent = reader.readAsDataURL(f);
+							//$('.data').html(fileContent);
+						} //end for loop 
+						//end upload the image
+						
+					},
+					error: function(model, response) {
+						console.debug(response);
+						alert("error in create topic");
+					}
+				});
+			
+		} // end else
+  } // end handleFileSelect function 
+ 
+ });
+</script>
+  
+
+<script type="text/javascript">
+$(function(){
+//onload validation
+var username=localStorage.getItem("stackmob.oauth2.user");
+//alert(username);
+StackMob.isLoggedIn({
+  yes: function(username){
+    console.log(username + " is logged in.");
+  },
+  no: function(){
+   // console.log("No one is currently logged in.");
+   window.location="login.html";
+  }
+});
+  
+
+
+
+
+
+$("#logout").click(function(e){
+$( "#dialog-confirm" ).dialog( "open" );
+});
+
+var User = StackMob.Model.extend({ schemaName: 'organization_login' });		
+var user = new StackMob.User({ organization_id: localStorage.getItem("stackmob.oauth2.user") });
+$( "#dialog-confirm" ).dialog({
+ 
+	 autoOpen: false,
+      resizable: true,
+      height:160,
+      modal: true,
+      buttons: {
+        "YES": function() {
+		user.logout({
+  success: function(model) {
+    //show a success message/update your UI
+		window.location="login.html"
+  }, 
+  error: function(model, response) {
+    //show a failure message in your app    
+	alert("error");
+  }
+});
+          $( this ).dialog( "close" );
+        },
+        "NO": function() {
+          $( this ).dialog( "close" );
+		
+        }
+      }
+    });
+
+
+ 
+
+});
+
+</script>
+
+	
+
+</body>
+<html>
