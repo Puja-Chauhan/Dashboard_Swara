@@ -1,0 +1,597 @@
+<html>
+    <head>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.9.1-bundled-min.js"></script>
+	
+	 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+	 <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/dark-hive/jquery-ui.css" />
+	<!-- <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/redmond/jquery-ui.css" />-->
+	  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+	  <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
+	 <script type="text/javascript" src="style/js/bootstrap.js"></script>
+	 
+	<link type="text/css" rel="stylesheet" href="style/css/bootstrap.css"></link>
+	
+		<!-- links for pagination -->
+        <script type="text/javascript" src="lib/jquery.bootpag.js"></script>
+		<!-- end links for pagination -->
+	
+        <title>Karna Dashboard - Change Hospital Info.</title>
+		
+		<script type="text/javascript">
+      /* <![CDATA[ */
+      // Initialize StackMob object
+      // Copy your init data from here: https://dashboard.stackmob.com/sdks/js/config
+      // Your other app information is here: https://dashboard.stackmob.com/settings
+      StackMob.init({
+        publicKey: '5a132e22-54b2-4d09-9260-fc090245ed31',
+		//secure: StackMob.NEVER ,
+		//userSchema: 'organisation',
+	   // loginField: 'organisation_id',
+	   // passwordField: 'password',
+        apiVersion : 0
+      });
+      /* ]]> */
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	var user = new StackMob.User({ username: localStorage.getItem("stackmob.oauth2.user") });
+	user.isLoggedIn({
+	  yes: function(){
+		//console.log("Logged in.");
+		//alert("logged in");
+	  },
+	  no: function(){
+		//console.log("Not logged in.");
+		window.location = "login.html";
+		//alert("not logged in");
+	  }
+	});
+	$("#logout").click(function(e){
+$( "#dialog-confirm" ).dialog( "open" );
+});
+
+var user = new StackMob.User({ username: localStorage.getItem("stackmob.oauth2.user") });
+$( "#dialog-confirm" ).dialog({
+ 
+	 autoOpen: false,
+      resizable: true,
+      height:160,
+      modal: true,
+      buttons: {
+        "YES": function() {
+		user.logout({
+  success: function(model) {
+    //show a success message/update your UI
+		window.location="login.html"
+  }, 
+  error: function(model, response) {
+    //show a failure message in your app    
+	alert("error");
+  }
+});
+          $( this ).dialog( "close" );
+        },
+        "NO": function() {
+          $( this ).dialog( "close" );
+		
+        }
+      }
+    });
+
+
+ 
+
+});
+ 
+ 	// check organisation super admin
+	/* var User = StackMob.Model.extend({ schemaName: 'organisation' });
+	var user = new StackMob.User({ });
+	var q = new StackMob.Collection.Query();
+	q.equals('organisation_id', localStorage.getItem("stackmob.oauth2.user"));
+	user.query(q, {
+		success:function(modal) {
+			array = modal.toJSON();
+			console.debug(array);
+			var super_admin = array[0].super_admin;
+			//alert(super_admin);
+			if(super_admin == "true") {
+				$('#admin_settings').show();
+			}
+		} 
+	});  */
+	// end check organisation super admin
+ 
+ </script> 
+ 
+ 
+
+<script type="text/javascript">
+	$(document).ready(function() {
+	
+				// fetch topics for the logged in organisation
+						 var User = StackMob.Model.extend({ schemaName: 'miscellaneous_content' });
+						var user = new User({ });
+						user.fetch({
+								success:function(modal) {
+									console.debug(modal.toJSON());
+									var array = modal.toJSON();
+									console.debug(array);
+									var key;
+									var count = 0;
+									for(key in array) {  //count no. of elements in image_search schema
+										 if(array.hasOwnProperty(key)) {
+											count ++;
+										 }
+									 }
+									 //alert(count);
+									 
+									 for(var i=0; i<=count; i++)
+									{
+										if(array[i].org_id == localStorage.getItem("stackmob.oauth2.user"))  // check the organisation name
+										{
+											$("#topic_id1").append("<option value='"+array[i].miscellaneous_content_id+"'>"+array[i].m_name+"</option>");
+											$("#topic_id2").append("<option value='"+array[i].miscellaneous_content_id+"'>"+array[i].m_name+"</option>");
+										}// end organisation name if condition
+									} //end i for loop
+
+								} //end fetch success
+							}); //end fetch query
+					//end fetch topics for the logged in organisation
+					
+	});
+</script>
+
+<style>
+				 #footer {
+	 width: 100%;
+position: fixed;
+bottom: 0px;
+background-color: #000;
+height: auto;
+}
+.container .credit {
+float: right;
+margin: 10px 0;
+}
+.muted {
+color: #999999;
+}
+		.ui-dialog .ui-dialog-title {
+
+font-weight: bold;
+font-size: 18px;
+}
+.ui-dialog .ui-dialog-buttonpane {
+font-size: 14px;
+}
+		.content
+		{
+		display:none;
+		}
+		.ui-dialog-titlebar-close {
+  visibility: hidden;
+}
+.active
+{
+padding-top:0px;
+}
+.navbar .nav > li {
+
+padding-top:0px;
+}
+</style>
+
+<style>
+.modal-header {
+	padding:0px 15px;
+}
+
+ p{
+     text-align: center;
+ }
+ 
+ .create {
+ width:100%;
+ height:auto;
+ }
+ .dropdown-menu {
+ 	padding:0px;
+}
+.dropdown-menu a {
+	padding: 1px 20px;
+}
+</style>
+        <style type="text/css">
+           label {
+			font-weight:bold;
+			}
+			.button {
+			float:left;
+			}
+			.setting_block {
+			background-color: #ffffff;
+			border: 1px solid #999;
+			border: 1px solid rgba(0, 0, 0, 0.3);
+			-webkit-border-radius: 6px;
+			-moz-border-radius: 6px;
+			border-radius: 6px;
+			-webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+			-moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+			box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+			-webkit-background-clip: padding-box;
+			-moz-background-clip: padding-box;
+			background-clip: padding-box;
+			padding:10px;
+			margin:20px;
+			}
+        </style>
+    </head>
+    <body>
+		<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+          <a class="brand" href="">Karna<img src="style/img/karna.png"/>Dashboard</a>
+          <div class="nav-collapse collapse pull-right" style="min-height:115px;">
+            <ul class="nav">
+              <li class="" id="home">
+                <a href="index.html">LIVE VIEW</a>
+              </li>
+			   <!--<li class="" id="content">
+                <a href="topic.html">CONTENT</a>
+              </li>-->
+			  <li class="dropdown" id="edit_content">
+					<a href="#" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
+						MEDIA CONTENT <b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+					    <li><a href="viewtopic.html">VIEW CONTENTS</a></li>
+						<li><a href="topic.html">REMOVE MEDIA CONTENTS</a></li>
+						<li><a href="create_content.html">CREATE MEDIA CONTENTS</a></li>
+						<li><a href="update_topic.html">EDIT TOPIC</a></li>
+						<li><a href="update_subtopic.html">EDIT SUBTOPICS</a></li>
+						<li><a href="update_media.html">EDIT MEDIA</a></li>
+						<li><a href="update_hospital.html">EDIT HOSPITAL INFO.</a></li>
+					</ul>
+              </li>
+              <li class="" id="user">
+                <a href="userdata.html">HISTORY </a>
+              </li>
+			  <li class="" id="device">
+                <a href="device.html">USERS</a>
+              </li>
+			 <!-- <li class="" id="create_content">
+                <a href="create_content.html">CREATE CONTENT</a>
+              </li>
+			  <li class="dropdown active" id="edit_content">
+					<a href="#" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
+						EDIT CONTENT <b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+						<li class="active"><a href="update_topic.html">EDIT TOPIC</a></li>
+						<li><a href="update_subtopic.html">EDIT SUBTOPIC</a></li>
+						<li><a href="update_media.html">EDIT MEDIA</a></li>
+					</ul>
+              </li>-->
+			 
+              <!-- <li class="dropdown" id="settings">
+					<a href="other_organisation_settings.html" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
+						SETTINGS <b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+						<li><a href="device_authorization.html">Device Authorization</a></li>
+						<li><a href="other_organisation_settings.html">Other Settings..</a></li>
+					</ul>
+              </li>
+			  <li class="dropdown" id="admin_settings" style="display:none;">
+					<a href="other_admin_settings.html" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
+						ADMIN SETTINGS <b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+						<li><a href="organisation_authorization.html">Organisation Authorization</a></li>
+						<li><a href="create_organisation.html">Create Organization</a></li>
+						<li><a href="other_admin_settings.html">Other Settings..</a></li>
+					</ul>
+			  </li> -->
+              <li class="" id="logout_btn">
+                <a id="logout" href="#LOGOUT">LOGOUT</a>
+              </li>
+            </ul>
+          </div>
+		  <div id="dialog-confirm"  title="Logout" style="font-size:14px;"><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>Do you really want to Logout? </div>
+		  
+        </div>
+      </div>
+	<header class="jumbotron subhead" style="height:45px;"></header>
+	
+	<div class="container" style="width:60%;">
+	
+		<!-- CHANGE TOPIC DESCRIPTION -->
+			<div class="setting_block"> 
+		  <div class="modal-header">
+			
+					<h5 id="myModalLabel"> Change Hospital Description</h5>
+					
+			</div></br>
+					<label>Select a Hospital Name</label>
+					<select id="topic_id1" name="topic_id1"  >
+					<option value="Select a topic">Select a Hospital Name</option>
+					</select>
+					
+					<!-- <script type="text/javascript">
+						function enter_topic_desc() {
+							if($('#topic_id1').val()=='Select a topic')
+							{
+								$('.new_topic_desc').hide();
+							}
+							else
+							{
+								$('.new_topic_desc').show();
+							}
+						}
+					</script> -->
+						<br/><br>
+						
+						<label>Enter New Hospital Name</label>
+			<input type="text" id="hospital_name" name="hospital_name" value="" required/>
+			<br/><br>
+	<label> Enter New Address</label>
+	<input type="text" id="hospital_address" name="hospital_address" value="" required/>
+	</br><br>
+	<label> Enter New Phone Number</label>
+	<input type="tel" id="hospital_number" name="hospital_number" max="10" required/>
+	</br><br>
+		
+	<label> Enter New Latitude</label>
+	<input type="text" id="hospital_latitude" name="hospital_latitude" value="" required/>
+	<br/><br>
+	<label> Enter New Longitude</label>
+	<input type="text" id="hospital_longitude" name="hospital_longitude" value="" required/>
+	<br/><br/>
+						
+						<input type="button" name="save_topicdesc_btn" id="save_topicdesc_btn" value="Save" />
+		</div> <!-- END SETTING BLOCK -->
+		<!-- CHANGE TOPIC DESCRIPTION -->
+		
+		<!-- CHANAGE TOPIC IMAGE -->
+		<div class="setting_block">
+			<div class="modal-header">
+				<h5 id="myModalLabel">Change the Hospital Image</h5>
+			</div></br>
+			     <label>Select a Hospital Name</label>
+		
+				<select id="topic_id2" name="topic_id2"  onChange="check_topic_image();">
+					<option value="Select a topic">Select a Hospital Name</option>
+				</select>
+				<br/><br>
+			
+			<script type="text/javascript">
+				function check_topic_image() {
+					//$('#scan_image_thumb').html("<img src='' style='height:50px; width:100px;' alt='no image' />");
+					var topic_id2 = $("#topic_id2").val();
+					if($('#topic_id2').val()=='Select a topic')
+					{
+						$('#topic_image').html("No Image");
+					}
+					else
+					{
+						// fetch current topic image
+							var topic_id2 = $('#topic_id2').val()
+								 var Todo = StackMob.Model.extend({ schemaName: 'miscellaneous_content' });
+								var myTodo = new Todo();
+								var q = new StackMob.Collection.Query();
+								q.equals('miscellaneous_content_id', topic_id2 );
+								myTodo.query(q, {
+										success:function(modal) {
+											array = modal.toJSON();
+											var topic_image = array[0].map;
+											$('#topic_image').html("<img src='"+topic_image+"' style='height:70px; width:100px;' alt='"+topic_id2+"' />");
+											//console.debug(array);
+										} ,
+										error: function(model, response) {
+											//console.debug(response);
+											//alert("no image");
+										}
+									}); 
+							// end fetch topic image
+						
+					}
+				} // end check_topic_image function
+			</script>
+			
+			<label for='upload'>Current Topic Image </label>
+			<div id="topic_image">No Image</div>
+			<br/>
+		
+			<label>File to Upload</label>
+			<input type="file" id="files1" name="files2[]" multiple style="margin-bottom:30px;" />
+		</div>
+	<!-- END CHANAGE TOPIC IMAGE -->
+		
+	</div> <!-- END CONTAINER -->
+
+<script type="text/javascript">
+  //on click of save(scan limit) button
+$("#save_topicdesc_btn").click(function() {
+   		var topic_id1 = $("#topic_id1").val();
+   		//var subtopic_id1 = $("#subtopic_id1").val();
+		
+		var hospital_name = $("#hospital_name").val();
+		var hospital_address=$("#hospital_address").val();
+		var hospital_number=$("#hospital_number").val();
+		var hospital_latitude=$("#hospital_latitude").val();
+		var hospital_longitude=$("#hospital_longitude").val();
+		var new_subtopic_desc = $("#new_subtopic_desc").val();
+		
+		if(topic_id1 == 'Select a Hospital Name')
+		{
+			$("#topic_id1").focus();
+			//$("#error_name").show();
+			alert("Please select the Hospital Name");
+		}
+		if(hospital_name=='')
+                         {
+                           //document.getElementById('files4').value = '';
+						   alert("Please enter  hospital name");
+                           $("#hospital_name").focus();
+                           return false;
+                         }
+						  
+                        if(hospital_address=='')
+                         {
+						    //document.getElementById('files4').value = '';
+                            alert("Please enter address");
+                            $("#hospital_address").focus();
+                            return false;
+                         }
+						 
+                       if(hospital_number=='')
+                       {
+					    //document.getElementById('files4').value = '';
+                        alert("Please enter phone number");
+                        $("#hospital_number").focus();
+                       return false;
+                       }
+					   
+                       if(hospital_latitude=='')
+                       {
+					    //document.getElementById('files4').value = '';
+                        alert("Please enter latitude");
+                        $("#hospital_latitude").focus();
+                        return false;
+                       }
+					   
+                       if(hospital_longitude=='')
+                       {
+					    //document.getElementById('files4').value = '';
+                        alert("Please enter longitude");
+                        $("#hospital_longitude").focus();
+                        return false;
+                       }
+		else {
+				//update stackmob - update scan limit in organisation schema
+				var Topic_schema = StackMob.Model.extend({ schemaName: 'miscellaneous_content' });
+				var topic_schema = new Topic_schema({ miscellaneous_content_id: topic_id1 });
+				topic_schema.save({ m_name: hospital_name,
+                       address: hospital_address,
+                       contact_number: hospital_number,
+                       m_lat:hospital_latitude,
+                       m_long:hospital_longitude,
+                       org_id:'1' }, {
+					success: function(model) {
+						console.log(model.toJSON());
+						alert("Hospital Description is successfully saved");
+						//result();
+					},
+					error: function(model, response) {
+						console.debug(response);
+						alert("error");
+					}
+				});
+				// end update stackmob 			
+		} // end else 
+ 	});
+	//end - on click of save(scan limit) button
+</script>
+
+<!-- UPLOAD TOPIC IMAGE -->
+	<script type="text/javascript">
+  //Define your Todo class once on the page.
+ $(function(){
+  document.getElementById('files1').addEventListener('change', upload_topic_image, false);
+  
+  function upload_topic_image(evt) {
+  		var topic_id2= $("#topic_id2").val();
+		
+  		
+		if((topic_id2 == '') || (topic_id2 == 'Select a topic'))
+		{
+			document.getElementById('files1').value = '';
+			$("#topic_id2").focus();
+			//$("#error_name").show();
+			alert("Please select a hospital name");
+		}
+		/* else if((select_subtopic_id == '') || (select_subtopic_id == 'Select a subtopic'))
+		{
+			document.getElementById('files3').value = '';
+			$("#select_subtopic_id").focus();
+			//$("#error_name").show();
+			alert("Please select a Subtopic");
+		} */
+		
+		else {
+				var Todo = StackMob.Model.extend({ schemaName: 'miscellaneous_content' });
+			 
+				  var todoInstance = new Todo({ miscellaneous_content_id: topic_id2 }); 
+				  var fieldname = 'map'; //name of binary field that you created in your schema
+			  
+				var files = evt.target.files; // FileList object
+				// Loop through the FileList
+				for (var i = 0, f; f = files[i]; i++) {
+				
+				  var reader = new FileReader();
+			 
+				  // Closure to capture the file information
+				  reader.onload = (function(theFile) {
+					return function(e) {
+						
+					  /*
+						e.target.result will return "data:image/jpeg;base64,[base64 encoded data]...".
+						We only want the "[base64 encoded data] portion, so strip out the first part
+					  */
+					  var base64Content = e.target.result.substring(e.target.result.indexOf(',') + 1, e.target.result.length);
+					  var fileName = theFile.name;
+					  var fileType = theFile.type;
+						if((fileType=="image/jpeg")||(fileType=="image/png")||(fileType=="image/jpg"))
+						{
+					  todoInstance.setBinaryFile(fieldname, fileName, fileType, base64Content);
+					  todoInstance.save();
+					  alert('image saved');
+					  document.getElementById('files1').value = '';
+					  
+					  // fetch toic updated image
+									 /* var User = StackMob.Model.extend({ schemaName: 'topic' });
+									var user = new User({ });
+									var q = new StackMob.Collection.Query();
+									q.equals('topic_id', topic_id2);
+									user.query(q, {
+											success:function(modal) {
+												array = modal.toJSON();
+												console.debug(array);
+												var topic_image = array[0].topic_url;
+												//alert(scan_limit);
+												$('#topic_image').html("<img src='"+topic_image+"' style='height:70px; width:100px;' alt='"+array[0].topic_id+"' />");
+											} 
+										});  */
+								// fetch organisation updated header image
+					 
+					  }
+					  else
+					  {
+					  alert("Please upload only image file in following format[jpeg,png,jpg]");
+					  }
+					 // todoInstance.setBinaryFile(fieldname, fileName, fileType, base64Content);
+					 // todoInstance.save();
+			//	  alert('Image saved');
+			 
+					};
+				  })(f);
+			 
+				  // Read in the file as a data URL
+				  fileContent = reader.readAsDataURL(f);
+					//$('.data').html(fileContent);
+				}
+		} // end else
+  } // end handleFileSelect function 
+ 
+ });
+</script>
+<!-- END UPLOAD TOPIC IMAGE -->
+
+<div id="footer">
+      <div class="container">
+        <p class="muted credit">Design and Developed by <a href="http://www.mobileharvest.in" target="_blank">MOBILE HARVEST</a> </p>
+      </div>
+</div>
+    </body>
+</html>

@@ -1,0 +1,516 @@
+<html>
+    <head>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.9.1-bundled-min.js"></script>
+	
+	 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+	 <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/dark-hive/jquery-ui.css" />
+	<!-- <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/redmond/jquery-ui.css" />-->
+	  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+	  <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
+	 <script type="text/javascript" src="style/js/bootstrap.js"></script>
+	 
+	<link type="text/css" rel="stylesheet" href="style/css/bootstrap.css"></link>
+	
+		<!-- links for pagination -->
+        <script type="text/javascript" src="lib/jquery.bootpag.js"></script>
+		<!-- end links for pagination -->
+		
+        <title>Karna Dashboard</title>
+		
+		<script type="text/javascript">
+      /* <![CDATA[ */
+      // Initialize StackMob object
+      // Copy your init data from here: https://dashboard.stackmob.com/sdks/js/config
+      // Your other app information is here: https://dashboard.stackmob.com/settings
+      StackMob.init({
+        publicKey: '5a132e22-54b2-4d09-9260-fc090245ed31',
+		//secure: StackMob.NEVER ,
+		//userSchema: 'organisation',
+	   // loginField: 'organisation_id',
+	   // passwordField: 'password',
+        apiVersion : 0
+      });
+      /* ]]> */
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	var user = new StackMob.User({ username: localStorage.getItem("stackmob.oauth2.user") });
+	user.isLoggedIn({
+	  yes: function(){
+		//console.log("Logged in.");
+		//alert("logged in");
+	  },
+	  no: function(){
+		//console.log("Not logged in.");
+		window.location = "login.html";
+		//alert("not logged in");
+	  }
+	});
+	$("#logout").click(function(e){
+$( "#dialog-confirm" ).dialog( "open" );
+});
+
+var user = new StackMob.User({ username: localStorage.getItem("stackmob.oauth2.user") });
+$( "#dialog-confirm" ).dialog({
+ 
+	 autoOpen: false,
+      resizable: true,
+      height:160,
+      modal: true,
+      buttons: {
+        "YES": function() {
+		user.logout({
+  success: function(model) {
+    //show a success message/update your UI
+		window.location="login.html"
+  }, 
+  error: function(model, response) {
+    //show a failure message in your app    
+	alert("error");
+  }
+});
+          $( this ).dialog( "close" );
+        },
+        "NO": function() {
+          $( this ).dialog( "close" );
+		
+        }
+      }
+    });
+
+
+ 
+
+});
+ 
+ 	// check organisation super admin
+	/* var User = StackMob.Model.extend({ schemaName: 'organisation' });
+	var user = new StackMob.User({ });
+	var q = new StackMob.Collection.Query();
+	q.equals('organisation_id', localStorage.getItem("stackmob.oauth2.user"));
+	user.query(q, {
+		success:function(modal) {
+			array = modal.toJSON();
+			console.debug(array);
+			var super_admin = array[0].super_admin;
+			//alert(super_admin);
+			if(super_admin == "true") {
+				$('#admin_settings').show();
+			}
+		} 
+	});  */
+	// end check organisation super admin
+ 
+ </script> 
+
+<script type="text/javascript">
+$(document).ready(function() {
+			
+	result();
+	function result() {
+	
+				var Userdata_schema = StackMob.Model.extend({ schemaName: 'miscellaneous_content' });
+			var userdata = new Userdata_schema({ });
+					var q = new StackMob.Collection.Query();
+					q.orderDesc('lastmoddate');
+					 userdata.query(q, {
+						success: function(modal) {
+							//After StackMob returns "Bill Watterson", print out the result
+						   	var array = modal.toJSON();
+							 // console.debug(array);
+							 
+							 //count total records in image search schema
+								var key;
+								var count = 0;
+								var counter=0;
+								for(key in array) {
+									 if(array.hasOwnProperty(key)) {
+									  count ++;
+									 }
+								 }
+								 //alert(count);
+							 //end count total records in image search schema
+							 
+							 $("#ui").html("<tr><th>S.No.</th> <th>Mobile No.</th><th>Name</th><th>Logo</th> <th>Address</th> <th>Location</th> <th>Time</th><th>Delete</th></tr>");
+							 
+							 var max_page_records = 5;
+							 var first_record_no = 1;
+							
+							url='view.html';
+							 
+							for(var i=0; i<=count; i++)
+							{
+								if(array[i].org_id == localStorage.getItem("stackmob.oauth2.user")) // check the organisation name
+								{
+									$('#org_records').attr('value', counter); // no of records for logged in organisation
+									//alert(counter);
+									//initially 10 records will shown
+									if(counter<max_page_records) {
+										 //var val = array[i].latitude+","+array[i].longitude;
+										//$('#latlng').attr('value', val);
+										var val = array[0].lastmoddate;
+							 			$('#last_mod_date').attr('value', val);
+										
+											$("#ui").append("<tr><td>"+(counter+1)+"</td><td>"+array[i].contact_number+"</td><td>"+array[i].m_name+"</td><td><a href="+array[i].map+" style='width: 100px; height:100px;' target='_blank'>View</a></td><td>"+array[i].address+"</td><td>"+array[i].m_lat +","+ array[i].m_long+"</td><td>"+ new Date(array[i].lastmoddate)+"</td><td><input type='button' class='topic_delete' id='"+array[i].miscellaneous_content_id+"' topic_id='"+array[i].miscellaneous_content_id+"' value='Delete' style='cursor:pointer;' /></td></tr>");
+									        $(".topic_delete").click(function(e){
+												var topic_id = $(this).attr('topic_id');
+												$("#current_topic_id").attr("value", topic_id); 
+												$( "#dialog-confirm1" ).dialog( "open" );
+											});
+											
+											
+											$( "#dialog-confirm1" ).dialog({
+												 	
+													 autoOpen: false,
+													  resizable: true,
+													  height:160,
+													  width:500,
+													  modal: true,
+													  buttons: {
+														"YES": function() {
+															
+															
+															
+															//after delete subtopic, delete topic from topic schema
+															var topic_id = $("#current_topic_id").attr('value');
+															var Todo_topic = StackMob.Model.extend({ schemaName: 'miscellaneous_content' });
+															var todo_topic = new Todo_topic({ miscellaneous_content_id: topic_id });
+															todo_topic.destroy({
+																success:function(modal) {
+																	alert("Hospital info. deleted successfully.");
+																	location.reload();
+																} // end success - topic delete
+															}); //end destroy topic delete function
+															//end delete topic from topic schema
+																		
+														  	$( this ).dialog( "close" );
+															//result();
+															//window.open(location.href ,'_top');
+														}, //end yes function
+														"NO": function() {
+														  $( this ).dialog( "close" );
+														} 
+													  } //end button
+													}); //end dialog confirm
+									
+									
+									
+									} //end counter if condition
+									counter++; 
+								} //end organisation name if condition
+								
+							} // end for loop
+						} //end success
+				 	 }); // end imagesearch schema query
+				// code for pagenation
+				
+			
+			setTimeout(pagination, 10000);
+			function pagination() {
+				
+				//calculate no. of pages accc. to records
+				var max_page_records = 5;
+				
+				var org_records = document.getElementById("org_records").getAttribute("value");
+				org_records = parseInt(org_records)+1;
+				//alert(org_records);
+				remdr = org_records % max_page_records;
+				
+				if(remdr == 0) {
+				total_pages = parseInt(org_records/max_page_records);
+				}
+				
+				if(remdr != 0) {
+				total_pages = parseInt((org_records/max_page_records)+1);
+				}
+				//calculate no. of pages accc. to records
+				
+				$('.demo1').bootpag({
+					total: total_pages,
+					maxVisible: 10,
+					 page: 1,
+					// href: '#page-{{number}}',
+				  // leaps: false,
+				  // prev: 'lower',
+				  // next: 'higher',
+				}).on("page", function(event, num){
+				
+				var Userdata_schema = StackMob.Model.extend({ schemaName: 'miscellaneous_content' });
+				var userdata = new Userdata_schema({ });
+					var q = new StackMob.Collection.Query();
+					q.orderDesc('lastmoddate');
+					userdata.query(q, {
+						success: function(modal) {
+							//After StackMob returns "Bill Watterson", print out the result
+						   	var array = modal.toJSON();
+							 // console.debug(array);
+							 //$('#data').html(array[0].user_name);
+							 var val = array[0].lastmoddate;
+							 $('#last_mod_date').attr('value', val);
+							 
+								var key;
+								var count = 0;
+								var counter=0;
+								for(key in array) {
+									 if(array.hasOwnProperty(key)) {
+									  count ++;
+									 }
+								 }
+								 //alert(count);
+								 
+								 //$("#ui").html("<tr><th>S.No.</th> <th>Mobile-no</th> <th>Points</th> <th>Location</th> <th>Time</th> <th>View</th></tr>");
+								 $("#ui").html("<tr><th>S.No.</th> <th>Mobile No.</th><th>Name</th> <th>Address</th> <th>Location</th> <th>Time</th></tr>");
+
+							 url='view.html';
+								 
+								 //var i = (num-1)*max_page_records;
+							var j=0;
+							var counter = (num-1)*max_page_records;
+							var first_record_no = ((num-1)*max_page_records)+1;
+								 
+							for(var i=0; i<=count; i++)
+							{
+								if(array[i].org_id == localStorage.getItem("stackmob.oauth2.user"))
+								{
+									if(j>= (num-1)*max_page_records) 
+									{
+										//alert(i);
+										if(counter<num*max_page_records) {
+											//var val = array[i].latitude+","+array[i].longitude;
+											var val = array[0].lastmoddate;
+											$('#last_mod_date').attr('value', val);
+											
+															$("#ui").append("<tr><td>"+(counter+1)+"</td><td>"+array[i].contact_number+"</td><td>"+array[i].m_name+"</td><td><a href="+array[i].map+" style='width: 100px; height:100px;' target+'_blank'>View</a></td><td>"+array[i].address+"</td><td>"+array[i].m_lat +","+ array[i].m_long+"</td><td>"+ new Date(array[i].lastmoddate)+"</td></tr>");
+													//$("#ui").append("<tr><td>"+(counter+1)+"</td><td>"+array[i].mobile_number+"</td><td>"+array[i].user_points+"</td><td>"+array[i].user_latitude +","+ array[i].user_longitude+"</td><td>"+ new Date(array[i].lastmoddate)+"</td><td><a href='"+url+"?id="+array[i].userdata_id+"' target='_blank' >View</a></td></tr>");
+												counter++;
+										} //end counter if condition
+									} //end j value if condition
+									j++;
+								} //end organisation name if condition
+								
+							} // end for loop
+						} //end success
+				 	 }); // end imagesearch schema query
+					 		 
+				});  //end pagination event function
+			} // end pagination function
+			
+		} //end result function
+				
+	});
+        </script>
+
+<style>
+				 #footer {
+	 width: 100%;
+position: fixed;
+bottom: 0px;
+background-color: #000;
+height: auto;
+}
+.container .credit {
+float: right;
+margin: 10px 0;
+}
+.muted {
+color: #999999;
+}
+		.ui-dialog .ui-dialog-title {
+
+font-weight: bold;
+font-size: 18px;
+}
+.ui-dialog .ui-dialog-buttonpane {
+font-size: 14px;
+}
+		.content
+		{
+		display:none;
+		}
+		.ui-dialog-titlebar-close {
+  visibility: hidden;
+}
+.active
+{
+padding-top:0px;
+}
+.navbar .nav > li {
+
+padding-top:0px;
+}
+.dashboard
+{
+
+margin-left: 5%;
+position: absolute;
+width: 90%;
+height: 90%;
+
+background-color: #ffffff;
+border: 1px solid #999;
+border: 1px solid rgba(0, 0, 0, 0.3);
+-webkit-border-radius: 6px;
+-moz-border-radius: 6px;
+border-radius: 6px;
+-webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+-moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+-webkit-background-clip: padding-box;
+-moz-background-clip: padding-box;
+background-clip: padding-box;
+}
+</style>
+
+<style>
+.modal-header {
+	padding:0px 15px;
+}
+.dropdown-menu {
+ 	padding:0px;
+}
+.dropdown-menu a {
+	padding: 1px 20px;
+}
+</style>
+<!-- css for pagination -->
+        <style type="text/css">
+            p{
+                text-align: center;
+            }
+        </style>
+		<!--end css for pagination -->
+    </head>
+    <body>
+		<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+          <a class="brand" href="">Karna<img src="style/img/karna.png"/>Dashboard</a>
+          <div class="nav-collapse collapse pull-right" style="min-height:115px;">
+            <ul class="nav">
+              <li class="" id="home">
+                <a href="index.html">LIVE VIEW</a>
+              </li>
+			  <!--<li class="" id="content">
+                <a href="topic.html">CONTENT</a>
+              </li>-->
+			  <li class="dropdown" id="edit_content">
+					<a href="#" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
+						MEDIA CONTENT <b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+					    <li><a href="viewtopic.html">VIEW CONTENTS</a></li>
+						<li><a href="topic.html">REMOVE MEDIA CONTENTS</a></li>
+						<li><a href="create_content.html">CREATE MEDIA CONTENTS</a></li>
+						<li><a href="update_topic.html">EDIT TOPIC</a></li>
+						<li><a href="update_subtopic.html">EDIT SUBTOPICS</a></li>
+						<li><a href="update_media.html">EDIT MEDIA</a></li>
+						<li><a href="update_hospital.html">EDIT HOSPITAL INFO.</a></li>
+					</ul>
+              </li>
+              <li class="active" id="user">
+                <a href="userdata.html">HISTORY </a>
+              </li>
+			  <li class="" id="device">
+                <a href="device.html">USERS</a>
+              </li>
+			  
+			  <!--<li class="" id="create_content">
+                <a href="create_content.html">CREATE CONTENT</a>
+              </li>
+			  <li class="dropdown" id="edit_content">
+					<a href="#" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
+						EDIT CONTENT <b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+						<li><a href="update_topic.html">EDIT TOPIC</a></li>
+						<li><a href="update_subtopic.html">EDIT SUBTOPIC</a></li>
+						<li><a href="update_media.html">EDIT MEDIA</a></li>
+					</ul>
+              </li>-->
+			  
+              <!-- <li class="dropdown" id="settings">
+					<a href="other_organisation_settings.html" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
+						SETTINGS <b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+						<li><a href="device_authorization.html">Device Authorization</a></li>
+						<li><a href="other_organisation_settings.html">Other Settings..</a></li>
+					</ul>
+              </li>
+			  <li class="dropdown" id="admin_settings" style="display:none;">
+					<a href="other_admin_settings.html" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
+						ADMIN SETTINGS <b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+						<li><a href="organisation_authorization.html">Organisation Authorization</a></li>
+						<li><a href="create_organisation.html">Create Organization</a></li>
+						<li><a href="other_admin_settings.html">Other Settings..</a></li>
+					</ul>
+			  </li> -->
+              <li class="" id="logout_btn">
+                <a id="logout" href="#LOGOUT">LOGOUT</a>
+              </li>
+            </ul>
+          </div>
+		 <!-- <div id="dialog-confirm"  title="Logout" style="font-size:14px;"><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>Do you really want to Logout??? </div> 
+		  <div id="dialog-confirm1"  title="Delete" style="font-size:14px;"><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>Do you really want to Delete?</div>-->
+        </div>
+      </div>
+	  <div id="dialog-confirm"  title="Logout" style="font-size:14px;"><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>Do you really want to Logout??? </div> 
+		  <div id="dialog-confirm1"  title="Delete" style="font-size:14px;"><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>Do you really want to Delete?</div>
+	<header class="jumbotron subhead" style="height:45px;"></header>
+	
+	<div class="dashboard"  style='' >
+  <div class="modal-header">
+	
+            <h5 id="myModalLabel"> Hospital Information</h5>
+    </div>
+    <div class="modal-body" style="height:70%;">
+	<table class="data  table-bordered table table-striped" id="ui" style="font-size:12px; margin-bottom:0px;">
+	<tr>
+		<th>S.No.</th>
+		<th>Mobile-no</th>
+		<th>Points</th>
+		<th>Location</th>
+		<th>Time</th>
+		<th>Delete</th>
+	</tr>
+	</table>
+	<!-- <form>
+			<input type="hidden" name="filename" value="user_data.csv" id="filename" />
+			<textarea cols="60" rows="10" name="data" id="data"></textarea>
+			<p id="downloadify">
+				You must have Flash 10 installed to download this file.
+			</p>
+		</form> -->
+        <div id="org_records" value=""></div> 
+		<div id="current_topic_id" value=""></div> 
+        <!-- <h2>Demo 2</h2>
+        <p class="page2">No page selected</p>
+        <p class="demo2"></p>
+        <h2>Demo 3</h2>
+        <p class="page3">No page selected</p>
+        <p class="demo3"></p> -->
+		</div>
+<div class="modal-footer" style="font-size:12px; padding:0px;">
+<!-- <p class="page1">No page selected</p> -->
+	
+	<div id="page_no" style="width:745px; float:left;">
+        <p class="demo1" style="margin: 10px;">
+		</p>
+	</div>	
+		
+	</div>
+</div>
+
+<div id="footer">
+      <div class="container">
+        <p class="muted credit">Design and Developed by <a href="http://mobileharvest.in" target="_blank">MOBILE HARVEST</a> </p>
+      </div>
+</div>
+ <div id="last_mod_date" value=""></div> 
+  <div id="last_mod_date_new" value=""></div>       
+      
+    </body>
+</html>

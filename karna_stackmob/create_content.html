@@ -1,0 +1,1321 @@
+<html>
+    <head>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.9.1-bundled-min.js"></script>
+	
+	 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+	 <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/dark-hive/jquery-ui.css" />
+	<!-- <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/redmond/jquery-ui.css" />-->
+	  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+	  <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
+	 <script type="text/javascript" src="style/js/bootstrap.js"></script>
+	 
+	<link type="text/css" rel="stylesheet" href="style/css/bootstrap.css"></link>
+	
+		<!-- links for pagination -->
+        <script type="text/javascript" src="lib/jquery.bootpag.js"></script>
+		<!-- end links for pagination -->
+	
+        <title>Karna Dashboard - Create Content</title>
+		
+		<script type="text/javascript">
+      /* <![CDATA[ */
+      // Initialize StackMob object
+      // Copy your init data from here: https://dashboard.stackmob.com/sdks/js/config
+      // Your other app information is here: https://dashboard.stackmob.com/settings
+      StackMob.init({
+        publicKey: '5a132e22-54b2-4d09-9260-fc090245ed31',
+		//secure: StackMob.NEVER ,
+		//userSchema: 'organisation',
+	   // loginField: 'organisation_id',
+	   // passwordField: 'password',
+        apiVersion : 0
+      });
+      /* ]]> */
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	var user = new StackMob.User({ username: localStorage.getItem("stackmob.oauth2.user") });
+	user.isLoggedIn({
+	  yes: function(){
+		//console.log("Logged in.");
+		//alert("logged in");
+	  },
+	  no: function(){
+		//console.log("Not logged in.");
+		window.location = "login.html";
+		//alert("not logged in");
+	  }
+	});
+	$("#logout").click(function(e){
+$( "#dialog-confirm" ).dialog( "open" );
+});
+
+var user = new StackMob.User({ username: localStorage.getItem("stackmob.oauth2.user") });
+$( "#dialog-confirm" ).dialog({
+ 
+	 autoOpen: false,
+      resizable: true,
+      height:160,
+      modal: true,
+      buttons: {
+        "YES": function() {
+		user.logout({
+  success: function(model) {
+    //show a success message/update your UI
+		window.location="login.html"
+  }, 
+  error: function(model, response) {
+    //show a failure message in your app    
+	alert("error");
+  }
+});
+          $( this ).dialog( "close" );
+        },
+        "NO": function() {
+          $( this ).dialog( "close" );
+		
+        }
+      }
+    });
+
+
+ 
+
+});
+ 
+ 	// check organisation super admin
+	/* var User = StackMob.Model.extend({ schemaName: 'organisation' });
+	var user = new StackMob.User({ });
+	var q = new StackMob.Collection.Query();
+	q.equals('organisation_id', localStorage.getItem("stackmob.oauth2.user"));
+	user.query(q, {
+		success:function(modal) {
+			array = modal.toJSON();
+			console.debug(array);
+			var super_admin = array[0].super_admin;
+			//alert(super_admin);
+			if(super_admin == "true") {
+				$('#admin_settings').show();
+			}
+		} 
+	});  */
+	// end check organisation super admin
+ 
+ </script> 
+ 
+ 
+
+<script type="text/javascript">
+	$(document).ready(function() {			
+				// fetch topics for the logged in organisation
+						 var User = StackMob.Model.extend({ schemaName: 'topic' });
+						var user = new User({ });
+						user.fetch({
+								success:function(modal) {
+									console.debug(modal.toJSON());
+									var array = modal.toJSON();
+									console.debug(array);
+									var key;
+									var count = 0;
+									for(key in array) {  //count no. of elements in image_search schema
+										 if(array.hasOwnProperty(key)) {
+											count ++;
+										 }
+									 }
+									 //alert(count);
+									 
+									 for(var i=0; i<=count; i++)
+									{
+										if(array[i].org_id == localStorage.getItem("stackmob.oauth2.user"))  // check the organisation name
+										{
+											$("#select_topic_id").append("<option value='"+array[i].topic_id+"'>"+array[i].topic_name+"</option>");
+											$("#select_topic_id2").append("<option value='"+array[i].topic_id+"'>"+array[i].topic_name+"</option>");
+										}// end organisation name if condition
+									} //end i for loop
+
+								} //end fetch success
+							}); //end fetch query
+					//end fetch topics for the logged in organisation
+					
+	});
+</script>
+
+<style>
+				 #footer {
+	 width: 100%;
+position: fixed;
+bottom: 0px;
+background-color: #000;
+height: auto;
+}
+.container .credit {
+float: right;
+margin: 10px 0;
+}
+.muted {
+color: #999999;
+}
+		.ui-dialog .ui-dialog-title {
+
+font-weight: bold;
+font-size: 18px;
+}
+.ui-dialog .ui-dialog-buttonpane {
+font-size: 14px;
+}
+		.content
+		{
+		display:none;
+		}
+		.ui-dialog-titlebar-close {
+  visibility: hidden;
+}
+.active
+{
+padding-top:0px;
+}
+.navbar .nav > li {
+
+padding-top:0px;
+}
+</style>
+
+<style>
+.modal-header {
+	padding:0px 15px;
+}
+
+ p{
+     text-align: center;
+ }
+ 
+ .create {
+ width:100%;
+ height:auto;
+ }
+ 
+ .dropdown-menu {
+ 	padding:0px;
+}
+.dropdown-menu a {
+	padding: 1px 20px;
+}
+</style>
+<!-- css for step tabs -->
+        <style type="text/css">
+           .tab-pane {
+		   		width:100%;
+				height:auto;
+			}
+			
+			.nav-tabs > li {
+				text-align:center;
+				font-weight:bold;
+			}
+        </style>
+		<!--end css for step tabs -->
+    </head>
+    <body>
+		<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+          <a class="brand" href="">Karna<img src="style/img/karna.png"/>Dashboard</a>
+          <div class="nav-collapse collapse pull-right" style="min-height:115px;">
+            <ul class="nav">
+              <li class="" id="home">
+                <a href="index.html">LIVE VIEW</a>
+              </li>
+			   <!--<li id="content">
+                <a ref="topic.html">CONTENT</a>
+              </li>-->
+			  
+			  <li class="dropdown" id="edit_content">
+					<a href="#" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
+						MEDIA CONTENT <b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+					    <li><a href="viewtopic.html">VIEW CONTENTS</a></li>
+						<li><a href="topic.html">REMOVE MEDIA CONTENTS</a></li>
+						<li><a href="create_content.html">CREATE MEDIA CONTENTS</a></li>
+						<li><a href="update_topic.html">EDIT TOPIC</a></li>
+						<li><a href="update_subtopic.html">EDIT SUBTOPICS</a></li>
+						<li><a href="update_media.html">EDIT MEDIA</a></li>
+						<li><a href="update_hospital.html">EDIT HOSPITAL INFO.</a></li>
+					</ul>
+              </li>
+              <li class="" id="user">
+                <a href="userdata.html">HISTORY </a>
+              </li>
+			  <li class="" id="device">
+                <a href="device.html">USERS</a>
+              </li>
+			  <!--<li class="active" id="create_content">
+                <a href="create_content.html">CREATE CONTENT</a>
+              </li>
+			  <li class="dropdown" id="edit_content">
+					<a href="#" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
+						EDIT CONTENT <b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+						<li><a href="update_topic.html">EDIT TOPIC</a></li>
+						<li><a href="update_subtopic.html">EDIT SUBTOPIC</a></li>
+						<li><a href="update_media.html">EDIT MEDIA</a></li>
+					</ul>
+              </li>-->
+			 
+              <!-- <li class="dropdown" id="settings">
+					<a href="other_organisation_settings.html" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
+						SETTINGS <b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+						<li><a href="device_authorization.html">Device Authorization</a></li>
+						<li><a href="other_organisation_settings.html">Other Settings..</a></li>
+					</ul>
+              </li>
+			  <li class="dropdown" id="admin_settings" style="display:none;">
+					<a href="other_admin_settings.html" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
+						ADMIN SETTINGS <b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+						<li><a href="organisation_authorization.html">Organisation Authorization</a></li>
+						<li><a href="create_organisation.html">Create Organization</a></li>
+						<li><a href="other_admin_settings.html">Other Settings..</a></li>
+					</ul>
+			  </li> -->
+              <li class="" id="logout_btn">
+                <a id="logout" href="#LOGOUT">LOGOUT</a>
+              </li>
+            </ul>
+          </div>
+		  <div id="dialog-confirm"  title="Logout" style="font-size:14px;"><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>Do you really want to Logout? </div>
+		  
+        </div>
+      </div>
+	<header class="jumbotron subhead" style="height:45px;"></header>
+	
+	
+	
+	<div class="modal" id="myModal" tabindex="-1"  aria-labelledby="myModalLabel" aria-hidden="true" style='z-index:1;margin: -250px; margin-top:-230px;left:40%; width:55%; height:485px;'>
+  <div class="modal-header">
+	
+            <h5 id="myModalLabel"> Create Content</h5>
+			<!-- steps tabs -->
+			<ul class="nav nav-tabs" id="myTab">
+			  <li class="active"><a href="#step1">Step1 <br>Create new Topic</a></li>
+			  <li><a href="#step2">Step2 <br>Create new Subtopic (optional)</a></li>
+			  <li><a href="#step3">Step3 <br>Create new Media</a></li>
+			  <li><a href="#step4">Step4</br>Create new Hospital</a></li>
+			</ul>
+			<!-- end step tabs -->
+    </div>
+    <div class="modal-body" style="height:69%;">
+		
+	<div class="tab-content">
+		<!-- step 1 -create topic -->
+		<div class="tab-pane active" id="step1">
+			<label>Topic Description</label>
+			<input type="text" id="topic_desc" name="topic_desc" value=""/>
+			<br/><br>
+	
+			<label>Upload topic image to create the topic.(Image Format - jpeg,png,jpg)</label>
+			<input type="file" id="files1" name="files1[]" multiple style="margin-bottom:30px;" />
+			<div><a href="#" id="skip_step1">Skip>></a></div>
+			<script type="text/javascript">
+				$(document).ready(function() {
+					$("#skip_step1").click(function() {
+						//alert("done");
+						$('#myTab a[href="#step2"]').tab('show');
+					});
+				});
+			</script>
+		</div>
+		
+		<!--end step 1 -create topic -->
+		
+		<!-- step 2 -create subtopic-->
+		<div class="tab-pane" id="step2">
+			<label>Select a Topic</label>
+			<select id="select_topic_id" name="select_topic_id">
+			<option value="Select a topic">Select a topic</option>
+			</select>
+			<label>Subtopic Description</label>
+			<input type="text" id="subtopic_desc" name="subtopic_desc" value=""/>
+			<br/><br>
+	
+			<label>Upload subtopic image to create the subtopic.(Image Format - jpeg,png,jpg)</label>
+			<input type="file" id="files2" name="files2[]" multiple style="margin-bottom:30px;" />
+			
+			<div><a href="#" id="skip_step2">Skip>></a></div>
+			<script type="text/javascript">
+				$(document).ready(function() {
+					$("#skip_step2").click(function() {
+						$('#myTab a[href="#step3"]').tab('show');
+					});
+				});
+			</script>
+		</div>
+		<!--end step 2 -create subtopic-->
+		
+		<!-- step 3 -create media-->
+		<div class="tab-pane" id="step3">
+			<label>Select a Topic</label>
+			<select id="select_topic_id2" name="select_topic_id2" onChange="check_subtopics();">
+			<option value="Select a topic">Select a topic</option>
+			</select>
+			<script type="text/javascript">
+				function check_subtopics() {
+					if($('#select_topic_id2').val()=='Select a topic')
+					{
+						$('#select_subtopic_id2').attr('value', '');
+					}
+					else
+					{
+						var select_topic_id2 = $('#select_topic_id2').val();
+						// fetch subtopics from topic schema relationship
+							var Topic_schema = StackMob.Model.extend({ schemaName: 'topic' });
+							var topic = new Topic_schema({ });
+								topic.fetchExpanded(1, {
+									success: function(modal) {
+										//After StackMob returns "Bill Watterson", print out the result
+										var array = modal.toJSON();
+										// console.debug(array);
+
+										 //count total records in image search schema
+											var key;
+											var count = 0;
+											var counter=0;
+											for(key in array) {
+												 if(array.hasOwnProperty(key)) {
+												  count ++;
+												 }
+											 }
+											 //alert(count);
+										 //end count total records in image search schema
+										 
+										for(var i=0; i<=count; i++)
+										{
+											if(array[i].topic_id == select_topic_id2)
+											{
+												var subtopic_array = array[i].subtopic;
+									
+												var key2;
+												var count2 = 0;
+												for(key2 in subtopic_array) {
+													 if(subtopic_array.hasOwnProperty(key2)) {
+													  count2 ++;
+													 }
+												 }
+												 //alert(count);
+												 
+												 $("#select_subtopic_id").html("<option value='Select a subtopic'>Select a subtopic</option>");
+												 
+												 for(var j=0; j<=count2; j++)
+										 		{
+													$("#select_subtopic_id").append("<option value='"+subtopic_array[j].subtopic_id+"'>"+subtopic_array[j].subtopic_name+"</option>");
+												}// end j for loop
+												 
+											} //end tpoic id if condition 
+										} //end i for loop
+									} //end fetch expand success
+								}); //end fetch expand
+							// end fetch subtopic from topic schema relationship
+					}
+				}
+				</script>
+				<br/><br/>
+				
+				<label>Select a Subtopic:</label>		
+				<select id="select_subtopic_id" name="select_subtopic_id">
+					<option value="Select a subtopic">Select a subtopic</option>
+				</select>
+				<br/><br/>
+				
+				<label>Media Name</label>
+				<input type="text" id="media_name" name="media_name" value=""/>
+				<br/><br>
+				
+				<label>Points</label>
+				<input type="text" id="media_points" name="media_points" value=""/>
+				<br/><br>
+				
+				<label>Media Type<br/><b>Note : Select the correct type of media otherwise it will not work in application properly.</b></label>
+				<select id="media_type" name="media_type" onChange="check_media_type();">
+					<option value="Select the media type">Select the media type</option>
+					<option value="IMAGE">Image</option>
+					<option value="AUDIO">Audio</option>
+					<option value="VIDEO">Video</option>
+					<option value="YOUTUBE">Youtube Link</option>
+				</select>
+				<script type="text/javascript">
+			function check_media_type() {
+				if($('#media_type').val()=='YOUTUBE')
+				{
+					$('.youtube_link').show();
+					$('.upload_media').hide();
+					$('#create_media_btn').show();
+					
+				}
+				else
+				{
+					$('.youtube_link').hide();
+					$('.upload_media').show();
+					$('#create_media_btn').hide();
+				}
+			}
+		</script>
+				<br/><br>
+				
+				<label class="youtube_link" style="display:none;">Enter the Youtube link</label>
+				<input type="text" id="youtube_link" name="youtube_link" value="" class="youtube_link" style="display:none;"/>
+				<br/><br>
+			
+				<label class="upload_media" style="display:none;">Choose File For Upload New Media</label>
+				<input type="file" id="files3" name="files3[]" multiple style="margin-bottom:30px; display:none" class="upload_media" />
+				
+				<input type="button" name="create_media_btn" id="create_media_btn" value="Create Media" /></br></br>
+				<div><a href="#" id="skip_step3">Skip>></a></div>
+			    <script type="text/javascript">
+				$(document).ready(function() {
+					$("#skip_step3").click(function() {
+						$('#myTab a[href="#step4"]').tab('show');
+					});
+				});
+			</script>
+		</div>
+		<!--end step 3 -create media-->
+		<!--step 4 -create new hospital-->
+		<div class="tab-pane" id="step4">
+			<label>Hospital Name</label>
+			<input type="text" id="hospital_name" name="hospital_name" value="" required/>
+			<br/><br>
+	<label> Address</label>
+	<input type="text" id="hospital_address" name="hospital_address" value="" required/>
+	</br><br>
+	<label> Phone Number</label>
+	<input type="tel" id="hospital_number" name="hospital_number" max="10" required/>
+	</br><br>
+		
+	<label> Latitude</label>
+	<input type="text" id="hospital_latitude" name="hospital_latitude" value="" required/>
+	<br/><br>
+	<label> Longitude</label>
+	<input type="text" id="hospital_longitude" name="hospital_longitude" value="" required/>
+	<br/><br/>
+	<label>Upload Hospital address image to create the Hospital.(Image Format - jpeg,png,jpg)</label>
+	<input type="file" id="files4" name="files4[]" multiple style="margin-bottom:30px;" />
+	
+			<div><a href="#" id="skip_step4">Skip>></a></div>
+			<script type="text/javascript">
+				$(document).ready(function() {
+					$("#skip_step4").click(function() {
+						//alert("done");
+						$('#myTab a[href="#step1"]').tab('show');
+					});
+				});
+			</script>
+		</div>
+		 <!-- end step 4 -create hospital-->
+	</div>
+	
+	<script>
+  $(function () {
+    $('#myTab a[href="#step1"]').tab('show');
+  });
+  
+  $('#myTab a').click(function (e) {
+		  e.preventDefault();
+		  $(this).tab('show');
+		  			
+							// fetch topics for the logged in organisation
+									 var User = StackMob.Model.extend({ schemaName: 'topic' });
+									var user = new User({ });
+									user.fetch({
+											success:function(modal) {
+												console.debug(modal.toJSON());
+												var array = modal.toJSON();
+												console.debug(array);
+												var key;
+												var count = 0;
+												for(key in array) {  //count no. of elements in image_search schema
+													 if(array.hasOwnProperty(key)) {
+														count ++;
+													 }
+												 }
+												 //alert(count);
+												 $("#select_topic_id").html("<option value='Select a topic'>Select a topic</option>");
+												 $("#select_topic_id2").html("<option value='Select a topic'>Select a topic</option>");
+												 for(var i=0; i<=count; i++)
+												{
+													if(array[i].org_id == localStorage.getItem("stackmob.oauth2.user"))  // check the organisation name
+													{
+														$("#select_topic_id").append("<option value='"+array[i].topic_id+"'>"+array[i].topic_name+"</option>");
+														$("#select_topic_id2").append("<option value='"+array[i].topic_id+"'>"+array[i].topic_name+"</option>");
+													}// end organisation name if condition
+												} //end i for loop
+			
+											} //end fetch success
+										}); //end fetch query
+								//end fetch topics for the logged in organisation
+	});
+</script>
+		
+		<br/><br/>
+	</div>
+<div class="modal-footer" style="font-size:12px; padding:0px;">
+<!-- <p class="page1">No page selected</p> -->
+	</div>
+</div>
+
+<div id="footer">
+      <div class="container">
+        <p class="muted credit">Design and Developed by <a href="http:www.mobileharvest.in" target="_blank">MOBILE HARVEST</a> </p>
+      </div>
+</div>
+ <div id="last_mod_date" value=""></div> 
+  <div id="last_mod_date_new" value=""></div>   
+  
+<!-- STEP 1 - UPLOAD TOPIC IMAGE THUMBNAIL -->
+<script type="text/javascript">
+  //Define your Todo class once on the page.
+ $(function(){
+  document.getElementById('files1').addEventListener('change', upload_topic_image, false);
+  
+  function upload_topic_image(evt) {
+  		var topic_desc = $("#topic_desc").val();
+		if(topic_desc == '')
+		{
+			document.getElementById('files1').value = '';
+			$("#topic_desc").focus();
+			//$("#error_name").show();
+			alert("Please enter the topic desc");
+		}
+		else {
+				
+				var Todo = StackMob.Model.extend({ schemaName: 'topic' });
+				var myTodo = new Todo({ org_id: localStorage.getItem("stackmob.oauth2.user"), topic_name: topic_desc,status:true });
+				myTodo.create({
+					success: function(model) {
+						var topic_array = model.toJSON();
+						console.debug(model.toJSON());
+						
+						//alert("topic created");
+						//alert(topic_array.topic_id);
+						
+						//upload the image
+						    var Todo = StackMob.Model.extend({ schemaName: 'topic' });
+						 
+						  var todoInstance = new Todo({ topic_id: topic_array.topic_id }); 
+						  var fieldname = 'topic_url'; //name of binary field that you created in your schema
+				  
+						var files = evt.target.files; // FileList object
+						// Loop through the FileList
+						for (var i = 0, f; f = files[i]; i++) {
+							
+						  var reader = new FileReader();
+					 
+						  // Closure to capture the file information
+						  reader.onload = (function(theFile) {
+							return function(e) {
+							
+							  var base64Content = e.target.result.substring(e.target.result.indexOf(',') + 1, e.target.result.length);
+							  var fileName = theFile.name;
+							  var fileType = theFile.type;
+								if((fileType=="image/jpeg")||(fileType=="image/png")|| (fileType=="image/jpg"))
+								{
+							  todoInstance.setBinaryFile(fieldname, fileName, fileType, base64Content);
+							  todoInstance.save();
+							  alert('Topic created successfully');
+							  document.getElementById('topic_desc').value = '';
+							  document.getElementById('files1').value = '';
+							  }
+							  else
+							  {
+							  alert("Please upload only image file in following format[jpeg,png,jpg]");
+							  }
+							 // todoInstance.setBinaryFile(fieldname, fileName, fileType, base64Content);
+							 // todoInstance.save();
+					//	  alert('Image saved');
+					 
+							};
+						  })(f);
+					 
+						  // Read in the file as a data URL
+						  fileContent = reader.readAsDataURL(f);
+							//$('.data').html(fileContent);
+						} //end for loop 
+						//end upload the image
+						
+					},
+					error: function(model, response) {
+						console.debug(response);
+						alert("error in create topic");
+					}
+				});
+			
+		} // end else
+  } // end handleFileSelect function 
+ 
+ });
+</script>
+<!-- END STEP 1 - UPLOAD TOPIC IMAGE THUMBNAIL --> 
+
+<!-- STEP 2 - UPLOAD SUBTOPIC IMAGE THUMBNAIL -->
+<script type="text/javascript">
+  //Define your Todo class once on the page.
+ $(function(){
+  document.getElementById('files2').addEventListener('change', upload_topic_image, false);
+  
+  function upload_topic_image(evt) {
+  		var select_topic_id = $("#select_topic_id").val();
+  		var subtopic_desc = $("#subtopic_desc").val();
+		if((select_topic_id == '') || (select_topic_id == 'Select a topic'))
+		{
+			document.getElementById('files2').value = '';
+			$("#select_topic_id").focus();
+			//$("#error_name").show();
+			alert("Please select a topic");
+		}
+		if(subtopic_desc == '')
+		{
+			document.getElementById('files2').value = '';
+			$("#subtopic_desc").focus();
+			//$("#error_name").show();
+			alert("Please enter the subtopic desc");
+		}
+		else {
+				//create subtopic in subtopic schema
+				var Todo = StackMob.Model.extend({ schemaName: 'subtopic' });
+				var myTodo = new Todo({ subtopic_name: subtopic_desc, status:true,topic_id:select_topic_id });
+				myTodo.create({
+					success: function(model) {
+						var subtopic_array = model.toJSON();
+						console.debug(model.toJSON());
+						
+						//alert("subtopic created");
+						//alert(subtopic_array.subtopic_id);
+						
+						//upload the image in subtopic schema
+						    var Todo = StackMob.Model.extend({ schemaName: 'subtopic' });
+						 
+						  var todoInstance = new Todo({ subtopic_id: subtopic_array.subtopic_id }); 
+						  var fieldname = 'subtopic_url'; //name of binary field that you created in your schema
+				  
+						var files = evt.target.files; // FileList object
+						// Loop through the FileList
+						for (var i = 0, f; f = files[i]; i++) {
+							
+						  var reader = new FileReader();
+					 
+						  // Closure to capture the file information
+						  reader.onload = (function(theFile) {
+							return function(e) {
+							
+							  var base64Content = e.target.result.substring(e.target.result.indexOf(',') + 1, e.target.result.length);
+							  var fileName = theFile.name;
+							  var fileType = theFile.type;
+								if((fileType=="image/jpeg")||(fileType=="image/png")|| (fileType=="image/jpg"))
+								{
+							  todoInstance.setBinaryFile(fieldname, fileName, fileType, base64Content);
+							  todoInstance.save();
+							  alert('Subtopic created successfully');
+							  document.getElementById('select_topic_id').value = 'Select a topic';
+							  document.getElementById('subtopic_desc').value = '';
+							  document.getElementById('files2').value = '';
+							  }
+							  else
+							  {
+							  alert("Please upload only image file in following format[jpeg,png,jpg]");
+							  }
+							 // todoInstance.setBinaryFile(fieldname, fileName, fileType, base64Content);
+							 // todoInstance.save();
+					//	  alert('Image saved');
+					 
+							};
+						  })(f);
+					 
+						  // Read in the file as a data URL
+						  fileContent = reader.readAsDataURL(f);
+							//$('.data').html(fileContent);
+						} //end for loop 
+					//end upload the image in subtopic schema
+					
+					//add subtopic relationship with topic
+					
+						//var Subtopic_schema = StackMob.Model.extend({ schemaName: 'subtopic' });
+						//var subtopic1 = new Subtopic_schema({ subtopic_id: subtopic_array.subtopic_id });
+						
+						var Topic_schema = StackMob.Model.extend({ schemaName: 'topic' });
+						var topic_schema = new Topic_schema({ topic_id: select_topic_id  });
+							//alert("creating relationship - "+subtopic_array.subtopic_id );
+							//alert(subtopic_array.subtopic_id);
+							topic_schema.appendAndSave('subtopic', [subtopic_array.subtopic_id], {
+								success: function(modal) {
+									//console.debug(modal.toJSON());
+									//alert("relationship created");
+									},
+								error : function(modal) {
+									//console.debug(modal.toJSON());
+									//alert("error in relationship create");
+								}
+							});
+					//end add subtopic relationship with topic
+						
+					}, // end success - //create subtopic in subtopic schema
+					
+					error: function(model, response) {
+						console.debug(response);
+						alert("error in create topic");
+					}
+				}); //end create subtopic query
+			//end create subtopic in subtopic schema
+		} // end else
+  } // end handleFileSelect function 
+ 
+ });
+</script>
+<!-- END STEP 2 - UPLOAD SUBTOPIC IMAGE THUMBNAIL -->      
+
+<!-- STEP 3 -  UPLOAD MEDIA -->
+				<!--click create media button - with youtube link-->
+				<!--<script type="text/javascript">
+						$("#create_media_btn").click(function() {
+							var select_topic_id2 = $("#select_topic_id2").val();
+							var select_subtopic_id = $("#select_subtopic_id").val();
+							var media_name= $("#media_name").val();
+							var media_points= $("#media_points").val();
+							var media_type= $("#media_type").val();
+							var youtube_link= $("#youtube_link").val();
+							if((select_topic_id2 == '') || (select_topic_id2 == 'Select a topic'))
+							{
+								document.getElementById('files3').value = '';
+								$("#select_topic_id2").focus();
+								//$("#error_name").show();
+								alert("Please select a topic");
+							}
+							/* else if((select_subtopic_id == '') || (select_subtopic_id == 'Select a subtopic'))
+							{
+								document.getElementById('files3').value = '';
+								$("#select_subtopic_id").focus();
+								//$("#error_name").show();
+								alert("Please select a Subtopic");
+							} */
+							else if(media_name == '')
+							{
+								document.getElementById('files3').value = '';
+								$("#media_name").focus();
+								//$("#error_name").show();
+								alert("Please enter the media_name");
+							}
+							else if(media_points == '')
+							{
+								document.getElementById('files3').value = '';
+								$("#media_points").focus();
+								//$("#error_name").show();
+								alert("Please enter the points for media");
+							}
+							else if(media_type == 'Select the media type')
+							{
+								document.getElementById('files3').value = '';
+								$("#media_type").focus();
+								//$("#error_name").show();
+								alert("Please select the media type");
+							}
+							else if((media_type == 'YOUTUBE') && (youtube_link == ''))
+							{
+								document.getElementById('files3').value = '';
+								$("#youtube_link").focus();
+								//$("#error_name").show();
+								alert("Please enter the Youtube Link.");
+							} 
+							else {
+									if(select_subtopic_id == 'Select a subtopic')
+									{
+										select_subtopic_id = '';
+									} 
+									
+									media_points = parseInt(media_points);
+									//create media in media schema
+									var Todo = StackMob.Model.extend({ schemaName: 'media' });
+									var myTodo = new Todo({ media_name: media_name, media_type: media_type, ,media_points: media_points, youtube_link: youtube_link });
+									myTodo.create({
+										success: function(model) {
+											var media_array = model.toJSON();
+											console.debug(model.toJSON());
+											alert("media created successfully");
+											
+											
+											if(select_subtopic_id =='')
+											{
+												var Media_schema = StackMob.Model.extend({ schemaName: 'media' });
+												var media_schema = new Media_schema({ media_id: media_array.media_id });
+													alert("creating relationship - "+select_topic_id2);
+													media_schema.addRelationship('media_topic', select_topic_id2, {
+														success: function(modal) {
+															//console.debug(modal.toJSON());
+															alert("relationship without created");
+															},
+														error : function(modal) {
+															//console.debug(modal.toJSON());
+															alert("error in creating relationship ");
+														}
+													});  
+											}
+											//end add topic relationship with media
+											
+											//add subtopic relationship with media
+											else 
+											{
+												var Media_schema = StackMob.Model.extend({ schemaName: 'media' });
+												var media_schema = new Media_schema({ media_id: media_array.media_id });
+												
+													alert("creating relationship - "+select_subtopic_id);
+													media_schema.addRelationship('media_subtopic', select_subtopic_id, {
+														success: function(modal) {
+															//console.debug(modal.toJSON());
+															alert("relationship created");
+															},
+														error : function(modal) {
+															//console.debug(modal.toJSON());
+															alert("error in creating relationship ");
+														}
+													}); 
+													
+													//add media relationship with subtopic
+													//var Media_schema = StackMob.Model.extend({ schemaName: 'media' });
+						                            //var subtopic1 = new Subtopic_schema({ media_id: media_array.media_id });
+						
+						                            var SubTopic_schema = StackMob.Model.extend({ schemaName: 'subtopic' });
+						                            var subtopic_schema = new subTopic_schema({ subtopic_id: select_subtopic_id  });
+													
+													alert(media_array.media_id);
+							                       //alert("creating relationship - "+subtopic_array.subtopic_id );
+							                        subtopic_schema.appendAndSave('subtopic_media', [media_array.media_id], {
+								                     success: function(modal) {
+									                 //console.debug(modal.toJSON());
+									                 //alert("relationship created");
+									                         },
+								                   error : function(modal) {
+									             //console.debug(modal.toJSON());
+									             //alert("error in relationship create");
+								                 }
+							                  });
+													
+													
+											} 
+											
+										}// end success
+									}); // end create media query
+							} //end else
+						});
+					</script>
+					<!-- end create media - with youtube link -->
+					
+					
+					<!-- create media - with media url -->
+					<script type="text/javascript">
+					  //Define your Todo class once on the page.
+					 $(function(){
+					  document.getElementById('files3').addEventListener('change', upload_media, false);
+					  
+					  function upload_media(evt) {
+							var select_topic_id2 = $("#select_topic_id2").val();
+							var select_subtopic_id = $("#select_subtopic_id").val();
+							var media_name= $("#media_name").val();
+							var media_points= $("#media_points").val();
+							var media_type= $("#media_type").val();
+							var youtube_link= $("#youtube_link").val();
+							if((select_topic_id2 == '') || (select_topic_id2 == 'Select a topic'))
+							{
+								document.getElementById('files3').value = '';
+								$("#select_topic_id2").focus();
+								//$("#error_name").show();
+								alert("Please select a topic");
+							}
+							/* else if((select_subtopic_id == '') || (select_subtopic_id == 'Select a subtopic'))
+							{
+								document.getElementById('files3').value = '';
+								$("#select_subtopic_id").focus();
+								//$("#error_name").show();
+								alert("Please select a Subtopic");
+							} */
+							else if(media_name == '')
+							{
+								document.getElementById('files3').value = '';
+								$("#media_name").focus();
+								//$("#error_name").show();
+								alert("Please enter the media_name");
+							}
+							else if(media_points == '')
+							{
+								document.getElementById('files3').value = '';
+								$("#media_points").focus();
+								//$("#error_name").show();
+								alert("Please enter the points for media");
+							}
+							else if(media_type == 'Select the media type')
+							{
+								document.getElementById('files3').value = '';
+								$("#media_type").focus();
+								//$("#error_name").show();
+								alert("Please enter the points for media");
+							}
+							/* else if((media_type == 'YOUTUBE') && (youtube_link == ''))
+							{
+								document.getElementById('files3').value = '';
+								$("#youtube_link").focus();
+								//$("#error_name").show();
+								alert("Please enter the Youtube Link.");
+							} */
+							
+							else {
+									if(select_subtopic_id == 'Select a subtopic')
+									{
+										select_subtopic_id = '';
+									} 
+									media_points = parseInt(media_points);
+									//create media in media schema
+									
+								  //alert(media_type);
+								   if(media_type=='IMAGE')
+								      var media_format='.png';
+									  
+								   else if(media_type=='AUDIO')
+                                      var media_format='.3gp';
+									  
+								   else  
+								       var media_format='.mp4';
+								  
+									var Todo = StackMob.Model.extend({ schemaName: 'media' });
+									var myTodo = new Todo({ media_format:media_format, media_name: media_name ,media_likes:0, media_org:localStorage.getItem("stackmob.oauth2.user"),media_type: media_type, media_points: media_points});
+									
+									
+									var files = evt.target.files; // FileList object
+											// Loop through the FileList
+											for (var i = 0, f; f = files[i]; i++) {
+												
+											  var reader = new FileReader();
+										 
+											  // Closure to capture the file information
+											  reader.onload = (function(theFile) {
+												return function(e) {
+												
+												  var base64Content = e.target.result.substring(e.target.result.indexOf(',') + 1, e.target.result.length);
+												  var fileName = theFile.name;
+												  var fileType = theFile.type;
+												  //alert("here to check");
+												  //alert(fileType );
+												 // alert(files3);
+										if((fileType=="image/jpeg")||(fileType=="image/png")|| (fileType=="image/jpg") || (fileType=="video/3gpp") ||(fileType=="video/mp4") || (fileType=="audio/mp3") )
+										{
+												myTodo.create({
+										            success: function(model) {
+											        var media_array = model.toJSON();
+											        console.debug(model.toJSON());
+											
+											         alert("Media created");
+											         //alert(media_array.media_id);
+											
+											//upload the media in media schema
+											  var Todo = StackMob.Model.extend({ schemaName: 'media' });
+											 
+											  var todoInstance = new Todo({ media_id: media_array.media_id }); 
+											  var fieldname = 'media_url'; //name of binary field that you created in your schema
+									  
+											var files = evt.target.files; // FileList object
+											// Loop through the FileList
+											for (var i = 0, f; f = files[i]; i++) {
+												
+											  var reader = new FileReader();
+										 
+											  // Closure to capture the file information
+											  reader.onload = (function(theFile) {
+												return function(e) {
+												
+												  var base64Content = e.target.result.substring(e.target.result.indexOf(',') + 1, e.target.result.length);
+												  var fileName = theFile.name;
+												  var fileType = theFile.type;
+												  //alert(fileType );
+												  //alert(files3);
+
+												/*  if((fileType=="image/gif"))
+												  {
+												  	alert("Error : Please Select Image file in  formate :jpeg,png or jpg");
+												  }
+												  */
+
+
+
+												  
+													if((fileType=="image/jpeg")||(fileType=="image/png")|| (fileType=="image/jpg") || (fileType=="video/3gpp") ||(fileType=="video/mp4") || (fileType=="audio/mp3") )
+													{
+
+
+												  todoInstance.setBinaryFile(fieldname, fileName, fileType, base64Content);
+												     todoInstance.save();
+												  alert('Media created successfully...');
+												  document.getElementById('select_topic_id2').value = 'Select a topic';
+												  document.getElementById('select_subtopic_id').value = 'Select a subtopic';
+												  document.getElementById('media_name').value = '';
+												  document.getElementById('media_type').value = 'Select the type of media';
+												  document.getElementById('media_points').value = '';
+												  document.getElementById('youtube_link').value = '';
+												  document.getElementById('files3').value = '';
+												  }
+												  else
+												  {
+												  alert("Please upload only image file in the  format[jpeg,png,jpg]");
+
+												  }
+												 // todoInstance.setBinaryFile(fieldname, fileName, fileType, base64Content);
+												 // todoInstance.save();
+										//	  alert('Image saved');
+										 
+												};
+											  })(f);
+										 
+											  // Read in the file as a data URL
+											  fileContent = reader.readAsDataURL(f);
+												//$('.data').html(fileContent);
+											} //end for loop 
+										//end upload the image in media schema
+										
+										//add topic relationship with media	
+
+										if(select_subtopic_id =='')
+											{
+												//alert("media- id - "+media_array.media_id);
+												var Media_schema = StackMob.Model.extend({ schemaName: 'media' });
+												var media_schema = new Media_schema({ media_id: media_array.media_id });
+													//alert("creating relationship - "+select_topic_id2);
+													media_schema.save({media_topic: select_topic_id2}, {
+														success: function(modal) {
+															//console.debug(modal.toJSON());
+															//alert("relationship created");
+															},
+														error : function(modal) {
+															//console.debug(modal.toJSON());
+															alert("error in relationship create");
+														}
+													});  
+											}										
+											//end add topic relationship with media
+											
+											//add subtopic relationship with media
+											else 
+											{
+												
+												var Media_schema = StackMob.Model.extend({ schemaName: 'media' });
+												var media_schema = new Media_schema({ media_id: media_array.media_id });
+													//alert("creating relationship - "+select_subtopic_id);
+													media_schema.save({media_subtopic: select_subtopic_id, media_topic:select_topic_id2, status:true}, {
+														success: function(modal) {
+															//console.debug(modal.toJSON());
+															//alert("relationship is created");
+															},
+														error : function(modal) {
+															//console.debug(modal.toJSON());
+															alert("error in relationship create");
+														}
+													}); 
+									
+										//end add subtopic relationship with media
+										
+										//add subtopic relationship with topic
+											// var Subtopic_schema = StackMob.Model.extend({ schemaName: 'subtopic' });
+											//var subtopic1 = new Subtopic_schema({ subtopic_id: subtopic_array.subtopic_id });
+											
+											var subTopic_schema = StackMob.Model.extend({ schemaName: 'subtopic' });
+											//alert(select_subtopic_id);
+											var subtopic_schema = new subTopic_schema({ subtopic_id: select_subtopic_id  });
+											//alert("media- id - "+media_array.media_id);
+												//alert("creating relationship - "+media_array.media_id );
+												subtopic_schema.appendAndSave('subtopic_media', [media_array.media_id], {
+													success: function(modal) {
+														//console.debug(modal.toJSON());
+														//alert("relationship created");
+														},
+													error : function(modal) {
+														//console.debug(modal.toJSON());
+														alert("error in relationship create");
+													}
+												});
+											}	
+										//end add subtopic relationship with topic
+											
+										}, // end success - //create media in media schema
+										
+										error: function(model, response) {
+											//console.debug(response);
+											alert("Error in create media");
+										}
+									}); //end create media query
+									
+									
+								//end create media in media schema
+												}
+												else
+												{
+												alert("This is not an image");
+												}
+										 
+												};
+											  })(f);
+										 
+											  // Read in the file as a data URL
+											  fileContent = reader.readAsDataURL(f);
+												//$('.data').html(fileContent);
+											} //end for loop 
+											
+											
+									
+							} // end else
+					  } // end handleFileSelect function 
+					 
+					 });
+					</script>
+					<!-- end create media - with media url -->
+<!-- END STEP 3 - UPLOAD MEDIA -->  
+<!-- STEP 4- Upload  Hospital  Info.-->
+
+<script type="text/javascript">
+
+$(function(){
+  document.getElementById('files4').addEventListener('change', upload_hospital_image, false);
+  
+  function upload_hospital_image(evt){
+  
+  
+							var hospital_name = $("#hospital_name").val();
+							var hospital_address=$("#hospital_address").val();
+							var hospital_number=$("#hospital_number").val();
+							var hospital_latitude=$("#hospital_latitude").val();
+							var hospital_longitude=$("#hospital_longitude").val();
+							 
+						
+							
+							
+ 
+                        // Create new instance of Todo
+                        if(hospital_name=='')
+                         {
+                           document.getElementById('files4').value = '';
+						   alert("Please enter  hospital name");
+                           $("#hospital_name").focus();
+                           return false;
+                         }
+						  
+                        if(hospital_address=='')
+                         {
+						    document.getElementById('files4').value = '';
+                            alert("Please enter address");
+                            $("#hospital_address").focus();
+                            return false;
+                         }
+						 
+                       if(hospital_number=='')
+                       {
+					    document.getElementById('files4').value = '';
+                        alert("Please enter phone number");
+                        $("#hospital_number").focus();
+                       return false;
+                       }
+					   
+                       if(hospital_latitude=='')
+                       {
+					    document.getElementById('files4').value = '';
+                        alert("Please enter latitude");
+                        $("#hospital_latitude").focus();
+                        return false;
+                       }
+					   
+                       if(hospital_longitude=='')
+                       {
+					    document.getElementById('files4').value = '';
+                        alert("Please enter longitude");
+                        $("#hospital_longitude").focus();
+                        return false;
+                       }
+
+
+else {
+
+var Todo = StackMob.Model.extend({ schemaName: 'miscellaneous_content' });
+ 
+// Persist the object to StackMob
+var todo = new Todo({
+  m_name: hospital_name,
+  address: hospital_address,
+  contact_number: hospital_number,
+  m_lat:hospital_latitude,
+  m_long:hospital_longitude,
+  org_id:'1'
+  
+});
+                       todo.create({
+                        success: function(model) { 
+                            var hosp_array = model.toJSON();
+ 
+						    var Todo = StackMob.Model.extend({ schemaName: 'miscellaneous_content' });
+						 
+						  var todoInstance = new Todo({ miscellaneous_content_id: hosp_array.miscellaneous_content_id }); 
+						  var fieldname = 'map'; //name of binary field that you created in your schema
+				  
+						var files = evt.target.files; // FileList object
+						// Loop through the FileList
+						for (var i = 0, f; f = files[i]; i++) {
+							
+						  var reader = new FileReader();
+					 
+						  // Closure to capture the file information
+						  reader.onload = (function(theFile) {
+							return function(e) {
+							
+							  var base64Content = e.target.result.substring(e.target.result.indexOf(',') + 1, e.target.result.length);
+							  var fileName = theFile.name;
+							  var fileType = theFile.type;
+								if((fileType=="image/jpeg")||(fileType=="image/png")|| (fileType=="image/jpg"))
+								{
+							  todoInstance.setBinaryFile(fieldname, fileName, fileType, base64Content);
+							  todoInstance.save();
+							  alert('Hospital Info. created successfully');
+							  //location.reload();
+							  document.getElementById('hospital_name').value = '';
+							  document.getElementById('hospital_address').value = '';
+							  document.getElementById('hospital_number').value = '';
+							  document.getElementById('hospital_latitude').value = '';
+							  document.getElementById('hospital_longitude').value = '';
+							  document.getElementById('files4').value = '';
+							  }
+							  else
+							  {
+							  alert("Please upload only image file in following format[jpeg,png,jpg]");
+							  }
+							 // todoInstance.setBinaryFile(fieldname, fileName, fileType, base64Content);
+							 // todoInstance.save();
+					//	  alert('Image saved');
+					 
+							};
+						  })(f);
+					 
+						  // Read in the file as a data URL
+						  fileContent = reader.readAsDataURL(f);
+							//$('.data').html(fileContent);
+				} //end for loop 
+						//end upload the image
+   },
+  error: function(model, error, options) {}
+});
+
+
+}
+							
+}							
+});
+						
+					</script>
+
+<!--END STEP 4- Upload Hospital Info.
+      
+    </body>
+</html>

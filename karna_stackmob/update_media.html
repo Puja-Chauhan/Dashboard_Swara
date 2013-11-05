@@ -1,0 +1,1024 @@
+<html>
+    <head>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.9.1-bundled-min.js"></script>
+	
+	 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+	 <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/dark-hive/jquery-ui.css" />
+	<!-- <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/redmond/jquery-ui.css" />-->
+	  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+	  <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
+	 <script type="text/javascript" src="style/js/bootstrap.js"></script>
+	 
+	<link type="text/css" rel="stylesheet" href="style/css/bootstrap.css"></link>
+	
+		<!-- links for pagination -->
+        <script type="text/javascript" src="lib/jquery.bootpag.js"></script>
+		<!-- end links for pagination -->
+	
+        <title>Karna Dashboard - Change Topic</title>
+		
+		<script type="text/javascript">
+      /* <![CDATA[ */
+      // Initialize StackMob object
+      // Copy your init data from here: https://dashboard.stackmob.com/sdks/js/config
+      // Your other app information is here: https://dashboard.stackmob.com/settings
+      StackMob.init({
+        publicKey: '5a132e22-54b2-4d09-9260-fc090245ed31',
+		//secure: StackMob.NEVER ,
+		//userSchema: 'organisation',
+	   // loginField: 'organisation_id',
+	   // passwordField: 'password',
+        apiVersion : 0
+      });
+      /* ]]> */
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	var user = new StackMob.User({ username: localStorage.getItem("stackmob.oauth2.user") });
+	user.isLoggedIn({
+	  yes: function(){
+		//console.log("Logged in.");
+		//alert("logged in");
+	  },
+	  no: function(){
+		//console.log("Not logged in.");
+		window.location = "login.html";
+		//alert("not logged in");
+	  }
+	});
+	$("#logout").click(function(e){
+$( "#dialog-confirm" ).dialog( "open" );
+});
+
+var user = new StackMob.User({ username: localStorage.getItem("stackmob.oauth2.user") });
+$( "#dialog-confirm" ).dialog({
+ 
+	 autoOpen: false,
+      resizable: true,
+      height:160,
+      modal: true,
+      buttons: {
+        "YES": function() {
+		user.logout({
+  success: function(model) {
+    //show a success message/update your UI
+		window.location="login.html"
+  }, 
+  error: function(model, response) {
+    //show a failure message in your app    
+	alert("error");
+  }
+});
+          $( this ).dialog( "close" );
+        },
+        "NO": function() {
+          $( this ).dialog( "close" );
+		
+        }
+      }
+    });
+
+
+ 
+
+});
+ 
+ 	// check organisation super admin
+	/* var User = StackMob.Model.extend({ schemaName: 'organisation' });
+	var user = new StackMob.User({ });
+	var q = new StackMob.Collection.Query();
+	q.equals('organisation_id', localStorage.getItem("stackmob.oauth2.user"));
+	user.query(q, {
+		success:function(modal) {
+			array = modal.toJSON();
+			console.debug(array);
+			var super_admin = array[0].super_admin;
+			//alert(super_admin);
+			if(super_admin == "true") {
+				$('#admin_settings').show();
+			}
+		} 
+	});  */
+	// end check organisation super admin
+ 
+ </script> 
+ 
+ 
+
+<script type="text/javascript">
+	$(document).ready(function() {
+	
+				// fetch topics for the logged in organisation
+						 var User = StackMob.Model.extend({ schemaName: 'topic' });
+						var user = new User({ });
+						user.fetch({
+								success:function(modal) {
+									console.debug(modal.toJSON());
+									var array = modal.toJSON();
+									console.debug(array);
+									var key;
+									var count = 0;
+									for(key in array) {  //count no. of elements in image_search schema
+										 if(array.hasOwnProperty(key)) {
+											count ++;
+										 }
+									 }
+									 //alert(count);
+									 
+									 for(var i=0; i<=count; i++)
+									{
+										if(array[i].org_id == localStorage.getItem("stackmob.oauth2.user"))  // check the organisation name
+										{
+											$("#topic_id1").append("<option value='"+array[i].topic_id+"'>"+array[i].topic_name+"</option>");
+											$("#topic_id2").append("<option value='"+array[i].topic_id+"'>"+array[i].topic_name+"</option>");
+										}// end organisation name if condition
+									} //end i for loop
+
+								} //end fetch success
+							}); //end fetch query
+					//end fetch topics for the logged in organisation
+					
+	});
+</script>
+
+<style>
+				 #footer {
+	 width: 100%;
+position: fixed;
+bottom: 0px;
+background-color: #000;
+height: auto;
+}
+.container .credit {
+float: right;
+margin: 10px 0;
+}
+.muted {
+color: #999999;
+}
+		.ui-dialog .ui-dialog-title {
+
+font-weight: bold;
+font-size: 18px;
+}
+.ui-dialog .ui-dialog-buttonpane {
+font-size: 14px;
+}
+		.content
+		{
+		display:none;
+		}
+		.ui-dialog-titlebar-close {
+  visibility: hidden;
+}
+.active
+{
+padding-top:0px;
+}
+.navbar .nav > li {
+
+padding-top:0px;
+}
+</style>
+
+<style>
+.modal-header {
+	padding:0px 15px;
+}
+
+ p{
+     text-align: center;
+ }
+ 
+ .create {
+ width:100%;
+ height:auto;
+ }
+ .dropdown-menu {
+ 	padding:0px;
+}
+.dropdown-menu a {
+	padding: 1px 20px;
+}
+</style>
+        <style type="text/css">
+           label {
+			font-weight:bold;
+			}
+			.button {
+			float:left;
+			}
+			.setting_block {
+			background-color: #ffffff;
+			border: 1px solid #999;
+			border: 1px solid rgba(0, 0, 0, 0.3);
+			-webkit-border-radius: 6px;
+			-moz-border-radius: 6px;
+			border-radius: 6px;
+			-webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+			-moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+			box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+			-webkit-background-clip: padding-box;
+			-moz-background-clip: padding-box;
+			background-clip: padding-box;
+			padding:10px;
+			margin:20px;
+			}
+        </style>
+    </head>
+    <body>
+		<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+          <a class="brand" href="">Karna<img src="style/img/karna.png"/>Dashboard</a>
+          <div class="nav-collapse collapse pull-right" style="min-height:115px;">
+            <ul class="nav">
+              <li class="" id="home">
+                <a href="index.html">LIVE VIEW</a>
+              </li>
+			  <li class="dropdown" id="edit_content">
+					<a href="#" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
+						MEDIA CONTENT <b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+					    <li><a href="viewtopic.html">VIEW CONTENTS</a></li>
+						<li><a href="topic.html">REMOVE MEDIA CONTENTS</a></li>
+						<li><a href="create_content.html">CREATE MEDIA CONTENTS</a></li>
+						<li><a href="update_topic.html">EDIT TOPIC</a></li>
+						<li><a href="update_subtopic.html">EDIT SUBTOPICS</a></li>
+						<li><a href="update_media.html">EDIT MEDIA</a></li>
+						<li><a href="update_hospital.html">EDIT HOSPITAL INFO.</a></li>
+					</ul>
+              </li>
+			   <!--<li class="" id="content">
+                <a href="topic.html">CONTENT</a>
+              </li>-->
+              <li class="" id="user">
+                <a href="userdata.html">HISTORY </a>
+              </li>
+			  <li class="" id="device">
+                <a href="device.html">USERS</a>
+              </li>
+			  <!--<li class="" id="create_content">
+                <a href="create_content.html">CREATE CONTENT</a>
+              </li>
+			  <li class="dropdown active" id="edit_content">
+					<a href="#" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
+						EDIT CONTENT <b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+						<li class="active"><a href="update_topic.html">EDIT TOPIC</a></li>
+						<li><a href="update_subtopic.html">EDIT SUBTOPIC</a></li>
+						<li><a href="update_media.html">EDIT MEDIA</a></li>
+					</ul>
+              </li>-->
+			 
+              <!-- <li class="dropdown" id="settings">
+					<a href="other_organisation_settings.html" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
+						SETTINGS <b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+						<li><a href="device_authorization.html">Device Authorization</a></li>
+						<li><a href="other_organisation_settings.html">Other Settings..</a></li>
+					</ul>
+              </li>
+			  <li class="dropdown" id="admin_settings" style="display:none;">
+					<a href="other_admin_settings.html" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
+						ADMIN SETTINGS <b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+						<li><a href="organisation_authorization.html">Organisation Authorization</a></li>
+						<li><a href="create_organisation.html">Create Organization</a></li>
+						<li><a href="other_admin_settings.html">Other Settings..</a></li>
+					</ul>
+			  </li> -->
+              <li class="" id="logout_btn">
+                <a id="logout" href="#LOGOUT">LOGOUT</a>
+              </li>
+            </ul>
+          </div>
+		  <div id="dialog-confirm"  title="Logout" style="font-size:14px;"><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>Do you really want to Logout? </div>
+		  
+        </div>
+      </div>
+	<header class="jumbotron subhead" style="height:45px;"></header>
+	
+	<div class="container" style="width:60%;">
+	
+		<!-- CHANGE MEDIA NAME -->
+			<div class="setting_block"> 
+		  <div class="modal-header">
+			
+					<h5 id="myModalLabel"> Update Media - Name and Points</h5>
+					
+			</div>
+					<label>Select a Topic</label>
+					<select id="topic_id1" name="topic_id1"  onChange="check_subtopic();">
+					<option value="Select a topic">Select a topic</option>
+					</select>
+					
+					<script type="text/javascript">
+					function check_subtopic() {
+						if($('#topic_id1').val()=='Select a topic')
+						{
+							$('#subtopic_id1').attr('value', 'Select a subtopic');
+						}
+						else
+						{
+							var topic_id1 = $('#topic_id1').val();
+							// fetch subtopics from topic schema relationship
+								var Topic_schema = StackMob.Model.extend({ schemaName: 'topic' });
+								var topic = new Topic_schema({ });
+									topic.fetchExpanded(1, {
+										success: function(modal) {
+											//After StackMob returns "Bill Watterson", print out the result
+											var array = modal.toJSON();
+											// console.debug(array);
+	
+											 //count total records in image search schema
+												var key;
+												var count = 0;
+												var counter=0;
+												for(key in array) {
+													 if(array.hasOwnProperty(key)) {
+													  count ++;
+													 }
+												 }
+												 //alert(count);
+											 //end count total records in image search schema
+											 $("#subtopic_id1").html("<option value='Select a subtopic'>Select a subtopic</option>");
+											for(var i=0; i<=count; i++)
+											{
+												if(array[i].topic_id == topic_id1)
+												{
+													var subtopic_array = array[i].subtopic;
+										
+													var key2;
+													var count2 = 0;
+													for(key2 in subtopic_array) {
+														 if(subtopic_array.hasOwnProperty(key2)) {
+														  count2 ++;
+														 }
+													 }
+													 //alert(count);
+													 
+													 for(var j=0; j<=count2; j++)
+													{
+														$("#subtopic_id1").append("<option value='"+subtopic_array[j].subtopic_id+"'>"+subtopic_array[j].subtopic_name+"</option>");
+														//var subtopic_value = $('#subtopic_id1').val();
+													}// end j for loop
+													 
+												} //end tpoic id if condition 
+											} //end i for loop
+										} //end fetch expand success
+									}); //end fetch expand
+								// end fetch subtopic from topic schema relationship
+								
+								//fetch media from media schema
+							
+									var topic_id1 = $('#topic_id1').val();
+									var Media_schema = StackMob.Model.extend({ schemaName: 'media' });
+									var media = new Media_schema({ });
+									var q = new StackMob.Collection.Query();
+									q.equals('media_topic', topic_id1);
+									media.query(q, {
+											success: function(modal) {
+												//After StackMob returns "Bill Watterson", print out the result
+												var array = modal.toJSON();
+												 console.debug(array);
+					
+												 //count total records in image search schema
+													var key;
+													var count = 0;
+													var counter=0;
+													for(key in array) {
+														 if(array.hasOwnProperty(key)) {
+														  count ++;
+														 }
+													 }
+													 //alert(count);
+												 //end count total records in image search schema
+												$("#media_id1").html("<option value='Select a media'>Select a media</option>");						 
+												for(var i=0; i<=count; i++)
+												{
+													//alert(array[i].media_name);
+													$("#media_id1").append("<option value='"+array[i].media_id+"'>"+array[i].media_name+"</option>");
+																	
+												} // end i for loop
+											} //end success
+										 }); // end imagesearch schema query
+								//end fetch media from media schema
+								
+						} // end else
+					} //end check subtopic function
+					</script>
+						<br/><br>
+						
+						<label>Select a Subtopic:</label>
+						<select id="subtopic_id1" name="subtopic_id1" onChange="check_media();">
+							<option value="Select a subtopic">Select a subtopic</option>
+						</select>
+						<br/><br/>
+						<script type="text/javascript">
+							function check_media() {
+								//fetch media from media schema
+									var subtopic_id1 = $('#subtopic_id1').val();
+									//alert(subtopic_id1);
+									var Media_schema = StackMob.Model.extend({ schemaName: 'media' });
+									var media = new Media_schema({ });
+									var q = new StackMob.Collection.Query();
+									q.equals('media_subtopic', subtopic_id1);
+									media.query(q, {
+											success: function(modal) {
+												//After StackMob returns "Bill Watterson", print out the result
+												var array = modal.toJSON();
+												 console.debug(array);
+					
+												 //count total records in image search schema
+													var key;
+													var count = 0;
+													var counter=0;
+													for(key in array) {
+														 if(array.hasOwnProperty(key)) {
+														  count ++;
+														 }
+													 }
+													 //alert(count);
+												 //end count total records in image search schema
+													$("#media_id1").html("<option value='Select a media'>Select a media</option>");					 
+												for(var i=0; i<=count; i++)
+												{
+													$("#media_id1").append("<option value='"+array[i].media_id+"'>"+array[i].media_name+"</option>");
+																	
+												} // end i for loop
+											} //end success
+										 }); // end imagesearch schema query
+					 
+								//end fetch media from media schema
+							}
+						</script>
+						
+						<label>Select a media:</label>
+						<select id="media_id1" name="media_id1" onChange="check_media_info();">
+							<option value="Select a media">Select a media</option>
+						</select>
+						
+						 <script type="text/javascript">
+						function check_media_info() {
+							if($('#media_id1').val()=='Select a media')
+							{
+								$('#new_media_name').attr('value', '');
+								$('#new_media_points').attr('value', '');
+								$('#new_media_type').attr('value', 'Select a media type');
+							}
+							else
+							{
+								// fetch media previous info
+									var media_id1 = $('#media_id1').val();
+									 var User = StackMob.Model.extend({ schemaName: 'media' });
+									var user = new User({ });
+									var q = new StackMob.Collection.Query();
+									q.equals('media_id', media_id1);
+									user.query(q, {
+											success:function(modal) {
+												array = modal.toJSON();
+												console.debug(array);
+												var media_name = array[0].media_name;
+												var media_points = array[0].points;
+												var media_type = array[0].media_type;
+												//alert(scan_limit);
+												//alert(media_type);
+												$('#new_media_name').attr('value', media_name);
+												$('#new_media_points').attr('value', media_points);
+												$('#new_media_type').attr('value', media_type);
+											} 
+										}); 
+								// end fetch media previous info
+							}
+						}
+					</script> 
+						<br/><br>
+						
+						<label class="new_media_name">Enter Media Name</label>
+						<input type="text" class="new_media_name" id="new_media_name" name="new_media_name" value=""/>
+						<br/><br/>
+						
+						<label class="new_media_points">Enter Media Points</label>
+						<input type="text" class="new_media_points" id="new_media_points" name="new_media_points" value=""/>
+						
+						
+						<br/><br/>
+						
+					<button class="btn btn-small btn-primary" type="button" name="save_medianame_btn" id="save_medianame_btn" value="Save">Save </button>
+		</div> <!-- END SETTING BLOCK -->
+		<!-- CHANGE SUBTOPIC DESCRIPTION -->
+		
+		
+		
+		<!-- CHANAGE MEDIA IMAGE -->
+		<div class="setting_block">
+			<div class="modal-header">
+				<h5 id="myModalLabel">Update Media File </h5>
+			</div>
+			
+			
+			
+			<label>Select a Topic</label>
+					<select id="topic_id2" name="topic_id2"  onChange="check_subtopic_two();">
+					<option value="Select a topic">Select a topic</option>
+					</select>
+					
+					<script type="text/javascript">
+					function check_subtopic_two() {
+						if($('#topic_id2').val()=='Select a topic')
+						{
+							$('#subtopic_id2').attr('value', 'Select a subtopic');
+						}
+						else
+						{
+							var topic_id2 = $('#topic_id2').val();
+							// fetch subtopics from topic schema relationship
+								var Topic_schema = StackMob.Model.extend({ schemaName: 'topic' });
+								var topic = new Topic_schema({ });
+									topic.fetchExpanded(1, {
+										success: function(modal) {
+											//After StackMob returns "Bill Watterson", print out the result
+											var array = modal.toJSON();
+											// console.debug(array);
+	
+											 //count total records in image search schema
+												var key;
+												var count = 0;
+												var counter=0;
+												for(key in array) {
+													 if(array.hasOwnProperty(key)) {
+													  count ++;
+													 }
+												 }
+												 //alert(count);
+											 //end count total records in image search schema
+											 
+											for(var i=0; i<=count; i++)
+											{
+												if(array[i].topic_id == topic_id2)
+												{
+													var subtopic_array = array[i].subtopic;
+										
+													var key2;
+													var count2 = 0;
+													for(key2 in subtopic_array) {
+														 if(subtopic_array.hasOwnProperty(key2)) {
+														  count2 ++;
+														 }
+													 }
+													 //alert(count);
+													 $("#subtopic_id2").html("<option value='Select a subtopic'>Select a subtopic</option>");
+													 
+													 for(var j=0; j<=count2; j++)
+													{
+														$("#subtopic_id2").append("<option value='"+subtopic_array[j].subtopic_id+"'>"+subtopic_array[j].subtopic_name+"</option>");
+													}// end j for loop
+													 
+												} //end tpoic id if condition 
+											} //end i for loop
+										} //end fetch expand success
+									}); //end fetch expand
+								// end fetch subtopic from topic schema relationship
+								
+								
+								//fetch media from media schema
+									var topic_id2 = $('#topic_id2').val();
+									var Media_schema = StackMob.Model.extend({ schemaName: 'media' });
+									var media = new Media_schema({ });
+									var q = new StackMob.Collection.Query();
+									q.equals('media_topic', topic_id2);
+									media.query(q, {
+											success: function(modal) {
+												//After StackMob returns "Bill Watterson", print out the result
+												var array = modal.toJSON();
+												 console.debug(array);
+					
+												 //count total records in image search schema
+													var key;
+													var count = 0;
+													var counter=0;
+													for(key in array) {
+														 if(array.hasOwnProperty(key)) {
+														  count ++;
+														 }
+													 }
+													 //alert(count);
+												 //end count total records in image search schema
+												$("#media_id2").html("<option value='Select a media'>Select a media</option>");						 
+												for(var i=0; i<=count; i++)
+												{
+													$("#media_id2").append("<option value='"+array[i].media_id+"'>"+array[i].media_name+"</option>");
+																	
+												} // end i for loop
+											} //end success
+										 }); // end imagesearch schema query
+								//end fetch media from media schema
+						} //end else
+					} // end check_subtopic function
+					</script>
+						<br/><br>
+						
+						<label>Select a Subtopic:</label>
+						<select id="subtopic_id2" name="subtopic_id2" onChange="check_subtopic_image();">
+							<option value="Select a subtopic">Select a subtopic</option>
+						</select>
+				<br/><br>
+			
+			<script type="text/javascript">
+							function check_subtopic_image() {
+								//fetch media from media schema
+									var subtopic_id2 = $('#subtopic_id2').val();
+									//alert(subtopic_id2);
+									var Media_schema = StackMob.Model.extend({ schemaName: 'media' });
+									var media = new Media_schema({ });
+									var q = new StackMob.Collection.Query();
+									q.equals('media_subtopic', subtopic_id2);
+									media.query(q, {
+											success: function(modal) {
+												//After StackMob returns "Bill Watterson", print out the result
+												var array = modal.toJSON();
+												 console.debug(array);
+					
+												 //count total records in image search schema
+													var key;
+													var count = 0;
+													var counter=0;
+													for(key in array) {
+														 if(array.hasOwnProperty(key)) {
+														  count ++;
+														 }
+													 }
+													 //alert(count);
+												 //end count total records in image search schema
+													$("#media_id2").html("<option value='Select a media'>Select a media</option>");					 
+												for(var i=0; i<=count; i++)
+												{
+													$("#media_id2").append("<option value='"+array[i].media_id+"'>"+array[i].media_name+"</option>");
+																	
+												} // end i for loop
+											} //end success
+										 }); // end imagesearch schema query
+					 
+								//end fetch media from media schema
+							}
+						</script>
+			
+					
+			
+			<label>Select a Media:</label>
+			<select id="media_id2" name="media_id2" onChange="check_media_info2();">
+				<option value="Select a media">Select a media</option>
+			</select>
+			<br/><br/>
+			
+			<script type="text/javascript">
+				function check_media_info2() {
+					//$('#scan_image_thumb').html("<img src='' style='height:50px; width:100px;' alt='no image' />");
+					//var topic_id2 = $("#topic_id2").val();
+					//var subtopic_id2 = $("#subtopic_id2").val();
+					var media_id2 = $("#media_id2").val();
+					alert(media_id2);
+					if($('#media_id2').val()=='Select a media')
+					{
+						$('#new_media_type2').attr('value', 'Select the media type');
+						$('.youtube_link2').hide();
+						$('.upload_media').hide();
+						$('#save_media_btn2').show();
+					}
+					else
+					{
+						// fetch media previous info
+									var User = StackMob.Model.extend({ schemaName: 'media' });
+									var user = new User({ });
+									var q = new StackMob.Collection.Query();
+									q.equals('media_id', media_id2);
+									user.query(q, {
+											success:function(modal) {
+												array = modal.toJSON();
+												console.debug(array);
+												var media_type = array[0].media_type;
+												//alert(media_type);
+												$('#new_media_type2').attr('value', media_type);
+												
+												if(media_type =='YOUTUBE')
+												{
+													$('.youtube_link2').show();
+													$('.upload_media').hide();
+													$('#save_media_btn2').show();
+													
+												}
+												else
+												{
+													$('.youtube_link2').hide();
+													$('.upload_media').show();
+													$('#save_media_btn2').hide();
+												} 
+											} 
+										}); 
+								// end fetch media previous info
+						
+					}
+				} // end check_topic_image function
+			</script>
+			
+			<label>Media Type:</label>Note : Select the correct type of media otherwise it will not work in application properly.
+			<select id="new_media_type2" name="new_media_type2" onChange="check_media_type2();">
+				<option value="Select the media type">Select the media type</option>
+				<option value="IMAGE">Image</option>
+				<option value="AUDIO">Audio</option>
+				<option value="VIDEO">Video</option>
+				<option value="YOUTUBE">Youtube Link</option>
+			</select>
+			<br/><br/>
+						
+			<script type="text/javascript">
+			function check_media_type2() {
+				if($('#new_media_type2').val()=='Select the media type')
+				{
+					$('.youtube_link2').hide();
+					$('.upload_media').hide();
+					$('#save_media_btn2').show();
+					
+				}
+				else if($('#new_media_type2').val()=='YOUTUBE')
+				{
+					$('.youtube_link2').show();
+					$('.upload_media').hide();
+					$('#save_media_btn2').show();
+					
+				}
+				else
+				{
+					$('.youtube_link2').hide();
+					$('.upload_media').show();
+					$('#save_media_btn2').hide();
+				}
+			}
+		</script>
+	
+			<label class="youtube_link2" style="display:none;">Enter the Youtube link</label>
+			<input type="text" id="youtube_link2" name="youtube_link2" value="" class="youtube_link2" style="display:none;"/>
+		
+			<label class="upload_media" style="display:none;">Choose File to Upload New Media</label>
+			<input type="file" id="files1" name="files1[]" multiple style="margin-bottom:30px; display:none;" class="upload_media" />
+			<br/>
+			
+			<button class="btn btn-small btn-primary" type="button" name="save_media_btn2" id="save_media_btn2" value="Save Media">Save Media </button>
+			<br/><br/>
+		</div>
+	<!-- END CHANAGE MEDIA IMAGE -->
+		
+	</div> <!-- END CONTAINER -->
+
+<script type="text/javascript">
+  //on click of save(subtopic description) button
+$("#save_medianame_btn").click(function() {
+		var topic_id1 = $("#topic_id1").val();
+   		var subtopic_id1 = $("#subtopic_id1").val();
+		var media_id1 = $("#media_id1").val();
+		var new_media_name = $("#new_media_name").val();
+		var new_media_points = $("#new_media_points").val();
+		var new_media_type = $("#new_media_type").val();
+		if(topic_id1 == 'Select a topic')
+		{
+			$("#topic_id1").focus();
+			//$("#error_name").show();
+			alert("Please select the Topic");
+		}
+		else if(media_id1 == 'Select a media')
+		{
+			$("#media_id1").focus();
+			//$("#error_name").show();
+			alert("Please select the media");
+		}
+		else if(new_media_name == '')
+		{
+			$("#new_media_name").focus();
+			//$("#error_name").show();
+			alert("Please enter the new media name");
+		}
+		else if(new_media_points == '')
+		{
+			$("#new_media_name").focus();
+			//$("#error_name").show();
+			alert("Please enter the new media points");
+		}
+		else if(new_media_type == 'Select a media type')
+		{
+			$("#new_media_name").focus();
+			//$("#error_name").show();
+			alert("Please enter the new media type");
+		}
+		else {
+				new_media_points = parseInt(new_media_points);
+				//update stackmob - updatemedia name in schema
+				var Media_schema = StackMob.Model.extend({ schemaName: 'media' });
+				var media_schema = new Media_schema({ media_id: media_id1 });
+				media_schema.save({ media_name: new_media_name, media_points: new_media_points, media_type: new_media_type }, {
+					success: function(model) {
+						console.log(model.toJSON());
+						alert("Updated successfully !!!");
+						
+	window.location.reload();
+
+						//result();
+					},
+					error: function(model, response) {
+						console.debug(response);
+						alert("error");
+					}
+				});
+				// end update stackmob - updatemedia name in schema 		
+		} // end else 
+ 	});
+	//end - on click of save(scan limitmedia name) button
+</script>
+
+<!-- UPLOAD MEDIA IMAGE -->
+
+	<!-- upload media with youtube link -->
+		<script type="text/javascript">
+						$("#save_media_btn2").click(function() {
+							var topic_id2 = $("#topic_id2").val();
+							var media_id2 = $("#media_id2").val();
+							var new_media_type2= $("#new_media_type2").val();
+							var youtube_link2= $("#youtube_link2").val();
+							if((topic_id2 == '') || (topic_id2 == 'Select a topic'))
+							{
+								document.getElementById('files1').value = '';
+								$("#topic_id2").focus();
+								//$("#error_name").show();
+								alert("Please select a topic");
+							}
+							 else if((media_id2 == '') || (media_id2 == 'Select a media'))
+							{
+								document.getElementById('files1').value = '';
+								$("#media_id2").focus();
+								//$("#error_name").show();
+								alert("Please select a Media");
+							} 
+							else if(new_media_type2 == 'Select the media type')
+							{
+								document.getElementById('files1').value = '';
+								$("#new_media_type2").focus();
+								//$("#error_name").show();
+								alert("Please select the media type");
+							}
+							else if((new_media_type2 == 'YOUTUBE') && (youtube_link2 == ''))
+							{
+								document.getElementById('files1').value = '';
+								$("#youtube_link1").focus();
+								//$("#error_name").show();
+								alert("Please enter the Youtube Link.");
+							} 
+							else {
+									//update stackmob - update media type and youtube link in schema
+								var media_url ='';
+								var Media_schema = StackMob.Model.extend({ schemaName: 'media' });
+								var media_schema = new Media_schema({ media_id: media_id2 });
+								media_schema.save({ media_type: new_media_type2, youtube_link: youtube_link2, media_url: media_url }, {
+									success: function(model) {
+										console.log(model.toJSON());
+										alert("Media is successfully saved");
+										//result();
+									},
+									error: function(model, response) {
+										console.debug(response);
+										alert("error");
+									}
+								});
+								// end update stackmob - updatemedia name in schema 	
+							} //end else
+						});
+				</script>
+	<!--end upload media with youtube link -->
+	
+
+	<!-- upload media with media url -->
+		<script type="text/javascript">
+			  //Define your Todo class once on the page.
+			 $(function(){
+			  document.getElementById('files1').addEventListener('change', upload_media_image, false);
+			  
+			  function upload_media_image(evt) {
+					var topic_id2= $("#topic_id2").val();
+					var subtopic_id2= $("#subtopic_id2").val();
+					var media_id2= $("#media_id2").val();
+					var new_media_type2= $("#new_media_type2").val();
+					//var youtube_link2= $("#youtube_link2").val();
+					
+					if((topic_id2 == '') || (topic_id2 == 'Select a topic'))
+					{
+						document.getElementById('files1').value = '';
+						$("#topic_id2").focus();
+						//$("#error_name").show();
+						alert("Please select a topic");
+					}
+					/*else if((subtopic_id2 == '') || (subtopic_id2 == 'Select a subtopic'))
+					{
+						document.getElementById('files1').value = '';
+						$("#subtopic_id2").focus();
+						//$("#error_name").show();
+						alert("Please select a Subtopic");
+					} */
+					
+					else if((media_id2 == '') || (media_id2 == 'Select a media'))
+					{
+						document.getElementById('files1').value = '';
+						$("#media_id2").focus();
+						//$("#error_name").show();
+						alert("Please select a Media");
+					} 
+					else if(new_media_type2 == 'Select the media type')
+					{
+						document.getElementById('files1').value = '';
+						$("#new_media_type2").focus();
+						//$("#error_name").show();
+							alert("Please enter the media type");
+					}
+					else {
+							var youtube_link2 ='' ;
+							//update stackmob - updatemedia type in schema
+							var Media_schema = StackMob.Model.extend({ schemaName: 'media' });
+							var media_schema = new Media_schema({ media_id: media_id2 });
+							media_schema.save({ media_type: new_media_type2, youtube_link: youtube_link2 }, {
+								success: function(model) {
+									console.log(model.toJSON());
+									//alert("Media type is successfully saved");
+									//result();
+								},
+								error: function(model, response) {
+									console.debug(response);
+									alert("error");
+								}
+							});
+							// end update stackmob - updatemedia name in schema 	
+							
+					
+							//upload media
+							var Todo = StackMob.Model.extend({ schemaName: 'media' });
+						 
+							  var todoInstance = new Todo({ media_id: media_id2 }); 
+							  var fieldname = 'media_url'; //name of binary field that you created in your schema
+						  
+							var files = evt.target.files; // FileList object
+							// Loop through the FileList
+							for (var i = 0, f; f = files[i]; i++) {
+							
+							  var reader = new FileReader();
+						 
+							  // Closure to capture the file information
+							  reader.onload = (function(theFile) {
+								return function(e) {
+									
+								  /*
+									e.target.result will return "data:image/jpeg;base64,[base64 encoded data]...".
+									We only want the "[base64 encoded data] portion, so strip out the first part
+								  */
+								  var base64Content = e.target.result.substring(e.target.result.indexOf(',') + 1, e.target.result.length);
+								  var fileName = theFile.name;
+								  var fileType = theFile.type;
+									if((fileType=="image/jpeg")||(fileType=="image/png")|| (fileType=="image/jpg") || (fileType=="video/3gpp") ||(fileType=="video/mp4") || (fileType=="audio/mp3") )
+									{
+								  todoInstance.setBinaryFile(fieldname, fileName, fileType, base64Content);
+								  todoInstance.save();
+								  alert('Media File has been successfully saved');
+								  document.getElementById('files1').value = '';					  				 
+								  }
+								  else
+								  {
+								  alert("Please Choose File in formate[Image : jpeg,png,jpg , Video: 3gp/mp4, Audio : 3gp]");
+								  }
+								 // todoInstance.setBinaryFile(fieldname, fileName, fileType, base64Content);
+								 // todoInstance.save();
+						//	  alert('Image saved');
+						 
+								};
+							  })(f);
+						 
+							  // Read in the file as a data URL
+							  fileContent = reader.readAsDataURL(f);
+								//$('.data').html(fileContent);
+							}
+							//end upload media 
+					} // end else
+			  } // end handleFileSelect function 
+			 
+			 });
+	</script>
+	
+<!-- END UPLOAD MEDIA IMAGE -->
+
+<div id="footer">
+      <div class="container">
+        <p class="muted credit">Design and Developed by <a href="http://www.mobileharvest.in" target="_blank">MOBILE HARVEST</a> </p>
+      </div>
+</div>
+    </body>
+</html>

@@ -1,0 +1,333 @@
+<html>
+	<head>
+    <title>Karna Dashboard</title>
+    <link href="http://www.stackmob.com/platform/favicon.ico" type="image/vnd.microsoft.icon" rel="icon" />
+    <link href="http://www.stackmob.com/platform/favicon.png" type="image/png" rel="icon" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.9.1-bundled-min.js"></script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXZG_t7ZYAOL0SgxiB3HIH2Warac77Hjc&sensor=false"></script>
+ <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+ <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/dark-hive/jquery-ui.css" />
+<!-- <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/redmond/jquery-ui.css" />-->
+  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+  <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
+ <script type="text/javascript" src="style/js/bootstrap.js"></script>
+ 
+<link type="text/css" rel="stylesheet" href="style/css/bootstrap.css"></link>    
+    <style type="text/css" media="screen">
+      /* <![CDATA[ */
+        /* li { padding-top: 10px; } */
+      /* ]]> */
+	 
+    </style>
+		<!--
+		*************************************
+		STACKMOB JS SDK DEPENDENCIES
+		Include these in your pages where you want to use the StackMob js sdk
+		*************************************
+		-->
+		<!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.8.0-bundled-min.js"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=place"></script> -->
+		<!--
+		*************************************
+		INITIALIZE THE JS SDK BELOW
+
+		Copy/Paste the init method from:
+		https://dashboard.stackmob.com/sdks/js/config
+		*************************************
+		-->
+	  <script type="text/javascript">
+      /* <![CDATA[ */
+      // Initialize StackMob object
+      // Copy your init data from here: https://dashboard.stackmob.com/sdks/js/config
+      // Your other app information is here: https://dashboard.stackmob.com/settings
+      StackMob.init({
+        publicKey: '5a132e22-54b2-4d09-9260-fc090245ed31',
+		//secure: StackMob.NEVER ,
+		//userSchema: 'organisation',
+	   // loginField: 'organisation_id',
+	   // passwordField: 'password',
+        apiVersion : 0
+      });
+      /* ]]> */
+</script>
+		<!--
+		*************************************
+		StackMob JS SDK code that creates and saves a TestObject
+		*************************************
+		-->
+		
+		<script type="text/javascript">
+      /* <![CDATA[ */
+      $(document).ready(function() {
+	  			  	var url = location.href; // fetch the current url
+					//alert(url);
+					
+					//in case fb comment id variable is added in the url
+					if (url.indexOf('&') != -1)
+					{
+						var url_arr = url.split('&'); //convert url string in array	
+						var url_without_commentid= url_arr[0]; //fetch the value of id from url
+						//alert(id);
+						window.open(url_without_commentid , '_top');
+					}
+					
+					//fetch id from url
+					var url_arr = url.split('='); //convert url string in array	
+					var id= url_arr[1]; //fetch the value of id from url
+					
+			// organisation app icon image
+			/* var User = StackMob.Model.extend({ schemaName: 'organisation' });
+			var user = new StackMob.User({ });
+			var q = new StackMob.Collection.Query();
+			q.equals('organisation_id', localStorage.getItem("stackmob.oauth2.user"));
+			user.query(q, {
+					success:function(modal) {
+						array = modal.toJSON();
+						console.debug(array);
+						var val = array[0].organisation_image_header;
+						$('#org_icon').attr('value', val);
+						//alert(val);
+					} 
+				}); */
+	  	// end organisation icon
+		
+	  var markersArray = [];
+	  			//fetch the current date and time and convert it into timestamp
+	  			//var currentTime = new Date();
+				//var current_date_time = Math.ceil(currentTime.getTime()/1000);
+				
+				// fetch the data from database
+				
+				// fetch the info from image search schema
+			 var Userdata_schema = StackMob.Model.extend({ schemaName: 'userdata' });
+			var userdata = new Userdata_schema({  });
+			var q = new StackMob.Collection.Query();
+			q.equals('userdata_id', id);
+			userdata.query(q, {
+					success:function(modal) {
+						array = modal.toJSON();
+						console.debug(array);
+						var val = array[0].dev_img;
+						//$('#org_icon').attr('value', val);
+						//alert(val);
+						var i=0;
+					
+							 //$('#last_mod_date').html(array[i].lastmoddate);
+							 //$('.current_date_time').html(current_date_time);
+							 
+							 var val = array[i].lastmoddate;
+							 $('#last_mod_date').attr('value', val);
+							 //alert(val);
+							 
+							 var val = array[i].mobile_number;
+							 $('#mobile_no').attr('value', val);
+							 
+							  var val = array[i].user_points;
+							 $('#points').attr('value', val); 
+							 
+							 var val = array[i].user_latitude+","+array[i].user_longitude;
+							$('#latlng').attr('value', val);
+							
+							initialize();
+							//alert("The map will show the information and location for the user");							
+					} //end success
+				  }); //  end imagesearcj schema query
+					 
+		// If your schema name is different than `place`, then you need to replace `place` with your schema
+		//setInterval(result,1000);
+	  
+	  		var geocoder;
+			  var map;
+			  var marker;
+		
+			 function initialize() {
+			  
+			geocoder = new google.maps.Geocoder();
+			show_marker();
+			
+			function show_marker() { // start show_marker function
+			clearOverlays();
+			
+			var input = document.getElementById("latlng").getAttribute("value"); 
+		   //alert(input);
+			var latlngStr = input.split(",",2);
+			var lat = parseFloat(latlngStr[0]);
+			var lng = parseFloat(latlngStr[1]);
+			var latlng = new google.maps.LatLng(lat, lng);
+			geocoder.geocode({'latLng': latlng}, function(results, status) {
+			  //var address = results[4].formatted_address;
+			  var address = results[0].formatted_address;
+			  //var address = input;
+			$("#test").html(address);
+		//	console.log(results[4].formatted_address);
+		geocoder.geocode( { 'address': address}, function(results, status) {
+			  if (status == google.maps.GeocoderStatus.OK) {
+				map.setCenter(results[0].geometry.location);
+				var marker = new google.maps.Marker({
+					map: map,
+					position: results[0].geometry.location,
+				});
+				
+				 markersArray.push(marker);
+				 
+					 /* var infowindow = new google.maps.InfoWindow({
+                        content: name
+                    }); */ 
+					
+					var mobile_no = document.getElementById("mobile_no").getAttribute("value");
+					var points = document.getElementById("points").getAttribute("value");
+					var lastmod_date = document.getElementById("last_mod_date").getAttribute("value");
+					//alert(lastmod_date);
+					//alert(org_icon);
+					var infowindow = new google.maps.InfoWindow();
+					
+					//infowindow.setContent("<img src='"+org_icon+"' style='width:50px; height:60px;' /> <br/><br/> Image-id  : " +image_id + "<br/> Mobile_no : "+mobile_no + "<br/> Address : "+address + "<br/> Feedback : "+feedback+"<br/>Device model  : " +model);
+					
+						var info = "<b>Mobile_no : </b>"+mobile_no + "<br/><b>Points  : </b>" +points+"<br/> <b>Address :</b> "+address;
+						
+					infowindow.setContent(info);
+				
+                    infowindow.open(map, marker);
+                   	
+					google.maps.event.addListener(marker, 'click', function(event) {
+                        infowindow.open(map, marker);
+                    });		 
+				
+			  } else {
+				alert("Geocode was not successful for the following reason: " + status);
+			  }
+			});
+		   });
+		   
+			 }  //end show_marker function
+			 
+			 var mapOptions = {
+			  zoom: 10,
+			  center: new google.maps.LatLng(37.4419, -22.1419),
+			  mapTypeId: google.maps.MapTypeId.TERRAIN,
+			  mapTypeControl: false,
+			  streetViewControl: false
+		 
+			}
+			map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+		  } 
+  	
+				function clearOverlays() {
+					  if (markersArray) {
+						for (i in markersArray) {
+						  markersArray[i].setMap(null);
+						}
+					  }
+				 	}
+				});
+
+     
+      /* ]]> */
+		</script>
+				<style>
+				.container {
+					width:90%;
+				}
+				 #footer {
+	 width: 100%;
+position: fixed;
+bottom: 0px;
+background-color: #000;
+height: auto;
+}
+.container .credit {
+float: right;
+margin: 10px 0;
+}
+.muted {
+color: #999999;
+}
+		.ui-dialog .ui-dialog-title {
+
+font-weight: bold;
+font-size: 18px;
+}
+.ui-dialog .ui-dialog-buttonpane {
+font-size: 14px;
+}
+		.content
+		{
+		display:none;
+		}
+		.ui-dialog-titlebar-close {
+  visibility: hidden;
+}
+.active
+{
+padding-top:0px;
+}
+.navbar .nav > li {
+
+padding-top:0px;
+}
+
+		</style>
+
+		<head>
+  <body>
+  <script>
+  (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=163796343784200";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script> 
+
+  <div id="fb-root"></div>
+  
+ <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+          <a class="brand" href="">Karna<img src="style/img/karna.png"/>Dashboard</a>	  
+        </div>
+      </div>
+<header class="jumbotron subhead" style="height:45px;"></header>	
+<div class="container">
+	
+  	<div id="mobile_no" value=""></div>
+   	<div id="points" value=""></div> 
+	<div id="address" value=""></div>
+	<div id="last_mod_date" value=""></div> 
+   	<div id="latlng" value=""></div>
+ <!-- <div class="current_date_time"></div> -->
+   
+<div id="map_canvas"  style="width: 100%; height: 60%; border: 1px solid black;"></div> 
+<div id="like_wrapper"> </div>
+<div id="comment_wrapper"></div>
+	
+<!--<script type="text/javascript">
+	$(document).ready(function() {
+			var url = location.href; // fetch the current url
+			//alert(url);
+			var url_arr = url.split('='); //convert url string in array	
+			var id= url_arr[1]; //fetch the value of id from url
+			//alert(id);
+			
+			$('#like_wrapper').html('<div class="fb-like" data-href="'+url+'" data-send="false" data-width="450" data-font="arial" data-show-faces="false" style="overflow:hidden; height:25px; width:400px"></div>');
+	
+			$('#comment_wrapper').html('<div class="fb-comments" data-href="'+url+'" data-width="470" data-num-posts="10"></div>');
+			
+			/* $('#like_wrapper').html('<div class="fb-like" data-href="http://dev.my_first_app.divyanshimixorgcom.stackmobapp.com/naitra/dashboard/view.html?id='+id+'" data-send="false" data-width="450" data-font="arial" data-show-faces="false" style="overflow:hidden; height:25px; width:400px"></div>');
+	
+			$('#comment_wrapper').html('<div class="fb-comments" data-href="http://dev.my_first_app.divyanshimixorgcom.stackmobapp.com/naitra/dashboard/view.html?id='+id+'" data-width="470" data-num-posts="10"></div>'); */
+			
+	});
+</script>-->
+</div>
+
+<footer class="jumbotron subhead" style="height:45px;"></footer>	
+<div id="footer">
+      <div class="container">
+        <p class="muted credit">Design and Developed by <a href="http://mixorg.com" target="_blank" >MIXORG</a> </p>
+      </div>
+    </div>
+</body>
+</html>
