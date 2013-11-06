@@ -2650,13 +2650,13 @@ table .span24 {
 .dropdown-menu {
   position: absolute;
   top: 100%;
-  left: 50;
+  left: 100;
   z-index: 1000;
   display: none;
   float: left;
   min-width: 160px;
   padding: 5px 0;
-  margin: 2px -50 0;
+  margin: 2px -100 0;
   list-style: none;
   background-color: #ffffff;
   border: 1px solid #ccc;

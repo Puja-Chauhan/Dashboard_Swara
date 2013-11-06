@@ -149,8 +149,8 @@ $(document).ready(function() {
 								 //alert(count);
 							 //end count total records in image search schema
 							 
-							 $("#subtopic_id").html("SubTopic id - "+url_subtopic_id);
-							 $("#ui").html("<tr><th>S.No.</th> <th>Media Likes</th> <th>Media Names</th> <th>Media Points</th><th>Media Logo</th> <th>Last Modified Time</th></tr>");
+							 //$("#subtopic_id").html("SubTopic id - "+url_subtopic_id);
+							 $("#ui").html("<tr><th>S.No.</th> <th>Media Likes</th> <th>Media Names</th> <th>Media Points</th><th>Media</th> <th>Last Modified Time</th></tr>");
 							 
 							 //var max_page_records = 5;
 							 //var first_record_no = 1;
@@ -299,28 +299,28 @@ background-clip: padding-box;
               <li class="" id="home">
                 <a href="index.html">LIVE VIEW</a>
               </li>
-			  <!--<li class="active" id="content">
-                <a href="topic.html">CONTENT</a>
-              </li>-->
+			  <li class="" id="user">
+                <a href="userdata.html">HISTORY </a>
+              </li>
+			   
 			  <li class="dropdown" id="edit_content">
 					<a href="#" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
-						MEDIA CONTENT <b class="caret"></b>
+						MEDIA<b class="caret"></b>
 					</a>
 					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-					    <li><a href="viewtopic.html">VIEW CONTENTS</a></li>
-						<li><a href="topic.html">REMOVE MEDIA CONTENTS</a></li>
-						<li><a href="create_content.html">CREATE MEDIA CONTENTS</a></li>
-						<li><a href="update_topic.html">EDIT TOPIC</a></li>
+					    <li><a href="viewtopic.html">VIEW CONTENT</a></li>
+						
+						<li><a href="create_content.html">CREATE MEDIA CONTENT</a></li>
+						<li><a href="update_topic.html">EDIT TOPICS</a></li>
 						<li><a href="update_subtopic.html">EDIT SUBTOPICS</a></li>
 						<li><a href="update_media.html">EDIT MEDIA</a></li>
-						<li><a href="update_hospital.html">EDIT HOSPITAL INFO.</a></li>
+						<li><a href="update_hospital.html">EDIT LOCATION TAB</a></li>
+						<li><a href="topic.html">REMOVE MEDIA CONTENT</a></li>
 					</ul>
               </li>
-              <li class="" id="user">
-                <a href="userdata.html">HISTORY</a>
-              </li>
+              
 			  <li class="" id="device">
-                <a href="device.html">USERS</a>
+                <a href="device.html">DEVICES</a>
               </li>
 			   <!--<li class="" id="create_content">
                 <a href="create_content.html">CREATE CONTENT</a>

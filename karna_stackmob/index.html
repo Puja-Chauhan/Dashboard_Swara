@@ -172,17 +172,22 @@ $( "#dialog-confirm" ).dialog({
 							
 							 var Usermediaplayeddata_schema = StackMob.Model.extend({ schemaName: 'user_media_played' });
 			                 var usermediaplayeddata = new Usermediaplayeddata_schema({  });
-					         var q = new StackMob.Collection.Query();
-							 q.equals('user_id',array[0].mobile_number);
-							 usermediaplayeddata.query(q,{
+					         var s = new StackMob.Collection.Query();
+							 s.orderDesc('lastmoddate');
+							 s.equals('user_id',array[0].mobile_number);
+							 usermediaplayeddata.query(s,{
 							 
-							 success:function(model){
+						     success:function(model)
+					    {
 							 //alert("hello");
+							 var i =0;
 							 var array1=model.toJSON();
 							 var userid=array1[0].user_id;
 							 var mediaid=array1[0].media_id;
+							 var deviceid=array1[0].device_id;
 							 //alert(userid);
 							 //alert(mediaid);
+							 //alert(deviceid);
 							 
 							 var Usermediadata_schema = StackMob.Model.extend({ schemaName: 'media' });
 			                 var usermediadata = new Usermediadata_schema({  });
@@ -192,9 +197,34 @@ $( "#dialog-confirm" ).dialog({
 							 success:function(model){
 							 var array2=model.toJSON();
 							 mediaurl=array2[0].media_url;
+							 mediatopic=array2[0].media_topic;
+							 mediasubtopic=array2[0].media_subtopic;
 							// alert(mediaurl);
-							// alert(points);
+							 //alert(mediasubtopic);
 							 $('#media_urll').attr('value', mediaurl);
+							 
+							 var subtopic_schema = StackMob.Model.extend({ schemaName: 'subtopic' });
+			                 var subtopicdata = new subtopic_schema({  });
+					         var t = new StackMob.Collection.Query();
+							 t.equals('subtopic_id',mediasubtopic);
+							 subtopicdata.query(t,{
+							 success:function(model){
+							 var array3=model.toJSON();
+							 subtopicurl=array3[0].subtopic_url;
+							 //alert(subtopicurl);
+							 $('#subtopic_url').attr('value',subtopicurl);
+							 
+							 var topic_schema = StackMob.Model.extend({ schemaName: 'topic' });
+			                 var topicdata = new topic_schema({  });
+					         var u = new StackMob.Collection.Query();
+							 u.equals('topic_id',mediatopic);
+							 topicdata.query(u,{
+							 success:function(model){
+							 var array4=model.toJSON();
+							 topicurl=array4[0].topic_url;
+							 $('#topic_url').attr('value',topicurl);
+					
+							 
 							 
 							 
 							 
@@ -220,6 +250,7 @@ $( "#dialog-confirm" ).dialog({
 							 //alert(mediaurl);
 							 
 							 var val = array[i].lastmoddate;
+							 
 							 $('#last_mod_date').attr('value', val);
 							 
 							 var val1 = array[i].mobile_number;
@@ -240,8 +271,16 @@ $( "#dialog-confirm" ).dialog({
 							exit();
 							} //  end if condition
 					//end for loop
-					 }
-							});
+					
+					}
+					
+					});
+					
+							 }
+					});
+					
+					 }//r success end
+							});//r end
 							 
 							 
 							 
@@ -298,8 +337,10 @@ $( "#dialog-confirm" ).dialog({
 					var points = document.getElementById("points").getAttribute("value");
 					var lastmod_date = document.getElementById("last_mod_date").getAttribute("value");
 					var media_url=document.getElementById("media_urll").getAttribute("value");
-					//alert(points);
-				//	alert(media_url);
+					var subtopic_url=document.getElementById("subtopic_url").getAttribute("value");
+					var topic_url=document.getElementById("topic_url").getAttribute("value");
+					//alert(lastmod_date);
+					var a = parseInt(lastmod_date);
 					
 					callingtomap();
 					
@@ -307,14 +348,13 @@ $( "#dialog-confirm" ).dialog({
 					{
 					//alert("calling to map");
 					var infowindow = new google.maps.InfoWindow();
-					
 					//infowindow.setContent("<img src='"+org_icon+"' style='width:50px; height:60px;' /> <br/><br/> Image-id  : " +image_id + "<br/> Mobile_no : "+mobile_no + "<br/> Address : "+address + "<br/> Feedback : "+feedback+"<br/>Device model  : " +model);
 						
 					//infowindow.setContent("<b>Time  :</b> " +new Date(lastmod_date/1000) + "<br/><b>Mobile_no : </b>"+mobile_no + "<br/><b>Points : </b>"+points + "<br/> <b>Address :</b> "+address);
-					
-					infowindow.setContent("<b>Mobile_no : </b>"+mobile_no + "<br/><b>Points : </b>"+points + "<br/> <b>Address :</b> "+address+"<br/><b>Time :</b>"+new Date + "<br/><a href='"+media_url+"'   target='_blank'>Open Media Accessed</a><br/>");
+					infowindow.setContent("<b>Mobile_no : </b>"+mobile_no + "<br/><b>Topic Image :</b><a href><img  src='"+topic_url+"' style='width: 40px; height:40px;' border='2'/></a><br/><b>Subtopic Image :</b><a href><img  src='"+subtopic_url+"' style='width: 40px; height:40px;' border='2'/></a><br/><b>Media :</b><a href='"+media_url+"'   target='_blank'>Open Media Accessed</a><br/><b>Points : </b>"+points + "<br/> <b>Address :</b> "+address+"<br/><b>Time :</b>"+ new Date(a) + "<br/>");
+					//infowindow.setContent("<b>Mobile_no : </b>"+mobile_no + "<br/><b>Points : </b>"+points + "<br/> <b>Address :</b> "+address+"<br/><b>Time :</b>"+new Date + "<br/><a href='"+media_url+"'   target='_blank'>Open Media Accessed</a><br/>");
 					//infowindow.setContent("<b>Mobile_no : </b>"+mobile_no + "<br/><b>Points : </b>"+points + "<br/> <b>Address :</b> "+address+"<br/><b>Time :</b>"+new Date);
-
+   				   // infowindow.setContent("<b>Mobile_no : </b>"+mobile_no + "<br/><b>Points : </b>"+points + "<br/> <b>Address :</b> "+address+"<br/><b>Time :</b>"+ new Date(a) + "<br/><b>Subtopic Image :</b><a href><img  src='"+subtopic_url+"' style='width: 40px; height:40px;' border='2'/></a><br/><br/><b>Topic Image :</b><a href><img  src='"+topic_url+"' style='width: 40px; height:40px;' border='2'/></a><br/><b>Media :</b><a href='"+media_url+"'   target='_blank'>Open Media Accessed</a><br/>");
                     infowindow.open(map, marker);
                    	
 					google.maps.event.addListener(marker, 'click', function(event) {
@@ -496,30 +536,28 @@ padding-top:0px;
               <li class="active" id="home">
                 <a href="index.html">LIVE VIEW</a>
               </li>
-              <!--<li class="" id="content">
-                <a href="topic.html">CONTENT </a>
-              </li>-->
-			  
+              <li class="" id="user">
+                <a href="userdata.html">HISTORY </a>
+              </li>
+			   
 			  <li class="dropdown" id="edit_content">
 					<a href="#" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
-						MEDIA CONTENT <b class="caret"></b>
+						MEDIA<b class="caret"></b>
 					</a>
 					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-					    <li><a href="viewtopic.html">VIEW CONTENTS</a></li>
-						<li><a href="topic.html">REMOVE MEDIA CONTENTS</a></li>
-						<li><a href="create_content.html">CREATE MEDIA CONTENTS</a></li>
-						<li><a href="update_topic.html">EDIT TOPIC</a></li>
+					    <li><a href="viewtopic.html">VIEW CONTENT</a></li>
+						
+						<li><a href="create_content.html">CREATE MEDIA CONTENT</a></li>
+						<li><a href="update_topic.html">EDIT TOPICS</a></li>
 						<li><a href="update_subtopic.html">EDIT SUBTOPICS</a></li>
 						<li><a href="update_media.html">EDIT MEDIA</a></li>
-						<li><a href="update_hospital.html">EDIT HOSPITAL INFO.</a></li>
+						<li><a href="update_hospital.html">EDIT LOCATION TAB</a></li>
+						<li><a href="topic.html">REMOVE MEDIA CONTENT</a></li>
 					</ul>
               </li>
-			  
-			  <li class="" id="user">
-                <a href="userdata.html">HISTORY</a>
-              </li>
+              
 			  <li class="" id="device">
-                <a href="device.html">USERS</a>
+                <a href="device.html">DEVICES</a>
               </li>
 			 <!-- <li class="" id="create_content">
                 <a href="create_content.html">CREATE CONTENT</a>
@@ -570,6 +608,8 @@ padding-top:0px;
 	<div id="last_mod_date" value=""></div> 
    	<div id="latlng" value=""></div>
 	<div id="media_urll" value=""></div> 
+	<div id="subtopic_url" value=""></div> 
+	<div id="topic_url" value=""></div> 
  <!-- <div class="current_date_time"></div> -->
    
 <div id="map_canvas"  style="width: 80%; height: 85%; border: 1px solid black; margin-left:10%"></div>  

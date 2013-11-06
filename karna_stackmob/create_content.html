@@ -226,29 +226,28 @@ padding-top:0px;
               <li class="" id="home">
                 <a href="index.html">LIVE VIEW</a>
               </li>
-			   <!--<li id="content">
-                <a ref="topic.html">CONTENT</a>
-              </li>-->
-			  
-			  <li class="dropdown" id="edit_content">
-					<a href="#" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
-						MEDIA CONTENT <b class="caret"></b>
-					</a>
-					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-					    <li><a href="viewtopic.html">VIEW CONTENTS</a></li>
-						<li><a href="topic.html">REMOVE MEDIA CONTENTS</a></li>
-						<li><a href="create_content.html">CREATE MEDIA CONTENTS</a></li>
-						<li><a href="update_topic.html">EDIT TOPIC</a></li>
-						<li><a href="update_subtopic.html">EDIT SUBTOPICS</a></li>
-						<li><a href="update_media.html">EDIT MEDIA</a></li>
-						<li><a href="update_hospital.html">EDIT HOSPITAL INFO.</a></li>
-					</ul>
-              </li>
-              <li class="" id="user">
+			  <li class="" id="user">
                 <a href="userdata.html">HISTORY </a>
               </li>
+			   
+			  <li class="dropdown" id="edit_content">
+					<a href="#" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
+						MEDIA<b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+					    <li><a href="viewtopic.html">VIEW CONTENT</a></li>
+						
+						<li><a href="create_content.html">CREATE MEDIA CONTENT</a></li>
+						<li><a href="update_topic.html">EDIT TOPICS</a></li>
+						<li><a href="update_subtopic.html">EDIT SUBTOPICS</a></li>
+						<li><a href="update_media.html">EDIT MEDIA</a></li>
+						<li><a href="update_hospital.html">EDIT LOCATION TAB</a></li>
+						<li><a href="topic.html">REMOVE MEDIA CONTENT</a></li>
+					</ul>
+              </li>
+              
 			  <li class="" id="device">
-                <a href="device.html">USERS</a>
+                <a href="device.html">DEVICES</a>
               </li>
 			  <!--<li class="active" id="create_content">
                 <a href="create_content.html">CREATE CONTENT</a>
@@ -493,7 +492,7 @@ padding-top:0px;
 	<input type="text" id="hospital_address" name="hospital_address" value="" required/>
 	</br><br>
 	<label> Phone Number</label>
-	<input type="tel" id="hospital_number" name="hospital_number" max="10" required/>
+	<input type="tel" id="hospital_number" name="hospital_number" maxlength="10" required/>
 	</br><br>
 		
 	<label> Latitude</label>
