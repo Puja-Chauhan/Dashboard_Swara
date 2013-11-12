@@ -133,7 +133,7 @@ $(document).ready(function() {
 								 //alert(count);
 							 //end count total records in image search schema
 							 
-							 $("#ui").html("<tr><th>S.No.</th> <th>Mobile No.</th><th>Points</th><th>Location of Last Access</th><th>Last Media Access</th> <th>Last Access Time</th> <th>View Location</th></tr>");
+							 $("#ui").html("<tr><th>S.No.</th> <th>Mobile No.</th><th>Location of Last Access</th> <th>Last Access Time</th> <th>View Location</th></tr>");
 							 
 							 var max_page_records = 5;
 							 var first_record_no = 1;
@@ -153,7 +153,7 @@ $(document).ready(function() {
 										var val = array[0].lastmoddate;
 							 			$('#last_mod_date').attr('value', val);
 										
-											$("#ui").append("<tr><td>"+(counter+1)+"</td><td>"+array[i].mobile_number+"</td><td>"+array[i].user_points+"</td><td>"+array[i].user_latitude +","+ array[i].user_longitude+"</td><td><a href='mediaaccess.html?id="+array[i].mobile_number+"'>View</a></td><td>"+ new Date(array[i].lastmoddate)+"</td><td><a href='"+url+"?id="+array[i].userdata_id+"' target='_blank' >View</a></td></tr>");
+											$("#ui").append("<tr><td>"+(counter+1)+"</td><td>"+array[i].mobile_number+"</td><td>"+array[i].user_latitude +","+ array[i].user_longitude+"</td><td>"+ new Date(array[i].lastmoddate)+"</td><td><a href='"+url+"?id="+array[i].userdata_id+"' target='_blank' >View</a></td></tr>");
 									} //end counter if condition
 									counter++; 
 								} //end organisation name if condition
@@ -217,7 +217,7 @@ $(document).ready(function() {
 								 }
 								 //alert(count);
 								 
-								 $("#ui").html("<tr><th>S.No.</th> <th>Mobile No.</th><th>Points</th><th>Location of Last Access</th><th>Last Media Access</th> <th>Last Access Time</th> <th>View Location</th></tr>");
+								 $("#ui").html("<tr><th>S.No.</th> <th>Mobile No.</th><th>Location of Last Access</th> <th>Last Access Time</th> <th>View Location</th></tr>");
 								 
 							 url='alluserview.html';
 								 
@@ -238,8 +238,7 @@ $(document).ready(function() {
 											var val = array[0].lastmoddate;
 											$('#last_mod_date').attr('value', val);
 											
-											
-													$("#ui").append("<tr><td>"+(counter+1)+"</td><td>"+array[i].mobile_number+"</td><td>"+array[i].user_points+"</td><td>"+array[i].user_latitude +","+ array[i].user_longitude+"</td><td><a href='mediaaccess.html?id="+array[i].mobile_number+"'>View</a></td><td>"+ new Date(array[i].lastmoddate)+"</td><td><a href='"+url+"?id="+array[i].userdata_id+"' target='_blank' >View</a></td></tr>");
+													$("#ui").append("<tr><td>"+(counter+1)+"</td><td>"+array[i].mobile_number+"</td><td>"+array[i].user_latitude +","+ array[i].user_longitude+"</td><td>"+ new Date(array[i].lastmoddate)+"</td><td><a href='"+url+"?id="+array[i].userdata_id+"' target='_blank' >View</a></td></tr>");
 												counter++;
 										} //end counter if condition
 									} //end j value if condition
@@ -347,7 +346,7 @@ background-clip: padding-box;
               <li class="" id="home">
                 <a href="index.html">LIVE VIEW</a>
               </li>
-			  <li class="active" id="user">
+			  <li class="" id="user">
                 <a href="userdata.html">HISTORY </a>
               </li>
 			   
@@ -366,10 +365,9 @@ background-clip: padding-box;
 						<li><a href="topic.html">REMOVE MEDIA CONTENT</a></li>
 					</ul>
               </li>
-			  <li class="" id="device">
+			   <li class="" id="device">
                 <a href="userinfo.html">USERS</a>
               </li>
-			  
               
 			  <li class="" id="device">
                 <a href="device.html">DEVICES</a>
@@ -422,7 +420,7 @@ background-clip: padding-box;
 	<div class="dashboard"  style='' >
   <div class="modal-header">
 	
-            <h5 id="myModalLabel">Last Access History</h5>
+            <h5 id="myModalLabel">Access History</h5>
     </div>
     <div class="modal-body" style="height:70%;">
 	<table class="data  table-bordered table table-striped" id="ui" style="font-size:12px; margin-bottom:0px;">

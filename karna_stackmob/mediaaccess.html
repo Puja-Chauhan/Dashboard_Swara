@@ -15,7 +15,7 @@
 		
 		
 		
-        <title>K Dashboard - Subtopics</title>
+        <title>Karna Dashboard - Media Access</title>
 		<script type="text/javascript">
       /* <![CDATA[ */
       // Initialize StackMob object
@@ -125,176 +125,82 @@ $(document).ready(function() {
 					
 					//fetch id from url
 					var url_arr = url.split('='); //convert url string in array	
-					var url_topic_id= url_arr[1]; //fetch the value of id from url
+					var url_mobile_id= url_arr[1]; //fetch the value of id from url
+					$("#topic_id").html("Mobile No. : " +url_mobile_id);
+					//alert(url_mobile_id);
 					//alert(url_topic_id);
 	
-				var Topic_schema = StackMob.Model.extend({ schemaName: 'topic' });
-			var topic = new Topic_schema({ });
-					 topic.fetchExpanded(1, {
+				    var Userdata_schema = StackMob.Model.extend({ schemaName: 'userdata' });
+			        var userdata = new Userdata_schema({  });
+					var q = new StackMob.Collection.Query();
+					q.orderDesc('lastmoddate');
+					userdata.query(q, {
 						success: function(modal) {
+						
 							//After StackMob returns "Bill Watterson", print out the result
 						   	var array = modal.toJSON();
-							 console.debug(array);
-							 //alert(array[i].topic_id);
-
-							 //count total records in image search schema
-								var key;
-								var count = 0;
-								var counter=0;
-								for(key in array) {
-									 if(array.hasOwnProperty(key)) {
-									  count ++;
-									 }
-								 }
-								 //alert(count);
-							 //end count total records in image search schema
-							 //$("#topic_id").html("Topic id - "+url_topic_id);
-							 $("#ui").html("<tr><th>S.No.</th>   <th>Sub-topic Description</th> <th>Sub-topic Image</th> <th>Sub-topic Media</th><th>Last Modified Time</th> <th>Delete</th></tr>");
+							var key;
+							var count = 0;
+							//alert(array[0].mobile_number);
+							
+							 var Usermediaplayeddata_schema = StackMob.Model.extend({ schemaName: 'user_media_played' });
+			                 var usermediaplayeddata = new Usermediaplayeddata_schema({  });
+					         var s = new StackMob.Collection.Query();
+							 s.orderDesc('lastmoddate');
+							 s.equals('user_id',url_mobile_id);
+							 usermediaplayeddata.query(s,{
 							 
-							 //var max_page_records = 5;
-							 //var first_record_no = 1;
-														 
-							for(var i=0; i<=count; i++)
-							{
-							        //alert(url_arr[i+1]);
-									if(array[i].topic_id == url_topic_id)
-									{
-									
-										var subtopic_array = array[i].subtopic;
-										//var sarray=array[i].subtopic.media;
-										//alert(sarray[0].media_like);
-								
-									
-										var key2;
-										var count2 = 0;
-										for(key2 in subtopic_array) {
-											 if(subtopic_array.hasOwnProperty(key2)) {
-											  count2 ++;
-											 }
-										 }
-										 //alert(count);
-										 
-										 for(var j=0; j<=count2; j++)
-										 {
-											 $("#ui").append("<tr><td>"+(counter+1)+"</td><td>"+subtopic_array[j].subtopic_name+"</td><td><img src='"+subtopic_array[j].subtopic_url+"' style='width: 80px; height:80px;'/></td><td><a href='subtopicmedia.html?id="+subtopic_array[j].subtopic_id+"'>Media</a></td><td>"+ new Date(subtopic_array[j].lastmoddate)+"</td><td><input type='button' class='subtopic_delete' id='"+subtopic_array[j].subtopic_id+"' subtopic_id='"+subtopic_array[j].subtopic_id+"' value='Delete' style='cursor:pointer;' /></td></tr>");
-											 //end counter if condition
-											 //var sarray=array[j].subtopic_media;
-											 //alert(sarray[j].media_like);
-											 
-											 
-											 $(".subtopic_delete").click(function(e){
-												var subtopic_id = $(this).attr('subtopic_id');	
-												//alert(subtopic_id);
-												//set the current click media id in a div value
-												$("#current_subtopic_id").attr("value", subtopic_id); 
-												$( "#dialog-confirm1" ).dialog( "open" );
-											});
-											
-											  	$( "#dialog-confirm1" ).dialog({
-												 	
-													 autoOpen: false,
-													  resizable: true,
-													  height:160,
-													  width:500,
-													  modal: true,
-													  buttons: {
-														"YES": function() {
-															
-															//fetch the current click media id from div value
-															var subtopic_id = $("#current_subtopic_id").attr('value');
-															//alert(subtopic_id);
-															
-															//fetch the media records from media schema for the subtopic
-															var Media_schema = StackMob.Model.extend({ schemaName: 'media' });
-															var media_schema = new Media_schema({ });
-															var q = new StackMob.Collection.Query();
-															q.equals('media_subtopic', subtopic_id);
-															media_schema.query(q, {
-																success:function(modal) {
-																	array = modal.toJSON();
-																	alert("Subtopic Deleted");
-																	console.debug(array);
-																	
-																	//find no. of results
-																	var key;
-																	var count = 0;
-																	for(key in array) {
-																		 if(array.hasOwnProperty(key)) {
-																		  count ++;
-																		 }
-																	 }
-																	 //alert(count);
-																	for(var i=0; i<=count; i++)
-																	{	
-																		//delete the media records for the subtopic from media schema
-																		var Todo_media = StackMob.Model.extend({ schemaName: 'media' });
-																		var todo_media  = new Todo_media ({ media_id: array[i].media_id });
-																		todo_media.destroy({
-																			success:function(modal) {
-																			//alert(media_id);
-																				array = modal.toJSON();
-																				console.debug(array);
-																				//alert("Media has been successfully deleted.");
-																				//window.open(location.href ,'_top');
-																				
-																			},
-																			error: function(modal, response) {
-																				console.debug(response);
-																				alert("error");
-																			}
-																		}); // end media destroy function
-																	} //end i for loop
-																	
-																} //end media schema equals success function
-															}); //end equals query
-															
-															//after media deleted, delete subtopic from subtopic schema and also subtopic relationship in topic schema
-																	var Todo_topic = StackMob.Model.extend({ schemaName: 'topic' });
-																	var todo_topic = new Todo_topic({ topic_id: url_topic_id });
-																	todo_topic.deleteAndSave('subtopic', [subtopic_id], StackMob.HARD_DELETE, {
-																	  	success: function(modal) {
-																			console.debug(modal.toJSON());
-																			alert("Subtopic has been deleted.");
-																		},
-																		error : function(modal) {
-																			console.debug(modal.toJSON());
-																			//alert("error in relationship deleted");
-																		}
-																	});
-															
-															
-														  	$( this ).dialog( "close" );
-															result();
-														}, //end yes function
-														"NO": function() {
-														  $( this ).dialog( "close" );
-														} 
-													  } //end button
-													  //alert("Subtopic has been deleted");
-													}); //end dialog confirm
-													//alert("Subtopic has been deleted");
-											
-											counter++; 
-										}
-                         				//alert("Subtopic has been deleted");						//end j for loop
-									} // end topic-id if condition
-								
-							} // end for loop
-						} //end success
-				 	 }); // end imagesearch schema query
+						     success:function(model)
+					    {
+							 //alert("hello");
+							 var i =0;
+							 var array1=model.toJSON();
+							 var userid=array1[0].user_id;
+							 var mediaid=array1[0].media_id;
+							 var deviceid=array1[0].device_id;
+							 //alert(userid);
+							 //alert(mediaid);
+							 //alert(deviceid);
+							 
+							 var Usermediadata_schema = StackMob.Model.extend({ schemaName: 'media' });
+			                 var usermediadata = new Usermediadata_schema({  });
+					         var r = new StackMob.Collection.Query();
+							 r.equals('media_id',mediaid);
+							 usermediadata.query(r,{
+							 success:function(model){
+							 var array2=model.toJSON();
+							 var mediaurl=array2[0].media_url;
+							 var count=1;
+							 var media_points=array2[0].media_points;
+							// alert(mediaurl);
+							 
+							 //alert(media_points);
+							  
+							 
+							$("#ui").append("<tr><td>"+count+"</td><td><a href="+mediaurl+" target='_blank'>Media</a></td><td>"+media_points+"</td></tr>");
+							 
+							 }
+						});
+						//$("#ui").append("<tr><td>"+count+"</td><td><a href="+mediaurl+" target='_blank'>Media</a></td><td>"+media_points+"</td></tr>");
+							 
+				  }
+		      });
+			}
+		});
+		
 				// code for pagenation
 				
 			
 			//setTimeout(pagination, 10000);
 			 // end pagination function
 			
-		} //end result function
+	} //end result function
 		
 		//setInterval(check_newentry,1000);
 					 
 			
 				
-	});
+});
         </script>
 
 <style>
@@ -412,39 +318,7 @@ background-clip: padding-box;
 			  <li class="" id="device">
                 <a href="device.html">DEVICES</a>
               </li>
-			   <!--<li class="" id="create_content">
-                <a href="create_content.html">CREATE CONTENT</a>
-              </li>
-			  <li class="dropdown" id="edit_content">
-					<a href="#" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
-						EDIT CONTENT <b class="caret"></b>
-					</a>
-					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-						<li><a href="update_topic.html">EDIT TOPIC</a></li>
-						<li><a href="update_subtopic.html">EDIT SUBTOPIC</a></li>
-						<li><a href="update_media.html">EDIT MEDIA</a></li>
-					</ul>
-              </li>-->
 			  
-              <!-- <li class="dropdown" id="settings">
-					<a href="other_organisation_settings.html" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
-						SETTINGS <b class="caret"></b>
-					</a>
-					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-						<li><a href="device_authorization.html">Device Authorization</a></li>
-						<li><a href="other_organisation_settings.html">Other Settings..</a></li>
-					</ul>
-              </li>
-			  <li class="dropdown" id="admin_settings" style="display:none;">
-					<a href="other_admin_settings.html" class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
-						ADMIN SETTINGS <b class="caret"></b>
-					</a>
-					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-						<li><a href="organisation_authorization.html">Organisation Authorization</a></li>
-						<li><a href="create_organisation.html">Create Organization</a></li>
-						<li><a href="other_admin_settings.html">Other Settings..</a></li>
-					</ul>
-			  </li> -->
               <li class="" id="logout_btn">
                 <a id="logout" href="#LOGOUT">LOGOUT</a>
               </li>
@@ -458,39 +332,25 @@ background-clip: padding-box;
 		  <div id="dialog-confirm1"  title="Delete" style="font-size:14px;"><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>Do you really want to Delete? <br/>Note: It will also delete the related Subtopics and media. </div> 
 	<header class="jumbotron subhead" style="height:45px;"></header>
 	
-	<div class="dashboard"  style='' >
+	<div class="dashboard"  style='margin-top:-2.9%' >
   <div class="modal-header">
 			
-            <h5 id="myModalLabel"> Sub-topics Information <br/><b id="topic_id"></b></h5>
+            <h5 id="myModalLabel"> Last Media Access Information <br/><h6><b id="topic_id"></b></h6></h5>
 			<b id="back"></b>
     </div>
     <div class="modal-body" style="height:70%;">
 	<table class="data  table-bordered table table-striped" id="ui" style="font-size:12px; margin-bottom:0px;">
 	<tr>
-		<!--<th>S.No.</th>
-		<th>Sub-topic-id</th>
+		<th>S.No.</th>
 		<th>Media</th>
-		<th>Sub-topic Description</th>
-		<th>Sub-topic Image</th>
-		<th>Last Modified Time</th>
-		<th>Delete</th>-->
+		<th>Points</th>
+		
 	</tr>
 	</table>
-	<!-- <form>
-			<input type="hidden" name="filename" value="user_data.csv" id="filename" />
-			<textarea cols="60" rows="10" name="data" id="data"></textarea>
-			<p id="downloadify">
-				You must have Flash 10 installed to download this file.
-			</p>
-		</form> -->
+	
         
 		<div id="current_subtopic_id" value=""></div> 
-        <!-- <h2>Demo 2</h2>
-        <p class="page2">No page selected</p>
-        <p class="demo2"></p>
-        <h2>Demo 3</h2>
-        <p class="page3">No page selected</p>
-        <p class="demo3"></p> -->
+        
 		</div>
 <div class="modal-footer" style="font-size:12px; padding:0px;">
 <!-- <p class="page1">No page selected</p> -->

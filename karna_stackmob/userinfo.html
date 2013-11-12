@@ -114,7 +114,7 @@ $(document).ready(function() {
 				var Userdata_schema = StackMob.Model.extend({ schemaName: 'userdata' });
 			var userdata = new Userdata_schema({ });
 					var q = new StackMob.Collection.Query();
-					q.orderDesc('lastmoddate');
+					q.orderDesc('user_points');
 					 userdata.query(q, {
 						success: function(modal) {
 							//After StackMob returns "Bill Watterson", print out the result
@@ -133,12 +133,12 @@ $(document).ready(function() {
 								 //alert(count);
 							 //end count total records in image search schema
 							 
-							 $("#ui").html("<tr><th>S.No.</th> <th>Mobile No.</th><th>Points</th><th>Location of Last Access</th><th>Last Media Access</th> <th>Last Access Time</th> <th>View Location</th></tr>");
+							 $("#ui").html("<tr><th>S.No.</th> <th>Mobile No.</th><th>Device IMEI</th><th>User Pic</th><th>Points</th></tr>");
 							 
 							 var max_page_records = 5;
 							 var first_record_no = 1;
 							
-							url='alluserview.html';
+							url='view.html';
 							 
 							for(var i=0; i<=count; i++)
 							{
@@ -152,8 +152,17 @@ $(document).ready(function() {
 										//$('#latlng').attr('value', val);
 										var val = array[0].lastmoddate;
 							 			$('#last_mod_date').attr('value', val);
+										if(array[i].mobile_number=='9999979349')
+											      
+										    $("#ui").append("<tr><td>"+(counter+1)+"</td><td>"+array[i].mobile_number+"</td><td><a href='userdevice.html?id="+array[i].mobile_number+"'>View</a></td><td><img src='style/img/sachin.png'style='width: 50px; height:50px;';/></td><td>"+array[i].user_points+"</td></tr>");
 										
-											$("#ui").append("<tr><td>"+(counter+1)+"</td><td>"+array[i].mobile_number+"</td><td>"+array[i].user_points+"</td><td>"+array[i].user_latitude +","+ array[i].user_longitude+"</td><td><a href='mediaaccess.html?id="+array[i].mobile_number+"'>View</a></td><td>"+ new Date(array[i].lastmoddate)+"</td><td><a href='"+url+"?id="+array[i].userdata_id+"' target='_blank' >View</a></td></tr>");
+                                        else if(array[i].mobile_number=='9718465185')
+											      
+										    $("#ui").append("<tr><td>"+(counter+1)+"</td><td>"+array[i].mobile_number+"</td><td><a href='userdevice.html?id="+array[i].mobile_number+"'>View</a></td><td><img src='style/img/zeeshan.png'style='width: 50px; height:50px;';/></td><td>"+array[i].user_points+"</td></tr>");										
+										else
+                                                  
+											$("#ui").append("<tr><td>"+(counter+1)+"</td><td>"+array[i].mobile_number+"</td><td><a href='userdevice.html?id="+array[i].mobile_number+"'>View</a></td><td><img src='style/img/nopic.png'style='width: 50px; height:50px;';/></td><td>"+array[i].user_points+"</td></tr>");				
+											//$("#ui").append("<tr><td>"+(counter+1)+"</td><td>"+array[i].mobile_number+"</td><td><img src='style/img/nopic.png'style='width: 50px; height:50px;';/></td><td>"+array[i].user_points+"</td></tr>");
 									} //end counter if condition
 									counter++; 
 								} //end organisation name if condition
@@ -197,7 +206,7 @@ $(document).ready(function() {
 				var Userdata_schema = StackMob.Model.extend({ schemaName: 'userdata' });
 				var userdata = new Userdata_schema({ });
 					var q = new StackMob.Collection.Query();
-					q.orderDesc('lastmoddate');
+					q.orderDesc('user_points');
 					userdata.query(q, {
 						success: function(modal) {
 							//After StackMob returns "Bill Watterson", print out the result
@@ -217,9 +226,9 @@ $(document).ready(function() {
 								 }
 								 //alert(count);
 								 
-								 $("#ui").html("<tr><th>S.No.</th> <th>Mobile No.</th><th>Points</th><th>Location of Last Access</th><th>Last Media Access</th> <th>Last Access Time</th> <th>View Location</th></tr>");
+								 $("#ui").html("<tr><th>S.No.</th> <th>Mobile No.</th><th>Device IMEI</th> <th>User Pic</th><th>Points</th></tr>");
 								 
-							 url='alluserview.html';
+							 url='view.html';
 								 
 								 //var i = (num-1)*max_page_records;
 							var j=0;
@@ -238,10 +247,17 @@ $(document).ready(function() {
 											var val = array[0].lastmoddate;
 											$('#last_mod_date').attr('value', val);
 											
-											
-													$("#ui").append("<tr><td>"+(counter+1)+"</td><td>"+array[i].mobile_number+"</td><td>"+array[i].user_points+"</td><td>"+array[i].user_latitude +","+ array[i].user_longitude+"</td><td><a href='mediaaccess.html?id="+array[i].mobile_number+"'>View</a></td><td>"+ new Date(array[i].lastmoddate)+"</td><td><a href='"+url+"?id="+array[i].userdata_id+"' target='_blank' >View</a></td></tr>");
-												counter++;
+											    if(array[i].mobile_number=='9999979349')
+											       $("#ui").append("<tr><td>"+(counter+1)+"</td><td>"+array[i].mobile_number+"</td><td><a href='userdevice.html?id="+array[i].mobile_number+"'>View</a></td><td><img src='style/img/sachin.png'style='width: 50px; height:50px;';/></td><td>"+array[i].user_points+"</td></tr>");
+												
+												else if(array[i].mobile_number=='9718465185')
+											       $("#ui").append("<tr><td>"+(counter+1)+"</td><td>"+array[i].mobile_number+"</td><td><a href='userdevice.html?id="+array[i].mobile_number+"'>View</a></td><td><img src='style/img/zeeshan.png'style='width: 50px; height:50px;';/></td><td>"+array[i].user_points+"</td></tr>");	 
+												 
+												 else
+                                                  $("#ui").append("<tr><td>"+(counter+1)+"</td><td>"+array[i].mobile_number+"</td><td><a href='userdevice.html?id="+array[i].mobile_number+"'>View</a></td><td><img src='style/img/nopic.png'style='width: 50px; height:50px;';/></td><td>"+array[i].user_points+"</td></tr>");												 
 										} //end counter if condition
+										counter++;
+										
 									} //end j value if condition
 									j++;
 								} //end organisation name if condition
@@ -347,7 +363,7 @@ background-clip: padding-box;
               <li class="" id="home">
                 <a href="index.html">LIVE VIEW</a>
               </li>
-			  <li class="active" id="user">
+			  <li class="" id="user">
                 <a href="userdata.html">HISTORY </a>
               </li>
 			   
@@ -366,10 +382,9 @@ background-clip: padding-box;
 						<li><a href="topic.html">REMOVE MEDIA CONTENT</a></li>
 					</ul>
               </li>
-			  <li class="" id="device">
+			   <li class="active" id="device">
                 <a href="userinfo.html">USERS</a>
               </li>
-			  
               
 			  <li class="" id="device">
                 <a href="device.html">DEVICES</a>
@@ -422,17 +437,15 @@ background-clip: padding-box;
 	<div class="dashboard"  style='' >
   <div class="modal-header">
 	
-            <h5 id="myModalLabel">Last Access History</h5>
+            <h4 id="myModalLabel">Leaderboard</h4>
     </div>
     <div class="modal-body" style="height:70%;">
 	<table class="data  table-bordered table table-striped" id="ui" style="font-size:12px; margin-bottom:0px;">
 	<tr>
 		<!--<th>S.No.</th>
 		<th>Mobile-no</th>
-		<th>Points</th>
-		<th>Location</th>
-		<th>Time</th>
-		<th>View</th>-->
+		<th>Points</th>-->
+		
 	</tr>
 	</table>
 	<!-- <form>
