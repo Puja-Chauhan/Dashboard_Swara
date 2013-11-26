@@ -1,0 +1,892 @@
+<html>
+    <head>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.9.1-bundled-min.js"></script>
+	
+	 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+	 <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/dark-hive/jquery-ui.css" />
+	<!-- <link rel="stylesheet" href= "http://code.jquery.com/ui/1.10.2/themes/redmond/jquery-ui.css" />-->
+	  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+	  <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
+	 <script type="text/javascript" src="style/js/bootstrap.js"></script>
+	 
+	<link type="text/css" rel="stylesheet" href="style/css/bootstrap.css"></link>
+	
+		<!-- links for pagination -->
+        <script type="text/javascript" src="lib/jquery.bootpag.js"></script>
+		<!-- end links for pagination -->
+	
+        <title>Course Demo - Create Content</title>
+		
+		<script type="text/javascript">
+      /* <![CDATA[ */
+      // Initialize StackMob object
+      // Copy your init data from here: https://dashboard.stackmob.com/sdks/js/config
+      // Your other app information is here: https://dashboard.stackmob.com/settings
+     StackMob.init({
+    appName: "karna_youtube",
+    publicKey:       "b4385354-e460-4a5e-b287-eb99bfc197ac",
+    apiVersion:      0
+});
+      /* ]]> */
+</script>
+
+
+ 
+
+
+<style>
+				 #footer {
+	 width: 100%;
+position: fixed;
+bottom: 0px;
+background-color: #000;
+height: auto;
+}
+.container .credit {
+float: right;
+margin: 10px 0;
+}
+.muted {
+color: #999999;
+}
+		.ui-dialog .ui-dialog-title {
+
+font-weight: bold;
+font-size: 18px;
+}
+.ui-dialog .ui-dialog-buttonpane {
+font-size: 14px;
+}
+		.content
+		{
+		display:none;
+		}
+		.ui-dialog-titlebar-close {
+  visibility: hidden;
+}
+.active
+{
+padding-top:0px;
+}
+.navbar .nav > li {
+
+padding-top:0px;
+}
+</style>
+
+<style>
+.modal-header {
+	padding:0px 15px;
+}
+
+ p{
+     text-align: center;
+ }
+ 
+ .create {
+ width:100%;
+ height:auto;
+ }
+ 
+ .dropdown-menu {
+ 	padding:0px;
+}
+.dropdown-menu a {
+	padding: 1px 20px;
+}
+</style>
+<!-- css for step tabs -->
+        <style type="text/css">
+           .tab-pane {
+		   		width:100%;
+				height:auto;
+			}
+			
+			.nav-tabs > li {
+				text-align:center;
+				font-weight:bold;
+			}
+        </style>
+		<!--end css for step tabs -->
+    </head>
+    <body>
+		<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+          <a class="brand" href="">Course Demo</a>
+          	  
+        </div>
+      </div>
+	<header class="jumbotron subhead" style="height:45px;"></header>
+	
+	
+	
+	<div class="modal" id="myModal" tabindex="-1"  aria-labelledby="myModalLabel" aria-hidden="true" style='z-index:1;margin: -250px; margin-top:-230px;left:40%; width:55%; height:485px;'>
+  <div class="modal-header">
+	
+            <h4 id="myModalLabel">Create course with media</h4>
+			<!-- steps tabs -->
+			<ul class="nav nav-tabs" id="myTab">
+			  <li class="active" style="margin-left: 32%;"><a href="#step1"><ul style="list-style:initial; font-size:40px;"><li></li></ul> </a></li>
+			  <li><a href="#step2"><ul style="list-style:initial; font-size:40px;"><li></li></ul></a></li>
+			  <li><a href="#step3"><ul style="list-style:initial; font-size:40px;"><li></li></ul></a></li>
+			</ul>
+			<!-- end step tabs -->
+    </div>
+    <div class="modal-body" style="height:80%;">
+		
+    <!--step 1 -Registratoin of new user-->		
+	<div class="tab-content">
+	
+		<div class="tab-pane active" id="step1">
+		<h5 id="myModalLabel">1. Registration</h5>
+			  <input type="text" id="c_name" name="c_name" value=""placeholder="Enter Your Name" style="height:30px;"/>
+			
+			<br/>
+			
+			  <input type="email" id="c_email" name="email" placeholder="Enter Your email id" style="height:30px;"/>
+			<br/>
+			
+			  <input type="text" id="c_mob"  MaxLength="10" placeholder="Enter Your Mobile no."style="height:30px;" />
+			 <br/> 
+			 
+			 <input type="password" id="c_password"  placeholder="Enter Your Password" style="height:30px;"/>
+			 </br>
+			
+			 <input type="text" id="c_course"  placeholder="Enter Your Course name" style="height:30px;" />
+			 <br/>
+
+			<label>Upload course image.(Image Format - jpeg,png,jpg)</label>
+			<input type="file" id="files1" name="files1[]" multiple style="margin-bottom:0px;" />
+            <label>About the Course:</label>
+			<textarea style="width: 350px; height: 50px;" id="course"placeholder="Describe yourself with 4 words..."></textarea>
+			<br/>
+			<div>
+			<button type="button" id="basicinfo"  >Next</button>
+			</div>
+			<div id="orgid" value=""></div>
+			<div id="course_id" value=""></div>
+		</div>
+		<!--End step 1 -Registratoin of new user-->	
+		
+		<!-- step 2 -create input topic and media content-->
+		
+			<div class="tab-pane" id="step2">
+			<h5 id="myModalLabel">2. Please select the topic to add media url's</h5>
+			<select id="select_topic_id" name="select_topic_id" onChange="check_media();">
+			<option value="Select a topic">Select a topic</option>
+			</select>
+			
+			<label>Upload topic image.(Image Format - jpeg,png,jpg)</label>
+			<input type="file" id="files2" name="files2[]" multiple style="margin-bottom:30px;" />
+			
+			<br/>
+			<br/>
+
+			Enter 1st Media URL :  <input type="text" id="c1" name="c_name1" value=""placeholder="Enter Your data"/>
+			<br/>
+			Enter  Media Points  :  <input type="text" id="cc1" name="c_name1" value=""placeholder="Enter Your data"/>
+			<br/><br>
+			
+			Enter 2nd Media URL :  <input type="text" id="c2" name="c_name2" value=""placeholder="Enter Your data"/>
+						<br/>
+			Enter  Media Points  :  <input type="text" id="cc2" name="c_name1" value=""placeholder="Enter Your data"/>
+			<br/><br>			
+
+			Enter 3rd Media URL :  <input type="text" id="c3" name="c_name3" value=""placeholder="Enter Your data"/>
+						<br/>
+			Enter  Media Points  :  <input type="text" id="cc3" name="c_name1" value=""placeholder="Enter Your data"/>
+			<br/><br>				
+
+			Enter 4th Media URL :  <input type="text" id="c4" name="c_name4" value=""placeholder="Enter Your data"/>
+						<br/>
+			Enter  Media Points  :  <input type="text" id="cc4" name="c_name1" value=""placeholder="Enter Your data"/>
+			<br/><br/>			
+
+			Enter 5th Media URL :  <input type="text" id="c5" name="c_name5" value=""placeholder="Enter Your data"/>
+			</br>
+			Enter Media Points  :  <input type="text" id="cc5" name="c_name1" value=""placeholder="Enter Your data"/>
+			
+			<br/><br/>
+			<div>
+			<button type="button" id="media_url"  >Next</button>
+			</div>
+		</div>	
+		
+		<!-- End step 2 -create input topic and media content-->
+		
+		<div class="tab-pane" id="step3">
+		<!--Org ID:  </br>
+		Password:</br>-->
+        Link:		
+		<br/><br>
+		</div>
+	</div>
+</div>
+<div class="modal-footer" style="font-size:12px; padding:0px;">
+<!-- <p class="page1">No page selected</p> -->
+	</div>
+	</div>
+
+
+<div id="footer">
+      <div class="container">
+        <p class="muted credit">Designed and developed by <a href="http:www.mobileharvest.in" target="_blank">MOBILE HARVEST</a> </p>
+      </div>
+</div>
+ <div id="last_mod_date" value=""></div> 
+  <div id="last_mod_date_new" value=""></div>   
+  
+    </body>
+</html>
+	
+
+		
+		
+		<script type="text/javascript">
+		$(document).ready(function() {
+		
+		document.getElementById('files1').addEventListener('change', upload_course_image, false);
+		
+		function upload_course_image(evt) {
+		//alert("image")
+		 //upload the image
+            $("#basicinfo").click(function() {
+			$(this).attr('disabled',false);
+				
+					var Todo = StackMob.Model.extend({ schemaName: 'org_admin' });
+					
+					//alert(orgid);
+					var name=$('#c_name').val();
+					var email=$('#c_email').val();
+					var mob_no=$('#c_mob').val();
+					var course=$('#c_course').val();
+					var password=$('#c_password').val();
+					var cdescribe = $('#course').val();
+											
+					//Validation for registration
+                    					
+						if(name=='')
+							{
+							var fld = document.getElementById('c_name');
+							alert("Please Fill name");
+							fld.value = "";
+							fld.focus();
+							
+							}
+							else if(email=='')
+							{
+							var fld = document.getElementById('c_email');
+							alert("Please Fill email");
+							fld.value = "";
+							fld.focus();
+							  
+							}
+							
+							
+							
+							else if(mob_no=='')
+							{
+							var fld = document.getElementById('c_mob');
+							alert("Please Enter 10 digit mobile number");
+							fld.value = "";
+							fld.focus();
+							 
+							}
+							
+							else if(password=='')
+							{
+							var fld = document.getElementById('c_password');
+							alert("Please Enter password");
+							fld.value = "";
+							fld.focus();
+							 
+							}
+							
+							else if(course=='')
+							{
+							var fld = document.getElementById('c_course');
+							alert("Please Fill Course name ")
+							fld.value = "";
+							fld.focus();
+							}
+							else if(cdescribe=='')
+							{
+							var fld = document.getElementById('course');
+							alert("Please Fill Course Content ")
+							fld.value = "";
+							fld.focus();
+							}
+							
+							
+							
+		        else{
+						
+										
+                         
+						 var mob = /^[1-9]{1}[0-9]{9}$/;
+						var fld = document.getElementById('c_mob');
+						if (mob.test(fld.value) == false) {
+						alert("Please enter valid mobile number.");
+							fld.focus();
+						}
+						
+						var eml = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;			
+						 var fld = document.getElementById('c_email');
+						 
+						if (eml.test(fld.value) == false) {
+							alert("Please enter valid email id.");
+									fld.focus();
+									}
+						//end validation for registration					
+				else  {	
+							 $(this).attr('disabled',true);
+							var todo = new Todo({
+							
+							  org_admin_id:email,
+							  password:password,
+  							  name: name,
+							  mobile: mob_no,
+							  course_name: course,
+							  course_desc:cdescribe,
+                              status:true							  
+							  });
+							  
+							 var pass=document.getElementById("c_password").value;
+							 var email=document.getElementById("c_email").value;
+							  //window.pass=document.getElementById("c_password").value;
+							  //window.email=document.getElementById("c_email").value;
+							  //alert(window.pass);
+							  //alert(window.email);
+							
+							//Inserting data in org_admin schema
+							 
+								 todo.create({
+								  success: function(model, result, options)
+								  { 
+								  alert("Information submitted successfully");
+								  console.debug(model.toJSON());  
+									//alert("111111"+orgId);
+								 var Org_Schema = StackMob.Model.extend({schemaName : 'organization'})
+								 var org_data = new Org_Schema({ });
+								 var q = new StackMob.Collection.Query();
+					             q.orderDesc('lastmoddate');
+					
+					              org_data.query(q, {
+						          success: function(modal) {
+													     
+								var array = modal.toJSON();
+							  //console.debug(array);
+							 
+							 //count total records in organization schema
+								var key;
+								var count = 0;
+								var counter=0;
+								for(key in array) {
+									 if(array.hasOwnProperty(key)) {
+									  count ++;
+									 }
+								 }
+								 var orgid = ++count;
+								  window.orgid=orgid;
+								 var orrgid = count*100;
+					             var orgId = orgid.toString();
+								 var OrgId = orrgid.toString();
+								 $('#orgid').attr('value',orgId);
+								 //alert(window.orgid);
+								 
+								 var data ="org_id="+orgid+"pass="+pass;
+								 
+								 $.ajax({
+								  type : "POST",
+								  url : "email.php",
+								  data : data,
+								  success : function(response){
+								  alert(response);
+								  }
+								 });
+								 
+								 var org_demo = new Org_Schema({
+									organization_id:orgId,
+									email:email,
+									status:true
+									});
+									
+								 //Inserting data in organization schema
+									org_demo.create({
+									success: function(modal) {
+									var org_array = modal.toJSON();
+									console.debug(org_array);
+									//alert(org_array.organization_id);
+									//alert(email);
+									var Organization_schema = StackMob.Model.extend({ schemaName: 'org_admin' });
+									
+															var organization_schema = new Organization_schema({org_admin_id:email });
+															
+															organization_schema.appendAndSave('org_ad', [org_array.organization_id] , {
+															success: function(modal) {
+															//alert("Relationship Created");
+
+													
+									
+								 var Course_schema = StackMob.Model.extend({schemaName : 'course'});
+								 //alert("222222"+orgId);
+								 
+								 ///////////////// start counter in course
+								 var coursedata = new Course_schema({ });
+					             var q = new StackMob.Collection.Query();
+					             q.orderDesc('lastmoddate');
+					
+					             coursedata.query(q, {
+						         success: function(modal) {
+							
+       							var array = modal.toJSON();
+							 // console.debug(array);
+							 
+							 //count total records in course schema
+									var key;
+									var count = 0;
+									var counter=0;
+									for(key in array) {
+										 if(array.hasOwnProperty(key)) {
+										  count ++;
+										 }
+									 }
+								 
+								 
+								 
+								 //alert(count);
+									var courseids = ++count;
+									//alert(corid);
+									var courseId = courseids.toString();
+									$('#course_id').attr('value',courseId);
+									//alert('Course id: '+courseId);
+									var org_idd=document.getElementById('orgid').value;
+									var course_iD = orrgid + courseids; 
+									var course_ID = course_iD.toString();
+									//alert(course_ID);
+							 ///////////////// end counter course
+									var course_demo = new Course_schema({
+									course_id: course_ID,
+									course_code: courseId,
+									org_id:org_idd,
+									course_name:course,
+									course_desc:cdescribe,
+									//register_id: orgId,
+									status:true
+									});
+									
+							//Inserting data in course schema		
+									course_demo.create({
+										     success: function(modal) {
+											 var course_array = modal.toJSON();
+											 //alert(course_array.course_id);
+										     //alert("Data inserted successfully.");
+															//console.debug(modal.toJSON());
+															//$('#myTab a[href="#step2"]').tab('show');
+															//document.getElementById('files1').addEventListener('change', upload_course_image, false);
+															//Insert image in course schema
+															var Todo = StackMob.Model.extend({ schemaName: 'course' });
+																 
+																  var todoInstance = new Todo({ course_id: course_array.course_id }); 
+																  var fieldname = 'course_image'; //name of binary field that you created in your schema
+														  
+																var files = evt.target.files; // FileList object
+																// Loop through the FileList
+																for (var i = 0, f; f = files[i]; i++) {
+																	
+																  var reader = new FileReader();
+															 
+																  // Closure to capture the file information
+																  reader.onload = (function(theFile) {
+																	return function(e) {
+																	
+																	  var base64Content = e.target.result.substring(e.target.result.indexOf(',') + 1, e.target.result.length);
+																	  var fileName = theFile.name;																  
+																	  var fileType = theFile.type;
+														
+																		if((fileType=="image/jpeg")||(fileType=="image/png")|| (fileType=="image/jpg"))
+																		{
+																	  todoInstance.setBinaryFile(fieldname, fileName, fileType, base64Content);
+																	  todoInstance.save();
+																	  alert('Image uploaded successfully');
+																	  //document.getElementById('files1').value = '';
+																	  }
+																	  else
+																	  {
+																	  alert("Please upload only image file in following format[jpeg,png,jpg]");
+																	  }
+																	 // todoInstance.setBinaryFile(fieldname, fileName, fileType, base64Content);
+																	 // todoInstance.save();
+															//	  alert('Image saved');
+															 
+																	};
+																  })(f);
+															 
+																  // Read in the file as a data URL
+																  fileContent = reader.readAsDataURL(f);
+																	//$('.data').html(fileContent);
+                                                                } //end for loop 
+																//end upload the image				
+															
+  
+											var i=1;														
+													var Topic_schema = StackMob.Model.extend({schemaName : 'topic'});
+													var topic_demo = new Topic_schema({
+													topic_name:'Topic '+i,
+													course_id: course_ID,
+													org_id:org_idd,
+													status:true
+													});
+													
+												//Inserting data in topic schema	
+													topic_demo.create({
+															success: function(modal) {
+															var topic_array = modal.toJSON();
+															console.debug(topic_array);
+															//alert(topic_array.topic_id);			  
+															//alert("Topic inserted successfully.");
+																
+																															
+												          // $('#myTab a[href="#step2"]').tab('show');
+																//alert("relationship created");
+															 //Relationship of course with topic schema 	
+															var courseTopic_schema = StackMob.Model.extend({ schemaName: 'course' });
+															var coursetopic_schema = new courseTopic_schema({course_id:course_ID });
+															coursetopic_schema.appendAndSave('course_topic', [topic_array.topic_id], {
+																	success: function(modal) {
+																	    //console.debug(topic_array.topic_id);
+																		//console.debug(courseId);
+																		//console.debug(modal.toJSON());
+																		//alert("relationship created");
+																		$('#myTab a[href="#step2"]').tab('show');
+																		var courseid = document.getElementById("course_id").getAttribute("value");
+				                                                        //alert('Test: '+courseid);
+				                                                   
+																   // fetch topics from course schema relationship
+																	var Course_schema = StackMob.Model.extend({ schemaName: 'course' });
+																	var course = new Course_schema({ });
+																		course.fetchExpanded(1, {
+																			success: function(modal) {
+																				//After StackMob returns "Bill Watterson", print out the result
+																				var array = modal.toJSON();
+																				// console.debug(array);
+
+																				 //count total records in image search schema
+																					var key;
+																					var count = 0;
+																					var counter=0;
+																					for(key in array) {
+																						 if(array.hasOwnProperty(key)) {
+																						  count ++;
+																						 }
+																					 }
+																					 //alert(count);
+																				 //end count total records in image search schema
+																				 
+																				for(var i=0; i<=count; i++)
+																				{
+																					if(array[i].course_id == course_ID)
+																					{
+																						var topic_array = array[i].course_topic;
+																			
+																						var key2;
+																						var count2 = 0;
+																						for(key2 in topic_array) {
+																							 if(topic_array.hasOwnProperty(key2)) {
+																							  count2 ++;
+																							 }
+																						 }
+																						 //alert(count);
+																						 
+																						$("#select_topic_id").html("<option value='Select a topic'>Select a topic</option>");
+																						 
+																						 for(var j=0; j<=count2; j++)
+																						{
+																							$("#select_topic_id").append("<option value='"+topic_array[j].topic_id+"'>"+topic_array[j].topic_name+"</option>");
+																						}// end j for loop
+																						 
+																					} //end course id if condition 
+																				} //end i for loop
+																			} //end fetch expand success
+																		}); //end fetch expand
+							                                     // end fetch topic from course schema relationship
+																		
+																		},//end sucess of course topic relationship schema
+																	error : function(modal) {
+																		//console.debug(modal.toJSON());
+																		alert("error in relationship create");
+																	}
+																}); //End Relationship of topic with media schema 
+																},//end success of create topic schema
+															error : function(modal) {
+																//console.debug(modal.toJSON());
+																alert("error in topic create");
+															}
+														});  //end create topic schema 
+		
+							 
+							  
+										},// end success of course schema
+									error : function(modal) {
+									//console.debug(modal.toJSON());
+									alert("error in relationship create");
+										}
+			
+								}); //end create course schema
+							  
+							  }, // end success
+							  error: function(model, error, options) 
+							  {  
+							    alert("Data is not inserted.");	
+							  }
+							}); // end create of course
+						}
+                     });						
+							
+							}//end success of organization schema
+						});//end create of organization schema
+        			 }//end success of org_admin
+					});//end organization query
+							
+										
+	                    },//end success
+						error: function(model, error, options) 
+					   {  
+					     alert("Email id already exist.");	
+				       }
+				 	 });	
+				} // end else
+			}// end else
+						//$('#myTab a[href="#step2"]').tab('show');				
+		});// end of button click
+	}//end function course upload image	
+	});//end ready function
+			</script>
+		
+		<!--end step 1 -create registration -->
+		
+		
+		
+	<!--start step 2 -create media -->	
+		  <script type="text/javascript">
+				  function check_media() {
+				        //alert(window.orgid);
+						//alert(window.pass);
+						//alert(window.email);
+				  
+					if($('#select_topic_id').val()=='Select a topic')
+					{
+						//$('#select_topic_id').attr('value', '');
+						//alert(window.name);
+						//alert(window.name1);
+					}
+					
+					else
+					{ 
+					    
+						var select_topic_id = $('#select_topic_id').val();
+						//alert(select_topic_id);
+						document.getElementById('files2').addEventListener('change', upload_topic_image, false);
+		
+		                function upload_topic_image(evt) {
+						
+						var Todo = StackMob.Model.extend({ schemaName: 'topic' });
+																 
+																  var todoInstance = new Todo({ topic_id: select_topic_id }); 
+																  var fieldname = 'topic_url'; //name of binary field that you created in your schema
+														  
+																var files = evt.target.files; // FileList object
+																// Loop through the FileList
+																for (var i = 0, f; f = files[i]; i++) {
+																	
+																  var reader = new FileReader();
+															 
+																  // Closure to capture the file information
+																  reader.onload = (function(theFile) {
+																	return function(e) {
+																	
+																	  var base64Content = e.target.result.substring(e.target.result.indexOf(',') + 1, e.target.result.length);
+																	  var fileName = theFile.name;
+																	  window.file = fileName;
+																	  var fileType = theFile.type;
+																		if((fileType=="image/jpeg")||(fileType=="image/png")|| (fileType=="image/jpg"))
+																		{
+																	  todoInstance.setBinaryFile(fieldname, fileName, fileType, base64Content);
+																	  todoInstance.save();
+																	  alert('Image uploaded successfully');
+																	  
+																	  //fetch topic_url which is uploaded
+																	   /* var Topic_urls = StackMob.Model.extend({ schemaName: 'topic' });
+																		   var topic_urls = new Topic_urls({ });
+																		   topic_urls.fetch({
+																			success: function(modal) {
+																				var array = modal.toJSON();
+																				//alert(array[0].topic_url);
+																			   }
+																			   //alert(array[0].topic_url);
+																			 });*/				
+																	  
+																	  //end fetch topic_url
+																	  //document.getElementById('files1').value = '';
+																	  }
+																	  else
+																	  {
+																	  alert("Please upload only image file in following format[jpeg,png,jpg]");
+																	  }
+																	 // todoInstance.setBinaryFile(fieldname, fileName, fileType, base64Content);
+																	 // todoInstance.save();
+															//	  alert('Image saved');
+															 
+																	};
+																  })(f);
+															 
+																  // Read in the file as a data URL
+																  fileContent = reader.readAsDataURL(f);
+																	//$('.data').html(fileContent);
+                                                                } //end for loop 
+																
+																
+					   		   
+						
+				
+					$("#media_url").click(function() {
+					 $(this).attr('disabled',false);
+					
+					/// Associates Model with the media Schema
+					var Media_Schema = StackMob.Model.extend({ schemaName: 'media' });
+					var mediaurl1=$('#c1').val();
+									
+												
+						    if(mediaurl1=='')
+							{
+				
+							 alert("Please Fill 1st url its mandatory");
+			
+							}
+							
+							
+							
+							
+								else{
+								       var Topic_urls = StackMob.Model.extend({ schemaName: 'topic' });
+																		   var topic_urls = new Topic_urls({ });
+																		   topic_urls.fetch({
+																			success: function(modal) {
+																				var array = modal.toJSON();
+																				//alert(array[0].topic_url);
+																			   																		 
+                                       //$(this).attr('disabled',true);								
+									  for( i=1; i<=5;i++)
+										  {
+										  var boxValue = document.getElementById("c"+i).value;
+										  var media_point = document.getElementById("cc"+i).value;
+										  var media_points = parseInt(media_point);
+										  if(media_points=='')
+										  media_points=0;
+										  if(boxValue=='')
+										  break;
+										  var matches = boxValue.match(/http:\/\/(?:www\.)?youtube.*watch\?v=([a-zA-Z0-9\-_]+)/);
+                                       
+									   if (matches)
+										  {
+											  //alert(array[0].topic_url);
+											  alert('Valid youtube url');
+											  var media_schema = new Media_Schema({
+											  media_topic:select_topic_id,
+											  media_url:boxValue,
+											  media_points:media_points,
+											 // media_image:array[0].topic_url,
+											  media_likes:0,
+											  status:true
+											 
+											  
+											 });
+										 
+										//Inserting data in media schema
+												media_schema.create({
+												  success: function(modal) { //console.debug(model.toJSON()); 
+												  var mediaarray = modal.toJSON();
+												  //alert(mediaarray.media_id);										  
+												  //alert("Media url's inserted successfully.");
+												  
+												  //Relationship of topic with media schema 
+												  var Topicmedia_schema = StackMob.Model.extend({ schemaName: 'topic' });
+												  var topicmedia_schema = new Topicmedia_schema({topic_id: select_topic_id  });
+												  topicmedia_schema.appendAndSave('topic_media', [mediaarray.media_id], {
+															success: function(modal) {
+															      
+																  $('#myTab a[href="#step3"]').tab('show');
+																//console.debug(modal.toJSON());
+																//alert("relationship created");
+																},
+															 error : function(modal) {
+																//console.debug(modal.toJSON());
+																alert("error in relationship create");
+															}
+														});
+													//	End relationship of topic with media schema
+														  
+
+														},
+														  error: function(modal) {  alert("Url's is not inserted.");
+														}
+														});
+														  
+												} //end if condition
+										
+										else 
+										{
+									      alert('Invalid youtube url');
+						     		    }
+										  
+										  
+ 										
+								   }//end for loop
+								   
+						   }
+						 });
+								}//end else 2
+								
+												
+					});//button ends
+				   }	
+				  }//end else 1
+                 }//end check media function
+      			 
+			</script>
+			
+			
+		
+		<!--end step 2 -create input media content-->
+		
+		<!-- step 3  create download app-->
+		
+		<script type="text/javascript">
+		//alert(window.name);
+		//alert("testing");
+		//alert(window.name1);
+		 //var password=document.getElementById("c_password").value;
+		 //alert(password);
+		
+		/*var Orgid_Schema = StackMob.Model.extend({ schemaName: 'register' });
+						var org_schema = new Orgid_Schema({ });
+								success:function(modal) {
+									var array = modal.toJSON();
+									console.debug(array);
+									}
+                             alert(array[0].register_id);	*/						 
+		</script>
+		    
+			
+			
+			
+				
+
+		<!--end step 3 -create download app-->
+		
+	
+	
+		
+		<br/><br/>
+	
