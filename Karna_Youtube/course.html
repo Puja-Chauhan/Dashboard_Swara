@@ -340,7 +340,7 @@ padding-top:0px;
 									}
 						//end validation for registration					
 				else  {	
-							 $(this).attr('disabled',true);
+							$(this).attr('disabled',true);
 							var todo = new Todo({
 							
 							  org_admin_id:email,
@@ -395,7 +395,7 @@ padding-top:0px;
 								 $('#orgid').attr('value',orgId);
 								 //alert(window.orgid);
 								 
-								 var data ="org_id="+orgid+"pass="+pass;
+								 var data ="org_id="+orgid+"&pass="+pass;
 								 
 								 $.ajax({
 								  type : "POST",
@@ -653,13 +653,15 @@ padding-top:0px;
 	                    },//end success
 						error: function(model, error, options) 
 					   {  
-					     alert("Email id already exist.");	
+					     alert("Email id already exist.");						 
 				       }
-				 	 });	
+				 	 });
+                  				 
 				} // end else
 			}// end else
-						//$('#myTab a[href="#step2"]').tab('show');				
+							//$('#myTab a[href="#step2"]').tab('show');				
 		});// end of button click
+		  
 	}//end function course upload image	
 	});//end ready function
 			</script>
@@ -716,18 +718,7 @@ padding-top:0px;
 																	  todoInstance.save();
 																	  alert('Image uploaded successfully');
 																	  
-																	  //fetch topic_url which is uploaded
-																	   /* var Topic_urls = StackMob.Model.extend({ schemaName: 'topic' });
-																		   var topic_urls = new Topic_urls({ });
-																		   topic_urls.fetch({
-																			success: function(modal) {
-																				var array = modal.toJSON();
-																				//alert(array[0].topic_url);
-																			   }
-																			   //alert(array[0].topic_url);
-																			 });*/				
 																	  
-																	  //end fetch topic_url
 																	  //document.getElementById('files1').value = '';
 																	  }
 																	  else
@@ -756,6 +747,11 @@ padding-top:0px;
 					/// Associates Model with the media Schema
 					var Media_Schema = StackMob.Model.extend({ schemaName: 'media' });
 					var mediaurl1=$('#c1').val();
+					
+					if($('#select_topic_id').val()=='Select a topic')
+					{
+						alert("Please select a topic");
+					}
 									
 												
 						    if(mediaurl1=='')
@@ -769,34 +765,32 @@ padding-top:0px;
 							
 							
 								else{
-								       var Topic_urls = StackMob.Model.extend({ schemaName: 'topic' });
-																		   var topic_urls = new Topic_urls({ });
-																		   topic_urls.fetch({
-																			success: function(modal) {
-																				var array = modal.toJSON();
-																				//alert(array[0].topic_url);
+								       
 																			   																		 
                                        //$(this).attr('disabled',true);								
-									  for( i=1; i<=5;i++)
+									  for( var i=1; i<=5;i++)
 										  {
 										  var boxValue = document.getElementById("c"+i).value;
 										  var media_point = document.getElementById("cc"+i).value;
+										  //alert(media_point);
 										  var media_points = parseInt(media_point);
-										  if(media_points=='')
-										  media_points=0;
+										  if(media_point=='')
+										  {
+										   media_points=0;
+										  }
 										  if(boxValue=='')
 										  break;
 										  var matches = boxValue.match(/http:\/\/(?:www\.)?youtube.*watch\?v=([a-zA-Z0-9\-_]+)/);
                                        
 									   if (matches)
 										  {
-											  //alert(array[0].topic_url);
 											  alert('Valid youtube url');
 											  var media_schema = new Media_Schema({
 											  media_topic:select_topic_id,
 											  media_url:boxValue,
 											  media_points:media_points,
 											 // media_image:array[0].topic_url,
+											  media_name:''+i,
 											  media_likes:0,
 											  status:true
 											 
@@ -844,8 +838,6 @@ padding-top:0px;
  										
 								   }//end for loop
 								   
-						   }
-						 });
 								}//end else 2
 								
 												
