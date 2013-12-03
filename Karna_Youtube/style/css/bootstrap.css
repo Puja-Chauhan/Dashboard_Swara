@@ -166,7 +166,7 @@ body {
 }
 
 a {
-  color: #0088cc;
+  color: lavender;
   text-decoration: none;
 }
 
@@ -4793,7 +4793,7 @@ input[type="submit"].btn.btn-mini {
 }
 
 .modal-body {
-  max-height: 400px;
+  max-height: 480px;
   padding: 15px;
   overflow-y: auto;
 }
@@ -4836,7 +4836,47 @@ input[type="submit"].btn.btn-mini {
 .modal-footer .btn-group .btn + .btn {
   margin-left: -1px;
 }
+.req{
+color:red;
+font-size: 20px;
+}
 
+.wufoo li.focused{
+	background-color:#FFF7C0;
+}
+.wufoo .instruct{
+	background-color:#F5F5F5;
+}
+.wufoo .instruct{
+	border:1px solid #E6E6E6;
+}
+form li.focused
+{
+background-color:#fff7c0
+}
+
+form li.focused .instruct,form li:hover .instruct{left:100%;visibility:visible;opacity:1}
+form li.focused{
+background-color:#fff7c0}
+form .instruct
+{
+position:absolute;
+top:0;
+left:0;
+z-index:1000;
+width:45%;
+margin:0 0 0 8px;
+padding:8px 10px 10px 10px;
+border:1px solid #e6e6e6;
+background:#f5f5f5;
+visibility:hidden;
+opacity:0;
+font-size:105%;
+-webkit-transition:opacity 350ms ease-out;
+-moz-transition:opacity 350ms ease-out;
+-o-transition:opacity 350ms ease-out;
+transition:opacity 350ms ease-out
+}
 .tooltip {
   position: absolute;
   z-index: 1030;

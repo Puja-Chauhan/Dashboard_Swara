@@ -340,7 +340,7 @@ padding-top:0px;
 									}
 						//end validation for registration					
 				else  {	
-							$(this).attr('disabled',true);
+							 $(this).attr('disabled',true);
 							var todo = new Todo({
 							
 							  org_admin_id:email,
@@ -395,16 +395,7 @@ padding-top:0px;
 								 $('#orgid').attr('value',orgId);
 								 //alert(window.orgid);
 								 
-								 var data ="org_id="+orgid+"&pass="+pass;
 								 
-								 $.ajax({
-								  type : "POST",
-								  url : "email.php",
-								  data : data,
-								  success : function(response){
-								  alert(response);
-								  }
-								 });
 								 
 								 var org_demo = new Org_Schema({
 									organization_id:orgId,
@@ -465,6 +456,36 @@ padding-top:0px;
 									var course_iD = orrgid + courseids; 
 									var course_ID = course_iD.toString();
 									//alert(course_ID);
+									
+									/*var data ="course_id="+course_iD+"&pass="+pass+"&email_id="+email;
+								 
+								 $.ajax({
+								  type : "POST",
+								  url : "email.php",
+								  data : data,
+								  success : function(response){
+								  alert(response);
+								  }
+								 });*/
+								 
+								 StackMob.customcode('sendgrid/email', { 
+									subject: 'Mobile Harvest : Login Information', 
+									from: 'Mobile Harvest', 
+									text: 'Course Id is : '+course_iD+' and your password is :'+pass, 
+								   // usernames: ['alfred'], 
+									emails: [email] 
+									}, 
+									'POST', 
+									{ 
+									success: function(result) { 
+										console.debug(result); 
+										alert("email sent");
+									}, 
+									error: function(error) { 
+										console.log(error); 
+										alert("failed to send email");
+									}
+								});
 							 ///////////////// end counter course
 									var course_demo = new Course_schema({
 									course_id: course_ID,
@@ -653,15 +674,13 @@ padding-top:0px;
 	                    },//end success
 						error: function(model, error, options) 
 					   {  
-					     alert("Email id already exist.");						 
+					     alert("Email id already exist.");	
 				       }
-				 	 });
-                  				 
+				 	 });	
 				} // end else
 			}// end else
-							//$('#myTab a[href="#step2"]').tab('show');				
+						//$('#myTab a[href="#step2"]').tab('show');				
 		});// end of button click
-		  
 	}//end function course upload image	
 	});//end ready function
 			</script>
@@ -680,7 +699,7 @@ padding-top:0px;
 					if($('#select_topic_id').val()=='Select a topic')
 					{
 						//$('#select_topic_id').attr('value', '');
-						//alert(window.name);
+						//alert("Please select topic")
 						//alert(window.name1);
 					}
 					
@@ -718,7 +737,18 @@ padding-top:0px;
 																	  todoInstance.save();
 																	  alert('Image uploaded successfully');
 																	  
+																	  //fetch topic_url which is uploaded
+																	   /* var Topic_urls = StackMob.Model.extend({ schemaName: 'topic' });
+																		   var topic_urls = new Topic_urls({ });
+																		   topic_urls.fetch({
+																			success: function(modal) {
+																				var array = modal.toJSON();
+																				//alert(array[0].topic_url);
+																			   }
+																			   //alert(array[0].topic_url);
+																			 });*/				
 																	  
+																	  //end fetch topic_url
 																	  //document.getElementById('files1').value = '';
 																	  }
 																	  else
@@ -742,19 +772,22 @@ padding-top:0px;
 						
 				
 					$("#media_url").click(function() {
+					
+					
+					
 					 $(this).attr('disabled',false);
 					
 					/// Associates Model with the media Schema
 					var Media_Schema = StackMob.Model.extend({ schemaName: 'media' });
 					var mediaurl1=$('#c1').val();
 					
-					if($('#select_topic_id').val()=='Select a topic')
-					{
-						alert("Please select a topic");
-					}
+					        if($('#select_topic_id').val()=='Select a topic')
+					        {
+						      alert("Please select topic");
+					        }
 									
 												
-						    if(mediaurl1=='')
+						    else if(mediaurl1=='')
 							{
 				
 							 alert("Please Fill 1st url its mandatory");
@@ -765,32 +798,36 @@ padding-top:0px;
 							
 							
 								else{
-								       
+								       $(this).attr('disabled',true);
+									   var Topic_urls = StackMob.Model.extend({ schemaName: 'topic' });
+																		   var topic_urls = new Topic_urls({ });
+																		   topic_urls.fetch({
+																			success: function(modal) {
+																				var array = modal.toJSON();
+																				//alert(array[0].topic_url);
 																			   																		 
                                        //$(this).attr('disabled',true);								
-									  for( var i=1; i<=5;i++)
+									  for( i=1; i<=5;i++)
 										  {
 										  var boxValue = document.getElementById("c"+i).value;
 										  var media_point = document.getElementById("cc"+i).value;
-										  //alert(media_point);
 										  var media_points = parseInt(media_point);
 										  if(media_point=='')
-										  {
-										   media_points=0;
-										  }
+										  media_points=0;
 										  if(boxValue=='')
 										  break;
 										  var matches = boxValue.match(/http:\/\/(?:www\.)?youtube.*watch\?v=([a-zA-Z0-9\-_]+)/);
                                        
 									   if (matches)
 										  {
+											  //alert(array[0].topic_url);
 											  alert('Valid youtube url');
 											  var media_schema = new Media_Schema({
 											  media_topic:select_topic_id,
 											  media_url:boxValue,
 											  media_points:media_points,
-											 // media_image:array[0].topic_url,
 											  media_name:''+i,
+											 // media_image:array[0].topic_url,
 											  media_likes:0,
 											  status:true
 											 
@@ -838,6 +875,8 @@ padding-top:0px;
  										
 								   }//end for loop
 								   
+						   }
+						 });
 								}//end else 2
 								
 												
